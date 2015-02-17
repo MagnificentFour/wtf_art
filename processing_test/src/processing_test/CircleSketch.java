@@ -14,6 +14,7 @@ public class CircleSketch extends PApplet {
     public void setup() {
         size(400, 400);
         background(255);
+        noLoop();
     }
 
     public void draw() {
@@ -29,5 +30,9 @@ public class CircleSketch extends PApplet {
         }
         ellipseMode(CENTER);
         ellipse(mouseX, mouseY, 40, 40);
+    }
+    
+    public void start() {
+        loop();
     }
 }
