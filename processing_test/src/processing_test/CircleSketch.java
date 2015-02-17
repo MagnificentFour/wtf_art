@@ -8,31 +8,49 @@ import processing.core.*;
  */
 public class CircleSketch extends PApplet {
 
-    float lastpnkt = 100;
-    float lastpnkt2 = 100;
+    int sizeWidth = 400;
+    int sizeHeight = 400;
+    int drawStatus = 0;
+    int xK = 0;
+    int yK = 0;
+    boolean running;
 
     public void setup() {
-        size(400, 400);
+        size(sizeWidth, sizeHeight);
         background(255);
+        frameRate(120);
+        running = false;
+        xK = 0;
+        yK = 0;
         noLoop();
     }
 
     public void draw() {
-        //background(155);
-        float pnkt = random(400);
-        float pnkt2 = random(400);
-        fill(80, 150, 20);
-        if ((pnkt > lastpnkt - 25 && pnkt < lastpnkt + 25)
-                && (pnkt2 > lastpnkt2 - 25 || pnkt2 < lastpnkt2 + 25)) {
-            line(pnkt, pnkt2, pnkt + 20, pnkt2 + 20);
-            lastpnkt = pnkt;
-            lastpnkt2 = pnkt2;
+        if (running) {
+            for (int i = yK; i < yK + 11; i++) {
+                for (int x = xK; x < xK + 11; x++) {
+                    stroke(random(255), random(255), random(255));
+                    point(x, i);
+                }
+            }
+            xK += 10;
+
+            if (xK == sizeWidth) {
+                yK += 10;
+                xK = 0;
+            }
         }
-        ellipseMode(CENTER);
-        ellipse(mouseX, mouseY, 40, 40);
+    }
+
+    public void start() {
+        running = true;
+        loop();
     }
     
-    public void start() {
-        loop();
+    public void clear() {
+        running = false;
+        background(255);
+        xK = 0;
+        yK = 0;
     }
 }
