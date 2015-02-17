@@ -29,7 +29,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     ProcessImage imageProcessor;
 
     public DisplayFrame() {
-        this.setSize(600, 600);
+        this.setSize(450, 500);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         JPanel panel = new JPanel();
         button = new JButton("Start");
@@ -38,7 +38,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         imageProcessor = new ProcessImage();
 
         setLayout(new FlowLayout());
-        panel.setBounds(20, 20, 600, 600);
+        panel.setBounds(20, 20, 450, 500);
         sketch = new CircleSketch();
         panel.add(sketch);
         this.add(panel);
