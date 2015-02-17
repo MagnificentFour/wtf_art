@@ -8,8 +8,6 @@ import processing.core.*;
  */
 public class CircleSketch extends PApplet {
 
-    float lastpnkt = 100;
-    float lastpnkt2 = 100;
     int sizeWidth = 400;
     int sizeHeight = 400;
     int drawStatus = 0;
@@ -37,7 +35,7 @@ public class CircleSketch extends PApplet {
             xK = 0;
         }
     }
-    
+
     public void wtfSikring() {
         for (int x = 0; x < 11; x++) {
             for (int y = 0; y < 11; y++) {
