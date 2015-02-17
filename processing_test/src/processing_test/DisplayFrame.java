@@ -65,5 +65,5 @@ public class DisplayFrame extends JFrame implements ActionListener {
         if(returnVal == JFileChooser.APPROVE_OPTION) {
             img = new ImagePlus(chooser.getSelectedFile().getAbsolutePath());
         }
-    }
+    }  
 }
