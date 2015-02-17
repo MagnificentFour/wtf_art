@@ -13,35 +13,44 @@ public class CircleSketch extends PApplet {
     int drawStatus = 0;
     int xK = 0;
     int yK = 0;
+    boolean running;
 
     public void setup() {
         size(sizeWidth, sizeHeight);
         background(255);
         frameRate(120);
-        wtfSikring();
+        running = false;
+        xK = 0;
+        yK = 0;
+        noLoop();
     }
 
     public void draw() {
-        for (int i = yK; i < yK + 11; i++) {
-            for (int x = xK; x < xK + 11; x++) {
-                stroke(random(255), random(255), random(255));
-                point(x, i);
+        if (running) {
+            for (int i = yK; i < yK + 11; i++) {
+                for (int x = xK; x < xK + 11; x++) {
+                    stroke(random(255), random(255), random(255));
+                    point(x, i);
+                }
             }
-        }
-        xK += 10;
+            xK += 10;
 
-        if (xK == sizeWidth) {
-            yK += 10;
-            xK = 0;
+            if (xK == sizeWidth) {
+                yK += 10;
+                xK = 0;
+            }
         }
     }
 
-    public void wtfSikring() {
-        for (int x = 0; x < 11; x++) {
-            for (int y = 0; y < 11; y++) {
-                stroke(random(255), random(255), random(255));
-                point(x, y);
-            }
-        }
+    public void start() {
+        running = true;
+        loop();
+    }
+    
+    public void clear() {
+        running = false;
+        background(255);
+        xK = 0;
+        yK = 0;
     }
 }
