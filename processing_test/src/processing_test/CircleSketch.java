@@ -14,6 +14,7 @@ public class CircleSketch extends PApplet {
     int xK = 0;
     int yK = 0;
     boolean running;
+    ProcessImage imageProcessor;
 
     public void setup() {
         size(sizeWidth, sizeHeight);
@@ -22,26 +23,28 @@ public class CircleSketch extends PApplet {
         running = false;
         xK = 0;
         yK = 0;
+        imageProcessor = new ProcessImage();
         noLoop();
     }
 
     public void draw() {
-        if (running) {
-            for (int i = yK; i < yK + 11; i++) {
-                for (int x = xK; x < xK + 11; x++) {
-                    stroke(random(255), random(255), random(255));
-                    point(x, i);
-                }
-            }
-            xK += 10;
-
-            if (xK == sizeWidth) {
-                yK += 10;
-                xK = 0;
-            }
-        }
+//        if (running) {
+//            for (int i = yK; i < yK + 11; i++) {
+//                for (int x = xK; x < xK + 11; x++) {
+//                    stroke(random(255), random(255), random(255));
+//                    point(x, i);
+//                }
+//            }
+//            xK += 10;
+//
+//            if (xK == sizeWidth) {
+//                yK += 10;
+//                xK = 0;
+//            }
+//        }
+        image(imageProcessor.getImage(), 0, 0);
     }
-
+    
     public void start() {
         running = true;
         loop();

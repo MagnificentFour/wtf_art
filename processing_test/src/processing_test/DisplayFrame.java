@@ -7,8 +7,10 @@ package processing_test;
 
 import ij.ImagePlus;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.Clock;
 import javax.swing.*;
@@ -24,7 +26,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     JButton fileChooseButton;
     JButton button;
     JButton clearButton;
-    ImagePlus img;
+    ProcessImage imageProcessor;
 
     public DisplayFrame() {
         this.setSize(600, 600);
@@ -33,6 +35,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         button = new JButton("Start");
         fileChooseButton = new JButton("Velg fil");
         clearButton = new JButton("Clear Canvas");
+        imageProcessor = new ProcessImage();
 
         setLayout(new FlowLayout());
         panel.setBounds(20, 20, 600, 600);
@@ -55,11 +58,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == button) {
             sketch.start();
-            try {
-            img.show();
-            } catch (Exception imgError) {
-                System.out.println("Fuck you " + imgError);
-            }
         } else if (e.getSource() == fileChooseButton) {
             chooseFile();
         } else if (e.getSource() == clearButton) {
@@ -74,7 +72,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(this);
         if(returnVal == JFileChooser.APPROVE_OPTION) {
-            img = new ImagePlus(chooser.getSelectedFile().getAbsolutePath());
+            imageProcessor.setCurrentImage(chooser.getSelectedFile().getAbsolutePath());
         }
     }  
 }
