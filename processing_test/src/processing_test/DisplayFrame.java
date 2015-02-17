@@ -5,14 +5,9 @@
  */
 package processing_test;
 
-import ij.ImagePlus;
 import java.awt.FlowLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.time.Clock;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -22,11 +17,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class DisplayFrame extends JFrame implements ActionListener {
 
-    processing.core.PApplet sketch;
-    JButton fileChooseButton;
-    JButton button;
-    JButton clearButton;
-    ProcessImage imageProcessor;
+    private final processing.core.PApplet sketch;
+    private JButton fileChooseButton;
+    private JButton button;
+    private JButton clearButton;
+    private ProcessImage imageProcessor;
 
     public DisplayFrame() {
         this.setSize(450, 500);
@@ -40,17 +35,19 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setLayout(new FlowLayout());
         panel.setBounds(20, 20, 450, 500);
         sketch = new CircleSketch();
+//        SampleSketch s = new SampleSketch();
         panel.add(sketch);
         this.add(panel);
         this.add(button);
         this.add(fileChooseButton);
         this.add(clearButton);
 
-        button.addActionListener(this);
-        fileChooseButton.addActionListener(this);
+        
+        button.addActionListener(sketch);
         clearButton.addActionListener(this);
 
         sketch.init(); //this is the function used to start the execution of the sketch
+        fileChooseButton.addActionListener(this);
         this.setVisible(true);
     }
 

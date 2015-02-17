@@ -1,12 +1,14 @@
 package processing_test;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import processing.core.*;
 
 /**
  *
  * @author nikla_000
  */
-public class CircleSketch extends PApplet {
+public class CircleSketch extends PApplet implements ActionListener {
 
     int sizeWidth = 400;
     int sizeHeight = 400;
@@ -16,6 +18,7 @@ public class CircleSketch extends PApplet {
     boolean running;
     ProcessImage imageProcessor;
 
+    @Override
     public void setup() {
         size(sizeWidth, sizeHeight);
         background(255);
@@ -55,5 +58,12 @@ public class CircleSketch extends PApplet {
         background(255);
         xK = 0;
         yK = 0;
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        if(ae.getActionCommand().equals(" ")) {
+            
+        }
     }
 }
