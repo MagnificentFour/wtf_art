@@ -16,8 +16,8 @@ public class ProcessImage {
     String imgPath;
     
     public ProcessImage() {
-        imgPath = "E:/image.jpg";
-        setCurrentImage(imgPath);
+//        imgPath = "E:/image.jpg";
+//        setCurrentImage(imgPath);
     }
     
     private BufferedImage makeCannyEdge(BufferedImage in) {

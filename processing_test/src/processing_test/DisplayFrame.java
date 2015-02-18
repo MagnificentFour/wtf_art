@@ -35,19 +35,30 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setLayout(new FlowLayout());
         panel.setBounds(20, 20, 450, 500);
         sketch = new CircleSketch();
-//        SampleSketch s = new SampleSketch();
-        panel.add(sketch);
+        SampleSketch s = new SampleSketch();
+        panel.add(s);
         this.add(panel);
         this.add(button);
         this.add(fileChooseButton);
         this.add(clearButton);
 
-        
-        button.addActionListener(sketch);
+        button.addActionListener(s);
         clearButton.addActionListener(this);
 
-        sketch.init(); //this is the function used to start the execution of the sketch
-        fileChooseButton.addActionListener(this);
+        s.init(); //this is the function used to start the execution of the sketch
+        fileChooseButton.addActionListener((ActionEvent arg0) -> {
+            JFileChooser chooser = new JFileChooser();
+            
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    "JPG, GIF & PNG", "jpg", "gif", "png");
+            chooser.setFileFilter(filter);
+            
+            int returnVal = chooser.showOpenDialog(panel);
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+                imageProcessor.setCurrentImage(chooser.getSelectedFile().getAbsolutePath());
+                s.loadBgImage(imageProcessor.getImage());
+            }
+        });
         this.setVisible(true);
     }
 
@@ -68,8 +79,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
                 "JPG, GIF & PNG", "jpg", "gif", "png");
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(this);
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
             imageProcessor.setCurrentImage(chooser.getSelectedFile().getAbsolutePath());
         }
-    }  
+    }
 }
