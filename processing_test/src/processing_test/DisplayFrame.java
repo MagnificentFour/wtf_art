@@ -12,7 +12,6 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- *
  * @author nikla_000
  */
 public class DisplayFrame extends JFrame implements ActionListener {
@@ -42,7 +41,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.add(fileChooseButton);
         this.add(clearButton);
 
-        button.addActionListener(sketch);
+        button.addActionListener(s);
         button.setActionCommand("run");
         clearButton.addActionListener(this);
 

@@ -8,8 +8,8 @@ package processing_test;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import processing.core.PApplet;
-import processing.core.PImage;
+import static javafx.scene.paint.Color.color;
+import processing.core.*;
 
 /**
  *
@@ -17,8 +17,8 @@ import processing.core.PImage;
  */
 public class SampleSketch extends PApplet implements ActionListener {
 
-    int sizeWidth = 1280;
-    int sizeHeight = 720;
+    int sizeWidth = 450;
+    int sizeHeight = 500;
     PImage bgImg;
     boolean gogo = false;
 
@@ -31,9 +31,9 @@ public class SampleSketch extends PApplet implements ActionListener {
 
     @Override
     public void draw() {
-//        ellipse(mouseX, mouseY, 40, 40);
         if (gogo) {
             image(bgImg, 0, 0);
+            
         }
     }
 
@@ -44,13 +44,12 @@ public class SampleSketch extends PApplet implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
+
         switch (e.getActionCommand()) {
             case "run":
-                loop();
+                redraw();
                 break;
         }
-                
-    }
 
+    }
 }
