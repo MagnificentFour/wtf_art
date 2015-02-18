@@ -17,7 +17,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class DisplayFrame extends JFrame implements ActionListener {
 
-    private final processing.core.PApplet sketch;
+    private final CircleSketch sketch;
     private JButton fileChooseButton;
     private JButton button;
     private JButton clearButton;
@@ -42,7 +42,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.add(fileChooseButton);
         this.add(clearButton);
 
-        button.addActionListener(s);
+        button.addActionListener(sketch);
+        button.setActionCommand("run");
         clearButton.addActionListener(this);
 
         s.init(); //this is the function used to start the execution of the sketch
@@ -55,8 +56,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
             
             int returnVal = chooser.showOpenDialog(panel);
             if(returnVal == JFileChooser.APPROVE_OPTION) {
-                imageProcessor.setCurrentImage(chooser.getSelectedFile().getAbsolutePath());
-                s.loadBgImage(imageProcessor.getImage());
+//                imageProcessor.setCurrentImage(chooser.getSelectedFile().getAbsolutePath());
+                s.loadBgImage(chooser.getSelectedFile());
             }
         });
         this.setVisible(true);

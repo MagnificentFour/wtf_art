@@ -16,19 +16,31 @@ public class ProcessImage {
     String imgPath;
     
     public ProcessImage() {
-//        imgPath = "E:/image.jpg";
+//        imgPath = "E:/newimage.jpg";
 //        setCurrentImage(imgPath);
     }
     
-    private BufferedImage makeCannyEdge(BufferedImage in) {
+    private ImagePlus makeCannyEdge(BufferedImage in) {
+        ImagePlus out = new ImagePlus(); 
         CannyEdgeDetector ced = new CannyEdgeDetector(in, 40, 80);
-        BufferedImage out = ced.filter();
-        
+        out.setImage(ced.filter());
         return out;
     }
     
     public PImage getImage() {
         pImage = new PImage(image.getBufferedImage());
+        return pImage;
+    }
+    
+    public PImage getCannyImage() {
+        ImagePlus cannyEdge = makeCannyEdge(image.getBufferedImage());
+        cannyEdge.show();
+        
+        try {
+        pImage = new PImage(cannyEdge.getBufferedImage());
+        } catch(ClassCastException e) {
+            System.out.println("Meh, something something " + e);
+        }
         return pImage;
     }
     

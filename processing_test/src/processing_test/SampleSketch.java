@@ -7,6 +7,7 @@ package processing_test;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -16,8 +17,8 @@ import processing.core.PImage;
  */
 public class SampleSketch extends PApplet implements ActionListener {
 
-    int sizeWidth = 400;
-    int sizeHeight = 400;
+    int sizeWidth = 1280;
+    int sizeHeight = 720;
     PImage bgImg;
     boolean gogo = false;
 
@@ -36,14 +37,20 @@ public class SampleSketch extends PApplet implements ActionListener {
         }
     }
 
-    public void loadBgImage(PImage imgIn) {
-        bgImg = imgIn;
+    public void loadBgImage(File filein) {
+        bgImg = loadImage(filein.getAbsolutePath());
         gogo = true;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        loop();
+        
+        switch (e.getActionCommand()) {
+            case "run":
+                loop();
+                break;
+        }
+                
     }
 
 }
