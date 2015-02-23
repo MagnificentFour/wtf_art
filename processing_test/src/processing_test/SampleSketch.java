@@ -10,16 +10,20 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import processing.core.*;
 
 /**
  *
  * @author nikla_000
  */
-public class SampleSketch extends PApplet implements ActionListener {
+public class SampleSketch extends PApplet implements ActionListener, ChangeListener {
 
     int sizeWidth = 1280;
     int sizeHeight = 720;
+    int pxSize = 20;
     PImage bgImg;
     boolean gogo = false;
     boolean noSave = false;
@@ -42,19 +46,19 @@ public class SampleSketch extends PApplet implements ActionListener {
         if (gogo) {
             if (!ellipseList.isEmpty()) {
                 drawList.add(ellipseList.remove(rand.nextInt(ellipseList.size())));
-            } else if(done) {
+            } else if (done) {
                 noLoop();
             } else {
                 done = true;
                 drawList.stream().forEach((e) -> {
-                    if(e.incrementSize()) {
-                       done = false; 
+                    if (e.incrementSize()) {
+                        done = false;
                     }
                 });
             }
-            
+
             background(0);
-            
+
             fill(255);
 
             drawList.stream().forEach((e) -> {
@@ -77,7 +81,7 @@ public class SampleSketch extends PApplet implements ActionListener {
 
     private void dotRep() {
         int loc = 0;
-        int pxSize = 10;
+        //int pxSize = 10;
         int createSize = 0;
 
         float r;
@@ -103,7 +107,7 @@ public class SampleSketch extends PApplet implements ActionListener {
 
         fill(0);
         rect(0, 0, width, height);
-        fill(255);
+        fill(240,110,110);
         for (int i = 0; i < width / pxSize; i++) {
             for (int j = 0; j < height / pxSize; j++) {
                 loc = (i * pxSize) + ((j * pxSize) * width);
@@ -121,7 +125,6 @@ public class SampleSketch extends PApplet implements ActionListener {
 
     private void pxlation() {
         int loc = 0;
-        int pxSize = 20;
         int barSize = 2;
         int contrast1 = 100; //detection of darker color
         int contrast2 = 150; //detection of lighter color
@@ -201,5 +204,13 @@ public class SampleSketch extends PApplet implements ActionListener {
                 frameRate(180);
         }
 
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        JSlider source = (JSlider) e.getSource();
+        pxSize = source.getValue();
+        dotRep();
+        redraw();
     }
 }

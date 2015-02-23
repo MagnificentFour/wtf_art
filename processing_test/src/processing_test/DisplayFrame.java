@@ -26,6 +26,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private JButton tripleSpeed;
     private ProcessImage imageProcessor;
     private JPanel panel;
+    private JSlider slider;
     
     SampleSketch s;
 
@@ -45,6 +46,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         doubleSpeed = new JButton("2X Speed");
         tripleSpeed = new JButton("3X Speed");
         imageProcessor = new ProcessImage();
+        slider = new JSlider(JSlider.HORIZONTAL, 4, 30, 20);
 
         arrangeLayout();
         
@@ -62,6 +64,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.add(fncButton3);
         this.add(doubleSpeed);
         this.add(tripleSpeed);
+        this.add(slider);
 
         
         this.setVisible(true);
@@ -82,6 +85,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         clearButton.setBounds(1320, 220, 215, 50);
         doubleSpeed.setBounds(1320, 300, 100, 50);
         tripleSpeed.setBounds(1435, 300, 100, 50);
+        slider.setBounds(1320, 370, 215, 20);
     }
     
     /**
@@ -102,6 +106,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         doubleSpeed.setActionCommand("double");
         tripleSpeed.addActionListener(s);
         tripleSpeed.setActionCommand("triple");
+        
+        slider.addChangeListener(s);
         
 
         fileChooseButton.addActionListener((ActionEvent arg0) -> {
