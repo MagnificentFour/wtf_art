@@ -22,8 +22,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton fncButton2;
     private final JButton fncButton3;
     private final JButton clearButton;
-    private JButton doubleSpeed;
-    private JButton tripleSpeed;
+    private final JButton doubleSpeed;
+    private final JButton tripleSpeed;
+    
+    private final JLabel step1;
+    private final JLabel step2;
+    private final JLabel step3;
+    private final JLabel sliderLabel;
+    
     private ProcessImage imageProcessor;
     private JPanel panel;
     private JSlider slider;
@@ -46,8 +52,16 @@ public class DisplayFrame extends JFrame implements ActionListener {
         doubleSpeed = new JButton("2X Speed");
         tripleSpeed = new JButton("3X Speed");
         imageProcessor = new ProcessImage();
+        
+        step1 = new JLabel("Step1: Choose a picture");
+        step2 = new JLabel("Step2: Choose a function");
+        step3 = new JLabel("Step3: Edit the result");
+        sliderLabel = new JLabel("Change size of \"pixels\"");
+        
         slider = new JSlider(JSlider.HORIZONTAL, 4, 30, 20);
 
+        fncButton3.setToolTipText("Show a dot representation for your picture");
+        
         arrangeLayout();
         
         s = new SampleSketch();
@@ -64,6 +78,10 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.add(fncButton3);
         this.add(doubleSpeed);
         this.add(tripleSpeed);
+        this.add(step1);
+        this.add(step2);
+        this.add(step3);
+        this.add(sliderLabel);
         this.add(slider);
 
         
@@ -77,15 +95,21 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setLayout(null);
         
         panel = new JPanel();
+        
         panel.setBounds(20, 20, 1280, 720);
-        button.setBounds(1320, 25, 100, 50);
-        fncButton2.setBounds(1320, 90, 100, 50);
-        fncButton3.setBounds(1435, 90, 100, 50);
-        fileChooseButton.setBounds(1320, 155, 215, 50);
-        clearButton.setBounds(1320, 220, 215, 50);
-        doubleSpeed.setBounds(1320, 300, 100, 50);
-        tripleSpeed.setBounds(1435, 300, 100, 50);
-        slider.setBounds(1320, 370, 215, 20);
+        fileChooseButton.setBounds(1320, 65, 215, 50);
+        button.setBounds(1320, 13065, 100, 50);
+        fncButton2.setBounds(1320, 195, 100, 50);
+        fncButton3.setBounds(1435, 195, 100, 50);
+        clearButton.setBounds(1320, 340, 215, 50);
+        doubleSpeed.setBounds(1320, 410, 100, 50);
+        tripleSpeed.setBounds(1435, 410, 100, 50);
+        slider.setBounds(1320, 510, 215, 20);
+        
+        step1.setBounds(1320, 25, 150, 30);
+        step2.setBounds(1320, 155, 150, 30);
+        step3.setBounds(1320, 300, 150, 30);
+        sliderLabel.setBounds(1360, 480, 150, 30);
     }
     
     /**
