@@ -5,7 +5,6 @@
  */
 package processing_test;
 
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -30,9 +29,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JLabel step3;
     private final JLabel sliderLabel;
     
-    private ProcessImage imageProcessor;
+    private final ProcessImage imageProcessor;
     private JPanel panel;
-    private JSlider slider;
+    private final JSlider slider;
     
     SampleSketch s;
 
@@ -43,6 +42,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     public DisplayFrame() {
         this.setSize(1600, 800);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
         
         button = new JButton("Start");
         fncButton2 = new JButton("Pixelate");
