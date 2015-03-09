@@ -87,7 +87,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         float r;
         float g;
         float b;
-        float[] ave = new float[450 * 500 * 450];
+        float[] ave = new float[1000000];
 
         size(bgImg.width, bgImg.height);
         noStroke();
@@ -132,7 +132,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         float r;
         float g;
         float b;
-        float[] ave = new float[450 * 500 * 450];
+        float[] ave = new float[1000000];
 
         size(((int) (bgImg.width / pxSize)) * pxSize, ((int) (bgImg.height / pxSize)) * pxSize); //this removes extra border space
         noStroke();
