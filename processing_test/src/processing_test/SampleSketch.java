@@ -30,6 +30,9 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     Random rand = new Random();
     int i;
     boolean done = false;
+    
+    boolean dotrep = false;
+    boolean pxlation = false;
 
     ArrayList<Ellipse> ellipseList = new ArrayList<>();
     ArrayList<Ellipse> drawList = new ArrayList<>();
@@ -67,6 +70,11 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             });
 
         }
+        if(dotrep) {
+            dotRep();
+        } else if(pxlation) {
+            pxlation();
+        }
     }
 
     public void loadBgImage(File filein) {
@@ -87,14 +95,14 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         float r;
         float g;
         float b;
-        float[] ave = new float[1000000];
+
+        float[] ave = new float[5000000];
 
         size(bgImg.width, bgImg.height);
         noStroke();
 
         image(bgImg, 0, 0);
         loadPixels();
-
         for (int x = 0; x < (width / pxSize); x++) {
             for (int y = 0; y < (height / pxSize); y++) {
                 loc = (x * pxSize) + ((y * pxSize) * width);
@@ -104,7 +112,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 ave[loc] = ((r + g + b) / 3);
             }
         }
-
+        
         fill(0);
         rect(0, 0, width, height);
         fill(240,110,110);
@@ -177,13 +185,15 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 gogo = false;
                 noSave = false;
                 background(255);
-                dotRep();
+                dotrep = true;
+                pxlation = false;
                 redraw();
                 break;
             case "dot":
                 noSave = true;
                 gogo = false;
-                dotRep();
+                dotrep = true;
+                pxlation = false;
                 redraw();
                 break;
             case "clear":
@@ -194,7 +204,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             case "pxlate":
                 gogo = false;
                 background(255);
-                pxlation();
+                dotrep = false;
+                pxlation = true;
                 redraw();
                 break;
             case "double":
@@ -210,7 +221,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     public void stateChanged(ChangeEvent e) {
         JSlider source = (JSlider) e.getSource();
         pxSize = source.getValue();
-        dotRep();
         redraw();
     }
 }
