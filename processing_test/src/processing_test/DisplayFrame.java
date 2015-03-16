@@ -29,6 +29,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton doubleSpeed;
     private final JButton tripleSpeed;
     private final JButton saveButton;
+    private final JButton blankButton;
     private final JButton backButton;
     private final JButton forwardButton;
 
@@ -48,7 +49,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
      * components of the GUI as well as the processing sketch.
      */
     public DisplayFrame() throws IOException {
-        this.setSize(1600, 800);
+        this.setSize(1600, 850);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -62,6 +63,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         imageProcessor = new ProcessImage();
 
         saveButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/Save-icon.png"))));
+        blankButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/blank.jpg"))));
         backButton = new JButton("<");
         forwardButton = new JButton(">");
 
@@ -96,6 +98,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.add(sliderLabel);
         this.add(slider);
         this.add(saveButton);
+        this.add(blankButton);
         this.add(backButton);
         this.add(forwardButton);
 
@@ -110,11 +113,12 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         panel = new JPanel();
         
-        saveButton.setBounds(20, 10, 50, 50);
-        backButton.setBounds(80, 10, 50, 50);
-        forwardButton.setBounds(140, 10, 50, 50);
+        blankButton.setBounds(20, 10, 50, 50);
+        saveButton.setBounds(80, 10, 50, 50);
+        backButton.setBounds(140, 10, 50, 50);
+        forwardButton.setBounds(200, 10, 50, 50);
 
-        panel.setBounds(20, 100, 1280, 720);
+        panel.setBounds(20, 70, 1280, 720);
         fileChooseButton.setBounds(1320, 145, 215, 50);
         button.setBounds(1320, 1445, 100, 50);
         fncButton2.setBounds(1320, 275, 100, 50);
@@ -142,18 +146,25 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         button.addActionListener(s);
         button.setActionCommand("run");
+        
         clearButton.addActionListener(s);
         clearButton.setActionCommand("clear");
+        
         fncButton2.addActionListener(s);
         fncButton2.setActionCommand("pxlate");
+        
         fncButton3.addActionListener(s);
         fncButton3.setActionCommand("dot");
+        
         doubleSpeed.addActionListener(s);
         doubleSpeed.setActionCommand("double");
+        
         tripleSpeed.addActionListener(s);
         tripleSpeed.setActionCommand("triple");
+        
         backButton.addActionListener(s);
         backButton.setActionCommand("back");
+        
         forwardButton.addActionListener(s);
         forwardButton.setActionCommand("forward");
 
