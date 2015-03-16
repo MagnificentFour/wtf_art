@@ -70,6 +70,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             dotRep();
         } else if(pxlation) {
             pxlation();
+        } else if(bgImg != null){
+            image(bgImg, 0, 0);
         }
     }
 
@@ -81,6 +83,10 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         image(bgImg, 0, 0);
 
         redraw();
+    }
+    
+    public void saveImage(File dir) {
+        save(dir.getAbsolutePath());
     }
 
     private void dotRep() {
@@ -109,6 +115,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             }
         }
         
+        rectMode(CORNER);
+        
         fill(0);
         rect(0, 0, width, height);
         fill(240,110,110);
@@ -130,8 +138,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     private void pxlation() {
         int loc = 0;
         int barSize = 2;
-        int contrast1 = 100; //detection of darker color
-        int contrast2 = 150; //detection of lighter color
+        int contrast1 = 80; //detection of darker color
+        int contrast2 = 190; //detection of lighter color
 
         float r;
         float g;
@@ -196,6 +204,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 gogo = false;
                 background(255);
                 redraw();
+                dotrep = false;
+                pxlation = false;
                 break;
             case "pxlate":
                 gogo = false;
