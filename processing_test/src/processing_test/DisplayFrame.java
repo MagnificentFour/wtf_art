@@ -79,7 +79,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         arrangeLayout();
 
         s = new SampleSketch();
-
+        s.setButtons(forwardButton, backButton);
+        
         setActionListeners(s);
         s.init(); //this is the function used to start the execution of the sketch
 
@@ -112,17 +113,17 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setLayout(null);
 
         panel = new JPanel();
-        
+
         blankButton.setBounds(20, 10, 50, 50);
         saveButton.setBounds(80, 10, 50, 50);
-        backButton.setBounds(140, 10, 50, 50);
-        forwardButton.setBounds(200, 10, 50, 50);
+        backButton.setBounds(150, 10, 50, 50);
+        forwardButton.setBounds(210, 10, 50, 50);
+        fncButton2.setBounds(1320, 275, 100, 50);
+        fncButton3.setBounds(1435, 275, 100, 50);
 
         panel.setBounds(20, 70, 1280, 720);
         fileChooseButton.setBounds(1320, 145, 215, 50);
         button.setBounds(1320, 1445, 100, 50);
-        fncButton2.setBounds(1320, 275, 100, 50);
-        fncButton3.setBounds(1435, 275, 100, 50);
         clearButton.setBounds(1320, 420, 215, 50);
         doubleSpeed.setBounds(1320, 490, 100, 50);
         tripleSpeed.setBounds(1435, 490, 100, 50);
@@ -146,27 +147,30 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         button.addActionListener(s);
         button.setActionCommand("run");
-        
+
         clearButton.addActionListener(s);
         clearButton.setActionCommand("clear");
-        
+
         fncButton2.addActionListener(s);
         fncButton2.setActionCommand("pxlate");
-        
+
         fncButton3.addActionListener(s);
         fncButton3.setActionCommand("dot");
-        
+
         doubleSpeed.addActionListener(s);
         doubleSpeed.setActionCommand("double");
-        
+
         tripleSpeed.addActionListener(s);
         tripleSpeed.setActionCommand("triple");
-        
+
         backButton.addActionListener(s);
         backButton.setActionCommand("back");
-        
+
         forwardButton.addActionListener(s);
         forwardButton.setActionCommand("forward");
+
+        blankButton.addActionListener(this);
+        blankButton.setActionCommand("blank");
 
         slider.addChangeListener(s);
 
@@ -187,7 +191,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         saveButton.addActionListener((ActionEvent arg0) -> {
             JFileChooser chooser = new JFileChooser();
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            
+
 //            FileNameExtensionFilter filter = new FileNameExtensionFilter(
 //                    "JPG, GIF & PNG", "jpg", "gif", "png");
 //            chooser.setFileFilter(filter);
@@ -203,15 +207,21 @@ public class DisplayFrame extends JFrame implements ActionListener {
         });
     }
 
+    private boolean wantToReset() {
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int dialogResult = JOptionPane.showConfirmDialog(null, "All unsaved progress will be lost, "
+                + "are you sure you want to do this?", "Warning", dialogButton);
+        return dialogResult == JOptionPane.YES_OPTION;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-//        if (e.getSource() == button) {
-//            sketch.start();
-//        } else if (e.getSource() == fileChooseButton) {
-//            chooseFile();
-//        } else if (e.getSource() == clearButton) {
-//            sketch.clear();
-//        }
+        switch (e.getActionCommand()) {
+            case "blank":
+                if (wantToReset()) {
+                    s.reset();
+                }
+        }
     }
 
     public void chooseFile() {

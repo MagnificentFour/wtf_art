@@ -1,4 +1,3 @@
-
 package processing_test;
 
 import java.awt.event.ActionEvent;
@@ -6,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -27,14 +27,17 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     int i;
     boolean done = false;
     
+    JButton fwd;
+    JButton back;
+    
     State methodState = State.CLEAR;
     State nextState = State.CLEAR;
 
     ArrayList<Ellipse> ellipseList = new ArrayList<>();
     ArrayList<Ellipse> drawList = new ArrayList<>();
-    
+
     JSlider source;
-    
+
     ChangeTracker tracker = new ChangeTracker();
 
     @Override
@@ -71,20 +74,45 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
         }
         
-        if(methodState == State.DOTREP) {
-            dotRep();
-        } else if(methodState == State.PXLATION) {
-            pxlation();
-        } else if(methodState == State.CLEAR && bgImg != null){
-            image(bgImg, 0, 0);
-        } else if(methodState == State.IMPORT) {
-            methodState = nextState;
+        if(tracker.hasNext()) {
+            fwd.setEnabled(true);
+        } else {
+            fwd.setEnabled(false);
         }
         
+        if(tracker.hasPrev()) {
+            back.setEnabled(true);
+        } else {
+            back.setEnabled(false);
+        }
+                
+        if (bgImg != null) {
+
+            if (methodState == State.DOTREP) {
+                dotRep();
+            } else if (methodState == State.PXLATION) {
+                pxlation();
+            } else if (methodState == State.CLEAR) {
+                image(bgImg, 0, 0);
+                tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
+            } else if (methodState == State.IMPORT) {
+                methodState = nextState;
+            }
+
+        } else {
+            
+            fill(0);
+            textSize(32);
+            textAlign(CENTER);
+            text("Please select an image", width/2, height/2);
+            
+        }
+
     }
 
     /**
      * Loads and displays an image selected by the FileChooser
+     *
      * @param filein Input image
      */
     public void loadBgImage(File filein) {
@@ -93,12 +121,13 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             bgImg.resize(0, 720);
         }
         image(bgImg, 0, 0);
-
+        tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
         redraw();
     }
-    
+
     /**
      * Saves the display window to an image file.
+     *
      * @param dir The directory where the image will be saved.
      */
     public void saveImage(File dir) {
@@ -133,12 +162,12 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 ave[loc] = ((r + g + b) / 3);
             }
         }
-        
+
         rectMode(CORNER);
-        
+
         fill(0);
         rect(0, 0, width, height);
-        fill(240,110,110);
+        fill(240, 110, 110);
         for (int i = 0; i < width / pxSize; i++) {
             for (int j = 0; j < height / pxSize; j++) {
                 loc = (i * pxSize) + ((j * pxSize) * width);
@@ -206,7 +235,53 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     }
 
     /**
+     * Takes a StateCapture and imports the parameters.
+     *
+     * @param state The state to be loaded.
+     */
+    public void importState(StateCapture state) {
+
+        image(state.getDisplayWindow(), 0, 0);
+        pxSize = state.getPxSize();
+        methodState = State.IMPORT;
+        nextState = state.getRunState();
+
+        if (source != null) {
+
+            source.setValue(pxSize);
+
+        }
+
+        redraw();
+
+    }
+    
+    public void setButtons(JButton fwd, JButton back) {
+        this.fwd = fwd;
+        this.back = back;
+    }
+
+    public void reset() {
+        bgImg = null;
+        tracker = new ChangeTracker();
+
+        methodState = State.CLEAR;
+
+        background(255);
+        redraw();
+    }
+    
+    public boolean changeHasNext() {
+        return tracker.hasNext();
+    }
+    
+    public boolean changeHasPrev() {
+        return tracker.hasPrev();
+    }
+
+    /**
      * Action performed by buttons.
+     *
      * @param e The action event.
      */
     @Override
@@ -245,39 +320,27 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 frameRate(180);
                 break;
             case "forward":
-                importState(tracker.getNextEntry());
+                if(tracker.hasChanged()) 
+                    importState(tracker.getNextEntry());
+                if(!tracker.hasNext())
+                    fwd.setEnabled(false);
                 break;
             case "back":
-                importState(tracker.getPrevEntry());
+                if(tracker.hasChanged()) 
+                    importState(tracker.getPrevEntry());
+                if(!tracker.hasPrev())
+                    back.setEnabled(false);
         }
 
-    }
-    
-    /**
-     * Takes a StateCapture and imports the parameters.
-     * @param state The state to be loaded.
-     */
-    public void importState(StateCapture state) {
-        
-        image(state.getDisplayWindow(), 0, 0);
-        pxSize = state.getPxSize();
-        methodState = State.IMPORT;
-        nextState = state.getRunState();
-        
-        if(source != null) {
-            
-            source.setValue(pxSize);
-            
-        }
-        
-        redraw();
-        
     }
 
     @Override
     public void stateChanged(ChangeEvent e) {
         source = (JSlider) e.getSource();
-        pxSize = source.getValue();
-        redraw();
+        
+        if(!source.getValueIsAdjusting()) {
+            pxSize = source.getValue();
+            redraw();
+        }
     }
 }

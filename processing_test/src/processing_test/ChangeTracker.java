@@ -13,7 +13,7 @@ public class ChangeTracker {
 
     public ChangeTracker() {
         changeList = new ArrayList<>();
-        currentIndex = 0;
+        currentIndex = -1;
     }
 
     public void addChange(StateCapture prevState) {
@@ -21,18 +21,16 @@ public class ChangeTracker {
 
         if (changeList.size() > 5) {
             changeList.remove(0);
-        } else {
-            currentIndex++;
+        } else if(changeList.size() > 0){
+            currentIndex = changeList.size() - 1;
         }
 
     }
 
     public StateCapture getPrevEntry() {
-        
         if (currentIndex > 0) {
             currentIndex--;
         }
-        
         StateCapture returnObject = changeList.get(currentIndex);
 
         return returnObject;
@@ -55,5 +53,9 @@ public class ChangeTracker {
     
     public boolean hasPrev() {
         return currentIndex > 0;
+    }
+    
+    public boolean hasChanged() {
+        return changeList.size() > 0;
     }
 }
