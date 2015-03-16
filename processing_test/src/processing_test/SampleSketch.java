@@ -27,11 +27,15 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     int i;
     boolean done = false;
     
-    boolean dotrep = false;
-    boolean pxlation = false;
+    State methodState = State.CLEAR;
+    State nextState = State.CLEAR;
 
     ArrayList<Ellipse> ellipseList = new ArrayList<>();
     ArrayList<Ellipse> drawList = new ArrayList<>();
+    
+    JSlider source;
+    
+    ChangeTracker tracker = new ChangeTracker();
 
     @Override
     public void setup() {
@@ -66,15 +70,23 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             });
 
         }
-        if(dotrep) {
+        
+        if(methodState == State.DOTREP) {
             dotRep();
-        } else if(pxlation) {
+        } else if(methodState == State.PXLATION) {
             pxlation();
-        } else if(bgImg != null){
+        } else if(methodState == State.CLEAR && bgImg != null){
             image(bgImg, 0, 0);
+        } else if(methodState == State.IMPORT) {
+            methodState = nextState;
         }
+        
     }
 
+    /**
+     * Loads and displays an image selected by the FileChooser
+     * @param filein Input image
+     */
     public void loadBgImage(File filein) {
         bgImg = loadImage(filein.getAbsolutePath());
         if (bgImg.width > 720) {
@@ -85,10 +97,17 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         redraw();
     }
     
+    /**
+     * Saves the display window to an image file.
+     * @param dir The directory where the image will be saved.
+     */
     public void saveImage(File dir) {
         save(dir.getAbsolutePath());
     }
 
+    /**
+     * Makes a representation of the image in dots.
+     */
     private void dotRep() {
         int loc = 0;
         //int pxSize = 10;
@@ -133,8 +152,12 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 }
             }
         }
+        tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
     }
 
+    /**
+     * Makes a pixelated representation of the image with two colors.
+     */
     private void pxlation() {
         int loc = 0;
         int barSize = 2;
@@ -179,8 +202,13 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 }
             }
         }
+        tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
     }
 
+    /**
+     * Action performed by buttons.
+     * @param e The action event.
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -189,29 +217,25 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 gogo = false;
                 noSave = false;
                 background(255);
-                dotrep = true;
-                pxlation = false;
+                methodState = State.DOTREP;
                 redraw();
                 break;
             case "dot":
                 noSave = true;
                 gogo = false;
-                dotrep = true;
-                pxlation = false;
+                methodState = State.DOTREP;
                 redraw();
                 break;
             case "clear":
                 gogo = false;
                 background(255);
                 redraw();
-                dotrep = false;
-                pxlation = false;
+                methodState = State.CLEAR;
                 break;
             case "pxlate":
                 gogo = false;
                 background(255);
-                dotrep = false;
-                pxlation = true;
+                methodState = State.PXLATION;
                 redraw();
                 break;
             case "double":
@@ -219,13 +243,40 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 break;
             case "triple":
                 frameRate(180);
+                break;
+            case "forward":
+                importState(tracker.getNextEntry());
+                break;
+            case "back":
+                importState(tracker.getPrevEntry());
         }
 
+    }
+    
+    /**
+     * Takes a StateCapture and imports the parameters.
+     * @param state The state to be loaded.
+     */
+    public void importState(StateCapture state) {
+        
+        image(state.getDisplayWindow(), 0, 0);
+        pxSize = state.getPxSize();
+        methodState = State.IMPORT;
+        nextState = state.getRunState();
+        
+        if(source != null) {
+            
+            source.setValue(pxSize);
+            
+        }
+        
+        redraw();
+        
     }
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        JSlider source = (JSlider) e.getSource();
+        source = (JSlider) e.getSource();
         pxSize = source.getValue();
         redraw();
     }

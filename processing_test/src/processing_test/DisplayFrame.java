@@ -29,6 +29,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton doubleSpeed;
     private final JButton tripleSpeed;
     private final JButton saveButton;
+    private final JButton backButton;
+    private final JButton forwardButton;
 
     private final JLabel step1;
     private final JLabel step2;
@@ -60,6 +62,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         imageProcessor = new ProcessImage();
 
         saveButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/Save-icon.png"))));
+        backButton = new JButton("<");
+        forwardButton = new JButton(">");
 
         step1 = new JLabel("Step1: Choose a picture");
         step2 = new JLabel("Step2: Choose a function");
@@ -92,6 +96,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.add(sliderLabel);
         this.add(slider);
         this.add(saveButton);
+        this.add(backButton);
+        this.add(forwardButton);
 
         this.setVisible(true);
     }
@@ -105,6 +111,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         panel = new JPanel();
         
         saveButton.setBounds(20, 10, 50, 50);
+        backButton.setBounds(80, 10, 50, 50);
+        forwardButton.setBounds(140, 10, 50, 50);
 
         panel.setBounds(20, 100, 1280, 720);
         fileChooseButton.setBounds(1320, 145, 215, 50);
@@ -144,6 +152,10 @@ public class DisplayFrame extends JFrame implements ActionListener {
         doubleSpeed.setActionCommand("double");
         tripleSpeed.addActionListener(s);
         tripleSpeed.setActionCommand("triple");
+        backButton.addActionListener(s);
+        backButton.setActionCommand("back");
+        forwardButton.addActionListener(s);
+        forwardButton.setActionCommand("forward");
 
         slider.addChangeListener(s);
 
