@@ -22,7 +22,7 @@ public class Processing_test {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new DisplayFrame().setVisible(true);
 //        ImagePlus img = new ImagePlus("E:/image.jpg");
 //        ImagePlus out = new ImagePlus();
