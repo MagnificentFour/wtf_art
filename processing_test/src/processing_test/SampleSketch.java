@@ -1,15 +1,22 @@
 package processing_test;
 
+import java.awt.Color;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
+import static javafx.scene.paint.Color.color;
+import static javafx.scene.paint.Color.color;
+import static javafx.scene.paint.Color.color;
 import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import processing.core.*;
+import static processing.core.PConstants.RGB;
 
 /**
  *
@@ -20,16 +27,19 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     int sizeWidth = 1280;
     int sizeHeight = 720;
     int pxSize = 20;
+    int waitingPoint = 0;
     PImage bgImg;
     boolean gogo = false;
     boolean noSave = false;
     boolean moveToSpot = false;
+    boolean copying = false;
     Random rand = new Random();
     int i;
     boolean done = false;
 
     JButton fwd;
     JButton back;
+    CloneTool clTool = new CloneTool();
 
     State methodState = State.CLEAR;
     State nextState = State.CLEAR;
@@ -70,6 +80,27 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         } else {
             fwd.setEnabled(false);
         }
+        
+        if (copying = true) {
+            if (mousePressed == true) {
+                System.out.println("heya");
+                //Point p1 = clTool.getPoint1();
+                //Point p2 = clTool.getPoint2();
+                //Point cp = new Point(mouseX, mouseY);
+                //int colour = color(bgImg.get(mouseX - 50, mouseY));
+                for (int i = -10; i < 10; i++) {
+                    for (int t = -10; t < 10; t++) {
+                        int colour = color(get(mouseX + i - 50, mouseY + t));
+                        set(mouseX + i, mouseY + t, colour);
+                    }
+                }
+                //copy(bgImg, (p1.x-30), (p1.y-30), 60, 60, mouseX - 30, mouseY - 30, 60, 60);
+                //tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
+                //updatePixels();
+                //redraw();
+                //image(bgImg,0,0);
+            }
+        }
 
         if (tracker.hasPrev()) {
             back.setEnabled(true);
@@ -86,6 +117,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             } else if (methodState == State.CLEAR) {
                 image(bgImg, 0, 0);
                 tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
+            } else if (methodState == State.SETPOINTS) {
+
             } else if (methodState == State.IMPORT) {
                 methodState = nextState;
             }
@@ -157,6 +190,36 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             ellipse(e.getxCoord(), e.getyCoord(), e.getWidth(), e.getHeight());
             e.incrementSize();
         });
+    }
+
+    public void mouseClicked() {
+        System.out.println("lolol");
+        System.out.println(methodState);
+        if (methodState == State.SETPOINTS) {
+            if (waitingPoint == 0) {
+                Point p = new Point(mouseX, mouseY);
+                clTool.setPoint1(p);
+                waitingPoint = 1;
+            } else {
+                Point p = new Point(mouseX, mouseY);
+                clTool.setPoint2(p);
+                waitingPoint = 0;
+                methodState = State.CLONE;
+                copying = true;
+            }
+        } else if (methodState == State.CLONE) {
+            Point p1 = clTool.getPoint1();
+            Point p2 = clTool.getPoint2();
+            Point cp = new Point(mouseX, mouseY);
+            loop();
+            //colorMode(RGB, 100);
+            //color c = color(12,12,12); 
+            //color c = (RGB)bgImg.get(p.x, p.y);
+            //copying = true;
+            //redraw();
+            System.out.println("copying");
+            //System.out.println(i);
+        }
     }
 
     /**
@@ -236,17 +299,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
         redraw();
 
-    }
-    
-    public void mouseClicked() {
-        
-        if(gogo) {
-            
-            moveToSpot = true;
-            gogo = false;
-            
-        }
-        
     }
 
     public void setButtons(JButton fwd, JButton back) {
@@ -328,6 +380,16 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 if (!tracker.hasPrev()) {
                     back.setEnabled(false);
                 }
+                break;
+            case "clone":
+                //CloneTool clTool = new CloneTool();
+                //Point p = MouseInfo.getPointerInfo().getLocation(); 
+                //System.out.println(p);
+                methodState = State.CLONE;
+                break;
+            case "setPoints":
+                methodState = State.SETPOINTS;
+                break;
         }
 
     }
