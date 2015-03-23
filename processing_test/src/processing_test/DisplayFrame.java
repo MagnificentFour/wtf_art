@@ -32,7 +32,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton blankButton;
     private final JButton backButton;
     private final JButton forwardButton;
-
+    private final JButton cloneButton;
+    private final JButton setPoints;
     private final JLabel step1;
     private final JLabel step2;
     private final JLabel step3;
@@ -60,6 +61,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         clearButton = new JButton("Clear Canvas");
         doubleSpeed = new JButton("2X Speed");
         tripleSpeed = new JButton("3X Speed");
+        cloneButton = new JButton("Clone");
+        setPoints = new JButton("Set Points");
         imageProcessor = new ProcessImage();
 
         saveButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/Save-icon.png"))));
@@ -102,6 +105,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.add(blankButton);
         this.add(backButton);
         this.add(forwardButton);
+        this.add(cloneButton);
+        this.add(setPoints);
 
         this.setVisible(true);
     }
@@ -120,7 +125,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         forwardButton.setBounds(210, 10, 50, 50);
         fncButton2.setBounds(1320, 275, 100, 50);
         fncButton3.setBounds(1435, 275, 100, 50);
-
+        cloneButton.setBounds(270, 10, 100, 50);
+        setPoints.setBounds(380, 10, 100, 50);
         panel.setBounds(20, 70, 1280, 720);
         fileChooseButton.setBounds(1320, 145, 215, 50);
         button.setBounds(1320, 1445, 100, 50);
@@ -171,6 +177,12 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         blankButton.addActionListener(this);
         blankButton.setActionCommand("blank");
+        
+        cloneButton.addActionListener(s);
+        cloneButton.setActionCommand("clone");
+        
+        setPoints.addActionListener(s);
+        setPoints.setActionCommand("setPoints");
 
         slider.addChangeListener(s);
 
