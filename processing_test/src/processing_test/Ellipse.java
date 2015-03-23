@@ -15,6 +15,8 @@ public class Ellipse {
     private final float yCoord;
     private final float width;
     private final float height;
+    private float animX = 0;
+    private float animY = 0;
     private float drawWidth;
     private float drawHeight;
 
@@ -35,12 +37,20 @@ public class Ellipse {
         return yCoord;
     }
 
+    public float getAnimX() {
+        return animX;
+    }
+
+    public float getAnimY() {
+        return animY;
+    }
+
     public float getWidth() {
-        return drawWidth;
+        return width;
     }
 
     public float getHeight() {
-        return drawHeight;
+        return height;
     }
     
     public boolean incrementSize() {
@@ -52,6 +62,20 @@ public class Ellipse {
         } else {
             return false;
         }
+    }
+    
+    public void setAnimXAndY(float x, float y) {
+        
+        animX = x;
+        animY = y;
+        
+    }
+    
+    public void move(int xAmount, int yAmount) {
+        
+        animX += xAmount;
+        animY += yAmount;
+        
     }
 
 }

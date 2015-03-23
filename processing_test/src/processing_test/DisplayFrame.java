@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import net.iharder.dnd.FileDrop;
 
 /**
  * @author nikla_000
@@ -80,7 +81,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         s = new SampleSketch();
         s.setButtons(forwardButton, backButton);
-        
+
         setActionListeners(s);
         s.init(); //this is the function used to start the execution of the sketch
 
@@ -204,6 +205,27 @@ public class DisplayFrame extends JFrame implements ActionListener {
 //                imageProcessor.setCurrentImage(chooser.getSelectedFile().getAbsolutePath());
                 s.saveImage(chooser.getSelectedFile());
             }
+        });
+
+        new FileDrop(s, new FileDrop.Listener() {
+
+            @Override
+            public void filesDropped(File[] files) {
+
+                String fileName = files[0].getAbsolutePath();
+
+                if (fileName.endsWith("jpg") || fileName.endsWith("png") || fileName.endsWith("gif")) {
+
+                    s.loadBgImage(files[0]);
+
+                } else {
+                    
+                   JOptionPane.showMessageDialog(s, "This it not a picture. Please drop an image with jpg, png or gif format.");
+                    
+                }
+
+            }
+
         });
     }
 

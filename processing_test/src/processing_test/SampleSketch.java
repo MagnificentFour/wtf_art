@@ -23,13 +23,14 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     PImage bgImg;
     boolean gogo = false;
     boolean noSave = false;
+    boolean moveToSpot = false;
     Random rand = new Random();
     int i;
     boolean done = false;
-    
+
     JButton fwd;
     JButton back;
-    
+
     State methodState = State.CLEAR;
     State nextState = State.CLEAR;
 
@@ -49,43 +50,33 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     @Override
     public void draw() {
-        if (gogo) {
-            if (!ellipseList.isEmpty()) {
-                drawList.add(ellipseList.remove(rand.nextInt(ellipseList.size())));
-            } else if (done) {
-                noLoop();
-            } else {
-                done = true;
-                drawList.stream().forEach((e) -> {
-                    if (e.incrementSize()) {
-                        done = false;
-                    }
-                });
-            }
+//        if (gogo) {
+//            background(255);
+//            for (Ellipse e : ellipseList) {
+//                
+//                fill(0);
+//                e.setAnimXAndY(mouseX + (rand.nextInt(80) - 40), mouseY + (rand.nextInt(80) - 40));
+//                ellipse(e.getAnimX(), e.getAnimY(), e.getHeight(), e.getWidth());
+//
+//            }
+//        } else if(moveToSpot) {
+//            
+//            moveToSpot();
+//            
+//        }
 
-            background(0);
-
-            fill(255);
-
-            drawList.stream().forEach((e) -> {
-                ellipse(e.getxCoord(), e.getyCoord(), e.getWidth(), e.getHeight());
-                e.incrementSize();
-            });
-
-        }
-        
-        if(tracker.hasNext()) {
+        if (tracker.hasNext()) {
             fwd.setEnabled(true);
         } else {
             fwd.setEnabled(false);
         }
-        
-        if(tracker.hasPrev()) {
+
+        if (tracker.hasPrev()) {
             back.setEnabled(true);
         } else {
             back.setEnabled(false);
         }
-                
+
         if (bgImg != null) {
 
             if (methodState == State.DOTREP) {
@@ -100,14 +91,72 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             }
 
         } else {
-            
+
             fill(0);
             textSize(32);
             textAlign(CENTER);
-            text("Please select an image", width/2, height/2);
-            
+            text("Please select an image", width / 2, height / 2);
+
         }
 
+    }
+    
+    public void moveToSpot() {
+        background(0);
+        for(Ellipse e : ellipseList) {
+            float oldX = e.getAnimX();
+            float oldY = e.getAnimY();
+            float actualX = e.getxCoord();
+            float actualY = e.getyCoord();
+            float newX = 0;
+            float newY = 0;
+            
+            if(oldX >= actualX - 11 && oldX <= actualX + 10) {
+                newX = actualX;
+            } else if(oldX > actualX) {
+                newX = oldX - 10;
+            } else if(oldX < actualX){
+                newX = oldX + 10;
+            } 
+            
+            if(oldY >= actualY - 11 && oldY <= actualY + 11) {
+                newY = actualY;
+            } else if(oldY > actualY) {
+                newY = oldY - 10;
+            } else if(oldY < actualY) {
+                newY = oldY + 10;
+            } 
+            e.setAnimXAndY(newX, newY);
+            
+            fill(255,0,0);
+            ellipse(e.getAnimX(), e.getAnimY(), e.getHeight(), e.getWidth());
+        }
+        
+    }
+
+    public void animateDots() {
+
+        if (!ellipseList.isEmpty()) {
+            drawList.add(ellipseList.remove(rand.nextInt(ellipseList.size())));
+        } else if (done) {
+            noLoop();
+        } else {
+            done = true;
+            drawList.stream().forEach((e) -> {
+                if (e.incrementSize()) {
+                    done = false;
+                }
+            });
+        }
+
+        background(0);
+
+        fill(255);
+
+        drawList.stream().forEach((e) -> {
+            ellipse(e.getxCoord(), e.getyCoord(), e.getWidth(), e.getHeight());
+            e.incrementSize();
+        });
     }
 
     /**
@@ -120,7 +169,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         if (bgImg.width > 720) {
             bgImg.resize(0, 720);
         }
-        image(bgImg, 0, 0);
+        background(bgImg);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
         redraw();
     }
@@ -138,99 +187,32 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
      * Makes a representation of the image in dots.
      */
     private void dotRep() {
-        int loc = 0;
-        //int pxSize = 10;
-        int createSize = 0;
+        Dotting dotRep = new Dotting();
+        dotRep.setupSketch(bgImg, pxSize, noSave);
+        dotRep.init();
+        dotRep.runFunction();
+//        ellipseList = dotRep.getEllipseList();
+//        gogo = true;
+//        methodState = State.NOACTION;
 
-        float r;
-        float g;
-        float b;
+//        loop();
+        PImage img = dotRep.getResult();
+        image(img, 0, 0);
 
-        float[] ave = new float[5000000];
-        rectMode(CORNER);
-        size(bgImg.width, bgImg.height);
-        noStroke();
-
-        image(bgImg, 0, 0);
-        loadPixels();
-        for (int x = 0; x < (width / pxSize); x++) {
-            for (int y = 0; y < (height / pxSize); y++) {
-                loc = (x * pxSize) + ((y * pxSize) * width);
-                r = red(pixels[loc]);
-                g = green(pixels[loc]);
-                b = blue(pixels[loc]);
-                ave[loc] = ((r + g + b) / 3);
-            }
-        }
-
-        rectMode(CORNER);
-
-        fill(0);
-        rect(0, 0, width, height);
-        fill(240, 110, 110);
-        for (int i = 0; i < width / pxSize; i++) {
-            for (int j = 0; j < height / pxSize; j++) {
-                loc = (i * pxSize) + ((j * pxSize) * width);
-                createSize = (int) constrain(map(ave[loc], 0, 255, 0, (float) (pxSize * 1.1)), 0, (float) (pxSize * 1.1));
-                if (noSave) {
-                    ellipse((i * pxSize) + (pxSize), (j * pxSize) + (pxSize), createSize, createSize);
-                } else {
-                    ellipseList.add(new Ellipse((i * pxSize) + (pxSize), (j * pxSize) + (pxSize), createSize, createSize));
-                    gogo = true;
-                    loop();
-                }
-            }
-        }
-        tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
+//        blend(img, 0, 0, img.width, img.height, 0, 0, width, height, SUBTRACT);
+//        tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
     }
 
     /**
      * Makes a pixelated representation of the image with two colors.
      */
     private void pxlation() {
-        int loc = 0;
-        int barSize = 2;
-        int contrast1 = 80; //detection of darker color
-        int contrast2 = 190; //detection of lighter color
+        BigPix pxlation = new BigPix();
+        pxlation.setupSketch(bgImg, pxSize);
+        pxlation.init();
+        pxlation.runFunction();
+        image(pxlation.getResult(), 0, 0);
 
-        float r;
-        float g;
-        float b;
-        float[] ave = new float[1000000];
-
-        size(((int) (bgImg.width / pxSize)) * pxSize, ((int) (bgImg.height / pxSize)) * pxSize); //this removes extra border space
-        noStroke();
-
-        image(bgImg, 0, 0);
-        loadPixels();
-
-        rectMode(CENTER);
-
-        for (int x = 0; x < (width / pxSize) - (pxSize / width * 2); x++) {
-            for (int y = 0; y < (height / pxSize) - (pxSize / height * 2); y++) {
-                loc = (x * pxSize) + ((y * pxSize) * width);
-                r = red(pixels[loc]);
-                g = green(pixels[loc]);
-                b = blue(pixels[loc]);
-                ave[loc] = ((r + g + b) / 3);
-            }
-        }
-
-        fill(color(251, 251, 238));
-        rect(width / 2, height / 2, width, height);
-        fill(12, 17, 60);
-        for (int i = 0; i < (width / pxSize) - (pxSize / width * 2); i++) {
-            for (int j = 0; j < (height / pxSize) - (pxSize / height * 2); j++) {
-                loc = (i * pxSize) + ((j * pxSize) * width);
-                if (ave[loc] < contrast1) {
-                    fill(color(12, 17, 60)); //darker color
-                    rect((i * pxSize) + (pxSize / 2), (j * pxSize) + (pxSize / 2), pxSize + 1, pxSize - barSize);
-                } else if (ave[loc] < contrast2) {
-                    fill(color(248, 159, 159)); //lighter color
-                    rect((i * pxSize) + (pxSize / 2), (j * pxSize) + (pxSize / 2), pxSize + 1, pxSize - barSize);
-                }
-            }
-        }
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
     }
 
@@ -256,6 +238,17 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     }
     
+    public void mouseClicked() {
+        
+        if(gogo) {
+            
+            moveToSpot = true;
+            gogo = false;
+            
+        }
+        
+    }
+
     public void setButtons(JButton fwd, JButton back) {
         this.fwd = fwd;
         this.back = back;
@@ -270,11 +263,11 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         background(255);
         redraw();
     }
-    
+
     public boolean changeHasNext() {
         return tracker.hasNext();
     }
-    
+
     public boolean changeHasPrev() {
         return tracker.hasPrev();
     }
@@ -297,7 +290,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 break;
             case "dot":
                 noSave = true;
-                gogo = false;
+                //gogo = false;
                 methodState = State.DOTREP;
                 redraw();
                 break;
@@ -321,16 +314,20 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 frameRate(180);
                 break;
             case "forward":
-                if(tracker.hasChanged()) 
+                if (tracker.hasChanged()) {
                     importState(tracker.getNextEntry());
-                if(!tracker.hasNext())
+                }
+                if (!tracker.hasNext()) {
                     fwd.setEnabled(false);
+                }
                 break;
             case "back":
-                if(tracker.hasChanged()) 
+                if (tracker.hasChanged()) {
                     importState(tracker.getPrevEntry());
-                if(!tracker.hasPrev())
+                }
+                if (!tracker.hasPrev()) {
                     back.setEnabled(false);
+                }
         }
 
     }
@@ -338,8 +335,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     @Override
     public void stateChanged(ChangeEvent e) {
         source = (JSlider) e.getSource();
-        
-        if(!source.getValueIsAdjusting()) {
+
+        if (!source.getValueIsAdjusting()) {
             pxSize = source.getValue();
             redraw();
         }
