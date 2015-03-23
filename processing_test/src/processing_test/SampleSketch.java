@@ -93,7 +93,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         float b;
 
         float[] ave = new float[5000000];
-
+        rectMode(CORNER);
         size(bgImg.width, bgImg.height);
         noStroke();
 
@@ -196,6 +196,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 gogo = false;
                 background(255);
                 redraw();
+                dotrep= false;
+                pxlation= false;
                 break;
             case "pxlate":
                 gogo = false;
