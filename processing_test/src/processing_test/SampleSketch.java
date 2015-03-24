@@ -220,6 +220,11 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             System.out.println("copying");
             //System.out.println(i);
         }
+        
+//        gogo = false;
+//        moveToSpot = true;
+        
+        
     }
 
     /**
@@ -232,6 +237,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         if (bgImg.width > 720) {
             bgImg.resize(0, 720);
         }
+        size(bgImg.width, bgImg.height);
         background(bgImg);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
         redraw();
@@ -322,6 +328,33 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     public boolean changeHasPrev() {
         return tracker.hasPrev();
+    }
+    
+    public void selectFunction(String function) {
+        
+        switch (function) {
+            
+            case "Dots":
+                noSave = true;
+                //gogo = false;
+                methodState = State.DOTREP;
+                redraw();
+                break;
+            case "Squares":
+                gogo = false;
+                background(255);
+                methodState = State.PXLATION;
+                redraw();
+                break;
+            case "Original":
+                gogo = false;
+                background(255);
+                redraw();
+                methodState = State.CLEAR;
+                break;
+            
+        }
+        
     }
 
     /**

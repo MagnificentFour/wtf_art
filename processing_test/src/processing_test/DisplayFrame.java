@@ -5,12 +5,10 @@
  */
 package processing_test;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -35,10 +33,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton forwardButton;
     private final JButton cloneButton;
     private final JButton setPoints;
+    private final JComboBox functionChooser;
     private final JLabel step1;
     private final JLabel step2;
     private final JLabel step3;
     private final JLabel sliderLabel;
+
+    private ImageIcon[] functionIcons;
+    private String[] functionNames = {"Original", "Dots", "Squares"};
 
     private final ProcessImage imageProcessor;
     private JPanel panel;
@@ -66,6 +68,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setPoints = new JButton("Set Points");
         imageProcessor = new ProcessImage();
 
+        functionIcons = new ImageIcon[functionNames.length];
+        Integer[] intArray = new Integer[functionNames.length];
+
         saveButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/Save-icon.png"))));
         blankButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/blank.jpg"))));
         backButton = new JButton("<");
@@ -79,6 +84,24 @@ public class DisplayFrame extends JFrame implements ActionListener {
         slider = new JSlider(JSlider.HORIZONTAL, 4, 30, 20);
 
         fncButton3.setToolTipText("Show a dot representation for your picture");
+
+        for (int i = 0; i < functionNames.length; i++) {
+
+            intArray[i] = i;
+            functionIcons[i] = createImageIcon("graphics/" + functionNames[i] + ".png");
+            if (functionIcons[i] != null) {
+
+                functionIcons[i].setDescription(functionNames[i]);
+
+            }
+
+        }
+
+        functionChooser = new JComboBox(intArray);
+        ComboBoxRenderer rend = new ComboBoxRenderer();
+        rend.setPreferredSize(new Dimension(150, 90));
+        functionChooser.setRenderer(rend);
+        functionChooser.setMaximumRowCount(3);
 
         arrangeLayout();
 
@@ -108,8 +131,21 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.add(forwardButton);
         this.add(cloneButton);
         this.add(setPoints);
+        add(functionChooser);
 
         this.setVisible(true);
+    }
+
+    protected static ImageIcon createImageIcon(String path) {
+        ImageIcon icon = null;
+
+        try {
+            icon = new ImageIcon(ImageIO.read(new File(path)));
+        } catch (IOException ex) {
+
+        }
+
+        return icon;
     }
 
     /**
@@ -135,6 +171,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         doubleSpeed.setBounds(1320, 490, 100, 50);
         tripleSpeed.setBounds(1435, 490, 100, 50);
         slider.setBounds(1320, 590, 215, 20);
+        functionChooser.setBounds(1280, 10, 300, 120);
 
         step1.setBounds(1320, 105, 150, 30);
         step2.setBounds(1320, 235, 150, 30);
@@ -178,10 +215,10 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         blankButton.addActionListener(this);
         blankButton.setActionCommand("blank");
-        
+
         cloneButton.addActionListener(s);
         cloneButton.setActionCommand("clone");
-        
+
         setPoints.addActionListener(s);
         setPoints.setActionCommand("setPoints");
 
@@ -231,14 +268,31 @@ public class DisplayFrame extends JFrame implements ActionListener {
                     s.loadBgImage(files[0]);
 
                 } else {
-                    
-                   JOptionPane.showMessageDialog(s, "This it not a picture. Please drop an image with jpg, png or gif format.");
-                    
+
+                    JOptionPane.showMessageDialog(s, "This it not a picture. Please drop an image with jpg, png or gif format.");
+
                 }
 
             }
 
         });
+        
+        functionChooser.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                
+                if(e.getStateChange() == ItemEvent.SELECTED) {
+                    
+                    s.selectFunction(functionNames[(int) e.getItem()]);
+                    
+                }
+                
+            }
+        
+        });
+        
+        
     }
 
     private boolean wantToReset() {
@@ -266,6 +320,65 @@ public class DisplayFrame extends JFrame implements ActionListener {
         int returnVal = chooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             imageProcessor.setCurrentImage(chooser.getSelectedFile().getAbsolutePath());
+        }
+    }
+
+    class ComboBoxRenderer extends JLabel
+            implements ListCellRenderer {
+
+        private Font uhOhFont;
+
+        public ComboBoxRenderer() {
+            setOpaque(true);
+            setHorizontalAlignment(CENTER);
+            setVerticalAlignment(CENTER);
+        }
+
+        /*
+         * This method finds the image and text corresponding
+         * to the selected value and returns the label, set up
+         * to display the text and image.
+         */
+        public Component getListCellRendererComponent(
+                JList list,
+                Object value,
+                int index,
+                boolean isSelected,
+                boolean cellHasFocus) {
+            //Get the selected index. (The index param isn't
+            //always valid, so just use the value.)
+            int selectedIndex = ((Integer) value).intValue();
+
+            if (isSelected) {
+                setBackground(list.getSelectionBackground());
+                setForeground(list.getSelectionForeground());
+            } else {
+                setBackground(list.getBackground());
+                setForeground(list.getForeground());
+            }
+
+            //Set the icon and text.  If icon was null, say so.
+            ImageIcon icon = functionIcons[selectedIndex];
+            String function = functionNames[selectedIndex];
+            setIcon(icon);
+            if (icon != null) {
+                setText(function);
+                setFont(list.getFont());
+            } else {
+                setUhOhText(function + " (no image available)",
+                        list.getFont());
+            }
+
+            return this;
+        }
+
+        //Set the font and text when no image was found.
+        protected void setUhOhText(String uhOhText, Font normalFont) {
+            if (uhOhFont == null) { //lazily create this font
+                uhOhFont = normalFont.deriveFont(Font.ITALIC);
+            }
+            setFont(uhOhFont);
+            setText(uhOhText);
         }
     }
 }
