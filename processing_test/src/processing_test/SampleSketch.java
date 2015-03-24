@@ -134,6 +134,10 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     }
     
+    /**
+     * Animation for the "Dot" function. Moves the dots step by step to their
+     * intended position.
+     */
     public void moveToSpot() {
         background(0);
         for(Ellipse e : ellipseList) {
@@ -307,11 +311,19 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     }
 
+    /**
+     * Assigns pointers to the undo and redo buttons.
+     * @param fwd The redo button.
+     * @param back The undo button.
+     */
     public void setButtons(JButton fwd, JButton back) {
         this.fwd = fwd;
         this.back = back;
     }
 
+    /**
+     * Resets the program removing the picture and all changes in the tracker.
+     */
     public void reset() {
         bgImg = null;
         tracker = new ChangeTracker();
@@ -322,14 +334,26 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         redraw();
     }
 
+    /**
+     * Checks if there is a change to redo.
+     * @return True if there is a change to redo. False if not.
+     */
     public boolean changeHasNext() {
         return tracker.hasNext();
     }
 
+    /**
+     * Checks if there is a change to undo.
+     * @return True if there is a change to undo. False if not.
+     */
     public boolean changeHasPrev() {
         return tracker.hasPrev();
     }
     
+    /**
+     * Runs a function based on the string taken as input.
+     * @param function Name of the function.
+     */
     public void selectFunction(String function) {
         
         switch (function) {
@@ -427,6 +451,10 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     }
 
+    /**
+     * Changes the variable pxSize with a value based on the slider.
+     * @param e 
+     */
     @Override
     public void stateChanged(ChangeEvent e) {
         source = (JSlider) e.getSource();
