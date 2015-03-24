@@ -60,7 +60,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
         button = new JButton("Start");
         fncButton2 = new JButton("Pixelate");
         fncButton3 = new JButton("Show dots");
-        fileChooseButton = new JButton("Velg fil");
         clearButton = new JButton("Clear Canvas");
         doubleSpeed = new JButton("2X Speed");
         tripleSpeed = new JButton("3X Speed");
@@ -71,6 +70,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         functionIcons = new ImageIcon[functionNames.length];
         Integer[] intArray = new Integer[functionNames.length];
 
+        fileChooseButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/OpenButton.gif"))));
         saveButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/Save-icon.png"))));
         blankButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/blank.jpg"))));
         backButton = new JButton("<");
@@ -156,16 +156,17 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         panel = new JPanel();
 
+        //Position and size for buttons.
         blankButton.setBounds(20, 10, 50, 50);
         saveButton.setBounds(80, 10, 50, 50);
-        backButton.setBounds(150, 10, 50, 50);
-        forwardButton.setBounds(210, 10, 50, 50);
+        fileChooseButton.setBounds(140, 10, 50, 50);
+        backButton.setBounds(220, 10, 50, 50);
+        forwardButton.setBounds(280, 10, 50, 50);
+        cloneButton.setBounds(340, 10, 100, 50);
+        setPoints.setBounds(450, 10, 100, 50);
         fncButton2.setBounds(1320, 275, 100, 50);
         fncButton3.setBounds(1435, 275, 100, 50);
-        cloneButton.setBounds(270, 10, 100, 50);
-        setPoints.setBounds(380, 10, 100, 50);
         panel.setBounds(20, 70, 1280, 720);
-        fileChooseButton.setBounds(1320, 145, 215, 50);
         button.setBounds(1320, 1445, 100, 50);
         clearButton.setBounds(1320, 420, 215, 50);
         doubleSpeed.setBounds(1320, 490, 100, 50);
@@ -173,6 +174,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         slider.setBounds(1320, 590, 215, 20);
         functionChooser.setBounds(1280, 10, 300, 120);
 
+        //Position and size for labels
         step1.setBounds(1320, 105, 150, 30);
         step2.setBounds(1320, 235, 150, 30);
         step3.setBounds(1320, 380, 150, 30);
