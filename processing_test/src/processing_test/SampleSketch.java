@@ -287,6 +287,12 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
     }
+        private void mapTo() {
+        MapTo map = new MapTo();
+        map.setupSketch(bgImg);
+        map.init();
+        map.function();
+    }
 
     /**
      * Takes a StateCapture and imports the parameters.
@@ -375,7 +381,10 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 redraw();
                 methodState = State.CLEAR;
                 break;
-            
+            case "MapTo":
+                noSave = true;
+                methodState = State.MAPTO;
+                redraw();
         }
         
     }
@@ -415,6 +424,10 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 methodState = State.PXLATION;
                 redraw();
                 break;
+            case "3D":
+                noSave = false;
+                methodState = State.MAPTO;
+                redraw();
             case "double":
                 frameRate(120);
                 break;
