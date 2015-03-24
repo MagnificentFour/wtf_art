@@ -44,4 +44,8 @@ public class CloneTool {
     public Point getPoint2() {
         return p2;
     }
+    
+    public int getRadius(){
+        return radius;
+    }
 }

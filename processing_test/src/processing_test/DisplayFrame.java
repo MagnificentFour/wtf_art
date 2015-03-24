@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import net.iharder.dnd.FileDrop;
 
@@ -43,8 +45,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final ProcessImage imageProcessor;
     private JPanel panel;
     private final JSlider slider;
+    private final JSlider cloneRadiusSlider;
 
-    SampleSketch s;
+    SampleSketch currentSketch;
 
     /**
      * Constructor for instances of class DisplayFrame. Initializes all
@@ -77,18 +80,18 @@ public class DisplayFrame extends JFrame implements ActionListener {
         sliderLabel = new JLabel("Change size of \"pixels\"");
 
         slider = new JSlider(JSlider.HORIZONTAL, 4, 30, 20);
-
+        cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
         fncButton3.setToolTipText("Show a dot representation for your picture");
 
         arrangeLayout();
 
-        s = new SampleSketch();
-        s.setButtons(forwardButton, backButton);
+        currentSketch = new SampleSketch();
+        currentSketch.setButtons(forwardButton, backButton);
 
-        setActionListeners(s);
-        s.init(); //this is the function used to start the execution of the sketch
+        setActionListeners(currentSketch);
+        currentSketch.init(); //this is the function used to start the execution of the sketch
 
-        panel.add(s);
+        panel.add(currentSketch);
         this.add(panel);
         this.add(button);
         this.add(fileChooseButton);
@@ -102,6 +105,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.add(step3);
         this.add(sliderLabel);
         this.add(slider);
+        this.add(cloneRadiusSlider);
         this.add(saveButton);
         this.add(blankButton);
         this.add(backButton);
@@ -135,7 +139,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         doubleSpeed.setBounds(1320, 490, 100, 50);
         tripleSpeed.setBounds(1435, 490, 100, 50);
         slider.setBounds(1320, 590, 215, 20);
-
+        cloneRadiusSlider.setBounds(490, 10, 215, 20);
+        
         step1.setBounds(1320, 105, 150, 30);
         step2.setBounds(1320, 235, 150, 30);
         step3.setBounds(1320, 380, 150, 30);
@@ -186,6 +191,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setPoints.setActionCommand("setPoints");
 
         slider.addChangeListener(s);
+        cloneRadiusSlider.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                currentSketch.cloneRadChanged(cloneRadiusSlider.getValue());
+            }
+            
+        });
 
         fileChooseButton.addActionListener((ActionEvent arg0) -> {
             JFileChooser chooser = new JFileChooser();
@@ -253,7 +266,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         switch (e.getActionCommand()) {
             case "blank":
                 if (wantToReset()) {
-                    s.reset();
+                    currentSketch.reset();
                 }
         }
     }

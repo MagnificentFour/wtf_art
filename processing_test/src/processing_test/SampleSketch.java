@@ -27,8 +27,11 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     int sizeWidth = 1280;
     int sizeHeight = 720;
     int pxSize = 20;
+    int cloneRadius = 25;
     int waitingPoint = 0;
     PImage bgImg;
+    PImage circle;
+    PGraphics pg;
     boolean gogo = false;
     boolean noSave = false;
     boolean moveToSpot = false;
@@ -36,7 +39,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     Random rand = new Random();
     int i;
     boolean done = false;
-
     JButton fwd;
     JButton back;
     CloneTool clTool = new CloneTool();
@@ -48,6 +50,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     ArrayList<Ellipse> drawList = new ArrayList<>();
 
     JSlider source;
+    JSlider cloneSource;
 
     ChangeTracker tracker = new ChangeTracker();
 
@@ -55,7 +58,9 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     public void setup() {
         size(sizeWidth, sizeHeight);
         background(255);
+        pg = createGraphics(sizeWidth, sizeHeight);
         noLoop();
+        circle = loadImage("graphics/cirlce.png");
     }
 
     @Override
@@ -80,26 +85,29 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         } else {
             fwd.setEnabled(false);
         }
-        
-        if (copying = true) {
+
+        if (copying == true) {
+
+            //cursor(circle, cloneRadius/2, cloneRadius/2);
             if (mousePressed == true) {
                 System.out.println("heya");
-                //Point p1 = clTool.getPoint1();
-                //Point p2 = clTool.getPoint2();
+                Point p1 = clTool.getPoint1();
+                Point p2 = clTool.getPoint2();
+                int distanceX = p2.x - p1.x;
+                int distanceY = p2.y - p1.y;
                 //Point cp = new Point(mouseX, mouseY);
                 //int colour = color(bgImg.get(mouseX - 50, mouseY));
-                for (int i = -10; i < 10; i++) {
-                    for (int t = -10; t < 10; t++) {
-                        int colour = color(get(mouseX + i - 50, mouseY + t));
-                        set(mouseX + i, mouseY + t, colour);
+                int staticX = mouseX;
+                int staticY = mouseY;
+                for (int i = -cloneRadius / 2; i < cloneRadius / 2; i++) {
+                    for (int t = -cloneRadius / 2; t < cloneRadius / 2; t++) {
+                        if (dist(mouseX, mouseY, (mouseX + i), (mouseY + t)) <= (cloneRadius / 2)) {
+                            int colour = color(get((mouseX - distanceX) + i, (mouseY - distanceY) + t));
+                            set(mouseX + i, mouseY + t, colour);
+                        }
                     }
                 }
-                //copy(bgImg, (p1.x-30), (p1.y-30), 60, 60, mouseX - 30, mouseY - 30, 60, 60);
-                //tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-                //updatePixels();
-                //redraw();
-                //image(bgImg,0,0);
-            }
+            } 
         }
 
         if (tracker.hasPrev()) {
@@ -108,7 +116,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             back.setEnabled(false);
         }
 
-        if (bgImg != null) {
+        if (bgImg
+                != null) {
 
             if (methodState == State.DOTREP) {
                 dotRep();
@@ -133,38 +142,38 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         }
 
     }
-    
+
     public void moveToSpot() {
         background(0);
-        for(Ellipse e : ellipseList) {
+        for (Ellipse e : ellipseList) {
             float oldX = e.getAnimX();
             float oldY = e.getAnimY();
             float actualX = e.getxCoord();
             float actualY = e.getyCoord();
             float newX = 0;
             float newY = 0;
-            
-            if(oldX >= actualX - 11 && oldX <= actualX + 10) {
+
+            if (oldX >= actualX - 11 && oldX <= actualX + 10) {
                 newX = actualX;
-            } else if(oldX > actualX) {
+            } else if (oldX > actualX) {
                 newX = oldX - 10;
-            } else if(oldX < actualX){
+            } else if (oldX < actualX) {
                 newX = oldX + 10;
-            } 
-            
-            if(oldY >= actualY - 11 && oldY <= actualY + 11) {
+            }
+
+            if (oldY >= actualY - 11 && oldY <= actualY + 11) {
                 newY = actualY;
-            } else if(oldY > actualY) {
+            } else if (oldY > actualY) {
                 newY = oldY - 10;
-            } else if(oldY < actualY) {
+            } else if (oldY < actualY) {
                 newY = oldY + 10;
-            } 
+            }
             e.setAnimXAndY(newX, newY);
-            
-            fill(255,0,0);
+
+            fill(255, 0, 0);
             ellipse(e.getAnimX(), e.getAnimY(), e.getHeight(), e.getWidth());
         }
-        
+
     }
 
     public void animateDots() {
@@ -206,19 +215,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 waitingPoint = 0;
                 methodState = State.CLONE;
                 copying = true;
+                loop();
             }
-        } else if (methodState == State.CLONE) {
-            Point p1 = clTool.getPoint1();
-            Point p2 = clTool.getPoint2();
-            Point cp = new Point(mouseX, mouseY);
-            loop();
-            //colorMode(RGB, 100);
-            //color c = color(12,12,12); 
-            //color c = (RGB)bgImg.get(p.x, p.y);
-            //copying = true;
-            //redraw();
-            System.out.println("copying");
-            //System.out.println(i);
         }
     }
 
@@ -232,6 +230,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         if (bgImg.width > 720) {
             bgImg.resize(0, 720);
         }
+        size(bgImg.width, bgImg.height);
         background(bgImg);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
         redraw();
@@ -382,25 +381,30 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 }
                 break;
             case "clone":
-                //CloneTool clTool = new CloneTool();
-                //Point p = MouseInfo.getPointerInfo().getLocation(); 
-                //System.out.println(p);
                 methodState = State.CLONE;
                 break;
             case "setPoints":
+                cursor(NORMAL);
+                copying = false;
                 methodState = State.SETPOINTS;
                 break;
         }
 
     }
+    
+    public void cloneRadChanged(int newR) {
+        cloneRadius = newR;
+    }
 
     @Override
     public void stateChanged(ChangeEvent e) {
         source = (JSlider) e.getSource();
+        cloneSource = (JSlider) e.getSource();
 
         if (!source.getValueIsAdjusting()) {
             pxSize = source.getValue();
             redraw();
         }
+
     }
 }
