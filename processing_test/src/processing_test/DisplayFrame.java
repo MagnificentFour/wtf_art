@@ -38,6 +38,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton cloneButton;
     private final JButton setPoints;
     private final JButton newTab;
+    private final JButton closeTab;
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
     private final JLabel step2;
@@ -50,13 +51,12 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JSlider slider;
     private final JSlider cloneRadiusSlider;
 
-
     private int tabIndex;
+    private int tabs = 2;
 
     private ArrayList<Component> componentList;
 
     private SampleSketch currentSketch;
-
 
     /**
      * Constructor for instances of class DisplayFrame. Initializes all
@@ -78,6 +78,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         cloneButton = new JButton("Clone");
         setPoints = new JButton("Set Points");
         newTab = new JButton("New Tab");
+        closeTab = new JButton(new ImageIcon(ImageIO.read(new File("graphics/X.gif"))));
         sketchTabs = new JTabbedPane();
 
         functionIcons = new ImageIcon[functionNames.length];
@@ -103,7 +104,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
             functionIcons[i] = createImageIcon("graphics/" + functionNames[i] + ".png");
             if (functionIcons[i] != null) {
 
-
                 functionIcons[i].setDescription(functionNames[i]);
 
             }
@@ -116,7 +116,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
         functionChooser.setRenderer(rend);
         functionChooser.setMaximumRowCount(3);
 
-        componentList.add(newTab);
         componentList.add(clearButton);
         componentList.add(backButton);
         componentList.add(forwardButton);
@@ -147,10 +146,12 @@ public class DisplayFrame extends JFrame implements ActionListener {
         add(functionChooser);
         add(sketchTabs);
         add(newTab);
+        add(closeTab);
 
         tabIndex = sketchTabs.getSelectedIndex();
         currentSketch = (SampleSketch) sketchTabs.getSelectedComponent();
         setActionListeners(currentSketch);
+        setLocalActionListeners();
 
         sketchTabs.addChangeListener(new ChangeListener() {
 
@@ -174,8 +175,17 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
+    private void newTab() {
+
+        sketchTabs.addTab("Sketch " + tabs, createNewSketch());
+        sketchTabs.setSelectedIndex(sketchTabs.getTabCount() - 1);
+        tabs++;
+
+    }
+
     /**
      * Creates and instance of the processing sketch class SampleSketch.
+     *
      * @return The created sketch.
      */
     private SampleSketch createNewSketch() {
@@ -212,8 +222,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
     /**
      * Creates an ImageIcon
+     *
      * @param path
-     * @return 
+     * @return
      */
     protected static ImageIcon createImageIcon(String path) {
         ImageIcon icon = null;
@@ -234,6 +245,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setLayout(null);
 
         //Position and size for buttons.
+        closeTab.setBounds(1267, 50, 35, 35);
         newTab.setBounds(600, 10, 100, 50);
         blankButton.setBounds(20, 10, 50, 50);
         saveButton.setBounds(80, 10, 50, 50);
@@ -252,13 +264,10 @@ public class DisplayFrame extends JFrame implements ActionListener {
         tripleSpeed.setBounds(1435, 490, 100, 50);
         slider.setBounds(1320, 590, 215, 20);
         cloneRadiusSlider.setBounds(490, 10, 215, 20);
-        
-
 
         functionChooser.setBounds(1320, 10, 300, 120);
 
         //Position and size for labels
-
         step2.setBounds(1320, 235, 150, 30);
         step3.setBounds(1320, 380, 150, 30);
         sliderLabel.setBounds(1360, 560, 150, 30);
@@ -269,7 +278,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
     /**
      * Removes action listeners for components.
-     * @param removeFrom A pointer to the instance of the sketch where the listeners will be removed from
+     *
+     * @param removeFrom A pointer to the instance of the sketch where the
+     * listeners will be removed from
      */
     private void removeOldActionListeners(SampleSketch removeFrom) {
 
@@ -283,14 +294,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
                 }
             } else if (c instanceof JSlider) {
                 JSlider s = (JSlider) c;
-                
-                for(ChangeListener ch : s.getChangeListeners()) {
+
+                for (ChangeListener ch : s.getChangeListeners()) {
                     s.removeChangeListener(ch);
                 }
             } else if (c instanceof JComboBox) {
                 JComboBox cb = (JComboBox) c;
-                
-                for(ItemListener il : cb.getItemListeners()) {
+
+                for (ItemListener il : cb.getItemListeners()) {
                     cb.removeItemListener(il);
                 }
             }
@@ -299,6 +310,19 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
     }
 
+    private void setLocalActionListeners() {
+        
+        newTab.addActionListener(this);
+        newTab.setActionCommand("newTab");
+        
+        blankButton.addActionListener(this);
+        blankButton.setActionCommand("blank");
+        
+        closeTab.addActionListener(this);
+        closeTab.setActionCommand("closeTab");
+        
+    }
+    
     /**
      * Adds action listener to all relevant components
      *
@@ -306,8 +330,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
      */
     private void setActionListeners(SampleSketch s) {
 
-        newTab.addActionListener(this);
-        newTab.setActionCommand("newTab");
+        
 
         clearButton.addActionListener(s);
         clearButton.setActionCommand("clear");
@@ -317,9 +340,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         forwardButton.addActionListener(s);
         forwardButton.setActionCommand("forward");
-
-        blankButton.addActionListener(this);
-        blankButton.setActionCommand("blank");
 
         cloneButton.addActionListener(s);
         cloneButton.setActionCommand("clone");
@@ -334,7 +354,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
             public void stateChanged(ChangeEvent e) {
                 currentSketch.cloneRadChanged(cloneRadiusSlider.getValue());
             }
-            
+
         });
 
         fileChooseButton.addActionListener((ActionEvent arg0) -> {
@@ -383,7 +403,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
     /**
      * Creates a dialog asking the user whether or not they want to reset.
-     * @return 
+     *
+     * @return
      */
     private boolean wantToReset() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -401,11 +422,13 @@ public class DisplayFrame extends JFrame implements ActionListener {
                 }
                 break;
             case "newTab":
-                SampleSketch newSketch = new SampleSketch();
-                sketchTabs.addTab("New sketch", newSketch);
-                newSketch.setButtons(forwardButton, backButton);
-                newSketch.init();
-                sketchTabs.setSelectedIndex(sketchTabs.getTabCount() - 1);
+                newTab();
+                break;
+            case "closeTab":
+                sketchTabs.remove(sketchTabs.getSelectedIndex());
+                if(sketchTabs.getTabCount() < 1) {
+                    newTab();
+                }
         }
     }
 
@@ -419,8 +442,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
 //            imageProcessor.setCurrentImage(chooser.getSelectedFile().getAbsolutePath());
 //        }
 //    }
-    
-    
     class ComboBoxRenderer extends JLabel
             implements ListCellRenderer {
 
