@@ -120,6 +120,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         panel = new JPanel();
 
+        //Position and size for buttons.
         blankButton.setBounds(20, 10, 50, 50);
         saveButton.setBounds(80, 10, 50, 50);
         fileChooseButton.setBounds(140, 10, 50, 50);
@@ -136,6 +137,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         tripleSpeed.setBounds(1435, 490, 100, 50);
         slider.setBounds(1320, 590, 215, 20);
 
+        //Position and size for labels
         step1.setBounds(1320, 105, 150, 30);
         step2.setBounds(1320, 235, 150, 30);
         step3.setBounds(1320, 380, 150, 30);
