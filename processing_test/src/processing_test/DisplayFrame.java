@@ -27,6 +27,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton button;
     private final JButton fncButton2;
     private final JButton fncButton3;
+    private final JButton fncButton4;
     private final JButton clearButton;
     private final JButton doubleSpeed;
     private final JButton tripleSpeed;
@@ -70,6 +71,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         button = new JButton("Start");
         fncButton2 = new JButton("Pixelate");
         fncButton3 = new JButton("Show dots");
+        fncButton4 = new JButton("MapTo3D");
         clearButton = new JButton("Clear Canvas");
         doubleSpeed = new JButton("2X Speed");
         tripleSpeed = new JButton("3X Speed");
@@ -242,6 +244,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setPoints.setBounds(450, 10, 100, 50);
         fncButton2.setBounds(1320, 275, 100, 50);
         fncButton3.setBounds(1435, 275, 100, 50);
+        fncButton4.setBounds(1320, 330, 100, 50);
         sketchTabs.setBounds(20, 70, 1282, 722);
         button.setBounds(1320, 1445, 100, 50);
         clearButton.setBounds(1320, 420, 215, 50);
