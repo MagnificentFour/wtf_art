@@ -126,7 +126,9 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             } else if (methodState == State.CLEAR) {
                 image(bgImg, 0, 0);
                 tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-            } else if (methodState == State.SETPOINTS) {
+            } else if (methodState == State.MAPTO) {
+                mapTo();
+            }  else if (methodState == State.SETPOINTS) {
 
             } else if (methodState == State.IMPORT) {
                 methodState = nextState;
