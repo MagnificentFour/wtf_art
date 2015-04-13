@@ -15,6 +15,7 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import net.iharder.dnd.FileDrop;
 
 /**
@@ -280,7 +281,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
      * Removes action listeners for components.
      *
      * @param removeFrom A pointer to the instance of the sketch where the
-     * listeners will be removed from
+     *                   listeners will be removed from
      */
     private void removeOldActionListeners(SampleSketch removeFrom) {
 
@@ -311,18 +312,18 @@ public class DisplayFrame extends JFrame implements ActionListener {
     }
 
     private void setLocalActionListeners() {
-        
+
         newTab.addActionListener(this);
         newTab.setActionCommand("newTab");
-        
+
         blankButton.addActionListener(this);
         blankButton.setActionCommand("blank");
-        
+
         closeTab.addActionListener(this);
         closeTab.setActionCommand("closeTab");
-        
+
     }
-    
+
     /**
      * Adds action listener to all relevant components
      *
@@ -330,7 +331,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
      */
     private void setActionListeners(SampleSketch s) {
 
-        
 
         clearButton.addActionListener(s);
         clearButton.setActionCommand("clear");
@@ -426,13 +426,13 @@ public class DisplayFrame extends JFrame implements ActionListener {
                 break;
             case "closeTab":
                 sketchTabs.remove(sketchTabs.getSelectedIndex());
-                if(sketchTabs.getTabCount() < 1) {
+                if (sketchTabs.getTabCount() < 1) {
                     newTab();
                 }
         }
     }
 
-//    public void chooseFile() {
+    //    public void chooseFile() {
 //        JFileChooser chooser = new JFileChooser();
 //        FileNameExtensionFilter filter = new FileNameExtensionFilter(
 //                "JPG, GIF & PNG", "jpg", "gif", "png");
