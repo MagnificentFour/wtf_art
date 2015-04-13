@@ -10,12 +10,13 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import net.iharder.dnd.FileDrop;
 
 /**
@@ -25,7 +26,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
     //private final CircleSketch sketch;
     private final JButton fileChooseButton;
-    private final JButton button;
+    //private final JButton button;
     private final JButton fncButton2;
     private final JButton fncButton3;
     private final JButton fncButton4;
@@ -42,11 +43,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton closeTab;
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
-    private final JLabel step2;
-    private final JLabel step3;
-    private final JLabel sliderLabel;
+//    private final JLabel sliderLabel;
 
-    private ImageIcon[] functionIcons;
     private String[] functionNames = {"Original", "Dots", "Squares"};
 
     private final JSlider slider;
@@ -56,6 +54,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private int tabs = 2;
 
     private ArrayList<Component> componentList;
+    private HashMap<String, Component> toolWindowComponents;
 
     private SampleSketch currentSketch;
 
@@ -64,26 +63,22 @@ public class DisplayFrame extends JFrame implements ActionListener {
      * components of the GUI as well as the processing sketch.
      */
     public DisplayFrame() throws IOException {
-        this.setSize(1670, 850);
+        this.setSize(1350, 850);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        
         componentList = new ArrayList<>();
-        button = new JButton("Start");
+        //button = new JButton("Start");
         fncButton2 = new JButton("Pixelate");
         fncButton3 = new JButton("Show dots");
         fncButton4 = new JButton("MapTo3D");
-        clearButton = new JButton("Clear Canvas");
         doubleSpeed = new JButton("2X Speed");
         tripleSpeed = new JButton("3X Speed");
-        cloneButton = new JButton("Clone");
         setPoints = new JButton("Set Points");
         newTab = new JButton("New Tab");
         closeTab = new JButton("x");
         sketchTabs = new JTabbedPane();
-
-        functionIcons = new ImageIcon[functionNames.length];
-        Integer[] intArray = new Integer[functionNames.length];
 
         fileChooseButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/OpenButton.gif"))));
         saveButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/Save-icon.png"))));
@@ -91,64 +86,44 @@ public class DisplayFrame extends JFrame implements ActionListener {
         backButton = new JButton("<");
         forwardButton = new JButton(">");
 
-        step2 = new JLabel("Step2: Choose a function");
-        step3 = new JLabel("Step3: Edit the result");
-        sliderLabel = new JLabel("Change size of \"pixels\"");
-
-        slider = new JSlider(JSlider.HORIZONTAL, 4, 30, 20);
         cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
         fncButton3.setToolTipText("Show a dot representation for your picture");
 
-        for (int i = 0; i < functionNames.length; i++) {
-
-            intArray[i] = i;
-            functionIcons[i] = createImageIcon("graphics/" + functionNames[i] + ".png");
-            if (functionIcons[i] != null) {
-
-                functionIcons[i].setDescription(functionNames[i]);
-
-            }
-
-        }
-
-        functionChooser = new JComboBox(intArray);
-        ComboBoxRenderer rend = new ComboBoxRenderer();
-        rend.setPreferredSize(new Dimension(150, 90));
-        functionChooser.setRenderer(rend);
-        functionChooser.setMaximumRowCount(3);
-
-        componentList.add(clearButton);
-        componentList.add(backButton);
-        componentList.add(forwardButton);
-        componentList.add(blankButton);
-        componentList.add(cloneButton);
-        componentList.add(setPoints);
-        componentList.add(slider);
-        componentList.add(fileChooseButton);
-        componentList.add(saveButton);
-        componentList.add(functionChooser);
 
         arrangeLayout();
 
         sketchTabs.addTab("Sketch 1", createNewSketch());
-        this.add(fileChooseButton);
-        this.add(clearButton);
-        this.add(step2);
-        this.add(step3);
-        this.add(sliderLabel);
-        this.add(slider);
-        this.add(cloneRadiusSlider);
-        this.add(saveButton);
-        this.add(blankButton);
-        this.add(backButton);
-        this.add(forwardButton);
-        this.add(cloneButton);
-        this.add(setPoints);
-        add(functionChooser);
+        add(fileChooseButton);
+        add(cloneRadiusSlider);
+        add(saveButton);
+        add(blankButton);
+        add(backButton);
+        add(forwardButton);
+        add(setPoints);
         add(sketchTabs);
         add(newTab);
         add(closeTab);
 
+        ToolWindow tw = new ToolWindow(currentSketch);
+        toolWindowComponents = tw.getToolComponents();
+        
+        componentList.add(backButton);
+        componentList.add(forwardButton);
+        componentList.add(blankButton);
+        componentList.add(setPoints);
+        componentList.add(fileChooseButton);
+        componentList.add(saveButton);
+        
+        Set<String> keys = toolWindowComponents.keySet();
+        for(String key : keys) {
+            componentList.add(toolWindowComponents.get(key));
+        }
+
+        clearButton = (JButton) toolWindowComponents.get("clearButton");
+        cloneButton = (JButton) toolWindowComponents.get("cloneButton");
+        slider = (JSlider) toolWindowComponents.get("sizeSlider");
+        functionChooser = (JComboBox) toolWindowComponents.get("functionComboBox");
+        
         tabIndex = sketchTabs.getSelectedIndex();
         currentSketch = (SampleSketch) sketchTabs.getSelectedComponent();
         setActionListeners(currentSketch);
@@ -173,7 +148,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         });
 
-        this.setVisible(true);
+        setVisible(true);
     }
 
     private void newTab() {
@@ -222,24 +197,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
     }
 
     /**
-     * Creates an ImageIcon
-     *
-     * @param path
-     * @return
-     */
-    protected static ImageIcon createImageIcon(String path) {
-        ImageIcon icon = null;
-
-        try {
-            icon = new ImageIcon(ImageIO.read(new File(path)));
-        } catch (IOException ex) {
-
-        }
-
-        return icon;
-    }
-
-    /**
      * Arranges the layout of the panel and buttons.
      */
     private void arrangeLayout() {
@@ -253,25 +210,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
         fileChooseButton.setBounds(140, 10, 50, 50);
         backButton.setBounds(220, 10, 50, 50);
         forwardButton.setBounds(280, 10, 50, 50);
-        cloneButton.setBounds(340, 10, 100, 50);
         setPoints.setBounds(450, 10, 100, 50);
         fncButton2.setBounds(1320, 275, 100, 50);
         fncButton3.setBounds(1435, 275, 100, 50);
         fncButton4.setBounds(1320, 330, 100, 50);
         sketchTabs.setBounds(20, 70, 1282, 722);
-        button.setBounds(1320, 1445, 100, 50);
-        clearButton.setBounds(1320, 420, 215, 50);
         doubleSpeed.setBounds(1320, 490, 100, 50);
         tripleSpeed.setBounds(1435, 490, 100, 50);
-        slider.setBounds(1320, 590, 215, 20);
         cloneRadiusSlider.setBounds(490, 10, 215, 20);
-
-        functionChooser.setBounds(1320, 10, 300, 120);
-
-        //Position and size for labels
-        step2.setBounds(1320, 235, 150, 30);
-        step3.setBounds(1320, 380, 150, 30);
-        sliderLabel.setBounds(1360, 560, 150, 30);
 
         //saveButton.setBorder(BorderFactory.createEmptyBorder());
         //saveButton.setContentAreaFilled(false);
@@ -442,62 +388,4 @@ public class DisplayFrame extends JFrame implements ActionListener {
 //            imageProcessor.setCurrentImage(chooser.getSelectedFile().getAbsolutePath());
 //        }
 //    }
-    class ComboBoxRenderer extends JLabel
-            implements ListCellRenderer {
-
-        private Font uhOhFont;
-
-        public ComboBoxRenderer() {
-            setOpaque(true);
-            setHorizontalAlignment(CENTER);
-            setVerticalAlignment(CENTER);
-        }
-
-        /*
-         * This method finds the image and text corresponding
-         * to the selected value and returns the label, set up
-         * to display the text and image.
-         */
-        public Component getListCellRendererComponent(
-                JList list,
-                Object value,
-                int index,
-                boolean isSelected,
-                boolean cellHasFocus) {
-            //Get the selected index. (The index param isn't
-            //always valid, so just use the value.)
-            int selectedIndex = ((Integer) value).intValue();
-
-            if (isSelected) {
-                setBackground(list.getSelectionBackground());
-                setForeground(list.getSelectionForeground());
-            } else {
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-            }
-
-            //Set the icon and text.  If icon was null, say so.
-            ImageIcon icon = functionIcons[selectedIndex];
-            String function = functionNames[selectedIndex];
-            setIcon(icon);
-            if (icon != null) {
-                setText(function);
-                setFont(list.getFont());
-            } else {
-                setUhOhText(function + " (no image available)",
-                        list.getFont());
-            }
-
-            return this;
-        }
-
-        //Set the font and text when no image was found.
-        protected void setUhOhText(String uhOhText, Font normalFont) {
-            if (uhOhFont == null) { //lazily create this font
-                uhOhFont = normalFont.deriveFont(Font.ITALIC);
-            }
-            setFont(uhOhFont);
-            setText(uhOhText);
-        }
-    }
 }
