@@ -78,7 +78,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         cloneButton = new JButton("Clone");
         setPoints = new JButton("Set Points");
         newTab = new JButton("New Tab");
-        closeTab = new JButton(new ImageIcon(ImageIO.read(new File("graphics/X.gif"))));
+        closeTab = new JButton("x");
         sketchTabs = new JTabbedPane();
 
         functionIcons = new ImageIcon[functionNames.length];
