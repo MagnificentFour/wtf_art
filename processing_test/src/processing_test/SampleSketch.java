@@ -192,9 +192,9 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
 //        loop();
         PImage img = dotRep.getResult();
-        image(img, 0, 0);
+//        image(img, 0, 0);
 
-//        blend(img, 0, 0, img.width, img.height, 0, 0, width, height, SUBTRACT);
+        blend(img, 0, 0, img.width, img.height, 0, 0, width, height, SUBTRACT);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
     }
 

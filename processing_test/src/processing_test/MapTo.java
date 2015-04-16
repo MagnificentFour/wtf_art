@@ -17,7 +17,7 @@ public class MapTo extends PApplet {
 
     PImage bgImg;
     boolean noSave = true;
-    int cellsize = 2; // Dimensions of each cell in the grid
+    int cellsize = 5; // Dimensions of each cell in the grid
     int cols, rows;   // Number of columns and rows in our system
 
     @Override
