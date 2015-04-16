@@ -21,7 +21,7 @@ public class ToolWindow extends JFrame {
     private final SampleSketch sketch;
     private HashMap<String, Component> components;
     private ImageIcon[] functionIcons;
-    private String[] functionNames = {"Original", "Dots", "Squares"};
+    private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
 
     public ToolWindow(SampleSketch sketch) {
         setSize(200, 400);

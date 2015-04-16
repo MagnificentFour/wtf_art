@@ -291,8 +291,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     }
         private void mapTo() {
         MapTo map = new MapTo();
-        map.setupSketch(bgImg);
         map.init();
+        map.setupSketch(bgImg);
         map.function();
     }
 
@@ -383,8 +383,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 redraw();
                 methodState = State.CLEAR;
                 break;
-            case "MapTo":
-                noSave = true;
+            case "3D":
+               // noSave = true;
                 methodState = State.MAPTO;
                 redraw();
         }

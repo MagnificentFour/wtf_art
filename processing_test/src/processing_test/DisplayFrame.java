@@ -45,7 +45,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JTabbedPane sketchTabs;
 //    private final JLabel sliderLabel;
 
-    private String[] functionNames = {"Original", "Dots", "Squares"};
+    private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
 
     private final JSlider slider;
     private final JSlider cloneRadiusSlider;
