@@ -23,7 +23,7 @@ public class SampleSketch extends PApplet
     int sizeWidth = 1280;
     int sizeHeight = 720;
     int pxSize = 20;
-    int cloneRadius = 60;
+    int cloneR = 60;
     int waitingPoint = 0;
     int figureState = 0;
     int i;
@@ -52,7 +52,7 @@ public class SampleSketch extends PApplet
     JButton back;
     JButton mapDone;
     JButton cellSize;
-    
+
     CloneTool clTool = new CloneTool();
 
     Layer selectedLayer;
@@ -83,7 +83,7 @@ public class SampleSketch extends PApplet
         pg = createGraphics(1280, 720);
         cursorP = createGraphics(1280, 720);
         circle = loadImage("graphics/circle2.png");
-        circle.resize(cloneRadius, cloneRadius);
+        circle.resize(cloneR, cloneR);
         point1 = loadImage("graphics/point1.png");
         point2 = loadImage("graphics/point2.png");
         point3 = loadImage("graphics/point3.png");
@@ -109,12 +109,12 @@ public class SampleSketch extends PApplet
 //        toolWindow.addLayerView(initLayer);
         initLayer.isDisplayed(true);
         initLayer.selected(true);
-        
+
         cursorLayer = new Layer(cursorP);
         cursorLayer.isDisplayed(true);
         layerHandler.addCursorLayer(cursorLayer);
         cursorLayer.setShow(false);
-        
+
         toolWindow.refreshLayerView(layerHandler.getLayerView());
     }
 
@@ -131,7 +131,7 @@ public class SampleSketch extends PApplet
         } else {
             back.setEnabled(false);
         }
-        
+
         ArrayList<Layer> rList = new ArrayList<>();
 
         for (Layer layer : layerHandler.getLayers()) {
@@ -182,7 +182,7 @@ public class SampleSketch extends PApplet
                     cursorLayer.setShow(true);
                     cursorP.beginDraw();
                     cursorP.background(0, 0);
-                    cursorP.image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
+                    cursorP.image(circle, mouseX - (cloneR / 2), mouseY - (cloneR / 2));
                     Point ppoint1 = clTool.getPoint1();
                     Point ppoint2 = clTool.getPoint2();
                     int p1x = ppoint1.x;
@@ -197,12 +197,11 @@ public class SampleSketch extends PApplet
                     cursorLayer.setShow(true);
                     cursorP.beginDraw();
                     cursorP.background(0, 0);
-                    cursorP.image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
+                    cursorP.image(circle, mouseX - (cloneR / 2), mouseY - (cloneR / 2));
                     cursorP.endDraw();
                 }
 
             }
-            drawFunc(selectedLayer.getGraphics());
         }
         drawFunc(selectedLayer.getGraphics());
     }
@@ -314,7 +313,7 @@ public class SampleSketch extends PApplet
         mapSlider.setBounds(20, 10, 15, 15);
         cellSize.setBounds(10, 10, 15, 15);
         mapDone.setBounds(1, 10, 20, 20);
-        
+
         MapTo map = new MapTo();
         JPanel p = new JPanel();
         p.setSize(bgImg.width, bgImg.height);
@@ -323,24 +322,23 @@ public class SampleSketch extends PApplet
         p.add(mapSlider);
         f.add(p);
         p.add(map);
-        
+
         cellSize.addActionListener(map);
         mapSlider.addChangeListener(map);
         mapDone.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-             f.setVisible(false);
+            public void actionPerformed(ActionEvent e) {
+                f.setVisible(false);
                 p.setVisible(false);
                 image(map.function(), 0, 0);
                 methodState = State.NOACTION;
-                redraw();       
+                redraw();
                 f.dispose();
-        }
-    });  
+            }
+        });
         map.init();
         map.setupSketch(this.get());
         f.setVisible(true);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-                
 
     }
 
@@ -366,7 +364,7 @@ public class SampleSketch extends PApplet
     /**
      * Assigns pointers to the undo and redo buttons.
      *
-     * @param fwd  The redo button.
+     * @param fwd The redo button.
      * @param back The undo button.
      */
     public void setButtons(JButton fwd, JButton back) {
@@ -487,6 +485,7 @@ public class SampleSketch extends PApplet
                 copying = false;
                 methodState = State.SETPOINTS;
                 mainState = State.EDITING;
+                selectedLayer.setLayerFunc(methodState);
                 loop();
                 break;
             case "setPoints":
@@ -494,6 +493,7 @@ public class SampleSketch extends PApplet
                 copying = false;
                 methodState = State.SETPOINTS;
                 mainState = State.EDITING;
+                selectedLayer.setLayerFunc(methodState);
                 loop();
                 break;
             case "blur":
@@ -501,6 +501,7 @@ public class SampleSketch extends PApplet
                     previousState = methodState;
                     mainState = State.EDITING;
                     methodState = State.BLUR;
+                    selectedLayer.setLayerFunc(methodState);
                     loop();
                     break;
                 } else {
@@ -509,19 +510,21 @@ public class SampleSketch extends PApplet
                 }
             case "invert":
                 if (methodState != State.INVERT) {
-                    previousState = methodState;
+                    //previousState = methodState;
                     noLoop();
                     firstState = true;
                     methodState = State.INVERT;
                     mainState = State.EDITING;
+                    selectedLayer.setLayerFunc(methodState);
                     redraw();
                 } else {
-                    methodState = previousState;
+                    //methodState = previousState;
                 }
                 break;
             case "wrapping":
                 methodState = State.WRAPPING;
                 mainState = State.EDITING;
+                selectedLayer.setLayerFunc(methodState);
                 loop();
                 break;
             case "square":
@@ -538,7 +541,7 @@ public class SampleSketch extends PApplet
     }
 
     public void cloneRadChanged(int newR) {
-        cloneRadius = newR;
+        cloneR = newR;
     }
 
     /**
@@ -550,27 +553,31 @@ public class SampleSketch extends PApplet
     public void stateChanged(ChangeEvent e) {
         source = (JSlider) e.getSource();
         cloneSource = (JSlider) e.getSource();
-        
-        
+
         if (!source.getValueIsAdjusting()) {
+            cloneR = source.getValue() * 3;
             pxSize = source.getValue();
             mainState = State.EDITING;
             methodState = selectedLayer.getLayerFunc();
+//            if (methodState == State.INVERT && firstState == false) {
+//                methodState = State.INVERT;
+//            }
+            
+            circle = loadImage("graphics/circle2.png");
+            circle.resize(cloneR, cloneR);
+            //firstState = false;
+            System.out.println(cloneR);
+            System.out.println(methodState);
+            redraw();
         }
+
     }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
         cloneSource = (JSlider) e.getSource();
         if (!cloneSource.getValueIsAdjusting()) {
-            if (methodState == State.INVERT && firstState == false) {
-                importState(tracker.getPrevEntry(), methodState);
-                methodState = State.INVERT;
-            }
-            cloneRadius = cloneSource.getValue() * 3;
-            circle = loadImage("graphics/circle2.png");
-            circle.resize(cloneRadius, cloneRadius);
-            firstState = false;
+
         }
 
     }
@@ -581,23 +588,25 @@ public class SampleSketch extends PApplet
 
     private void drawFunc(PGraphics pg) {
         pg.beginDraw();
-        switch (methodState) {
-            case BLUR:
-                if (mousePressed == true) {
-                    blurEdit(pg);
-                }
-                break;
-            case CLONE:
-                if (copying == true) {
+        if (methodState != null) {
+            switch (methodState) {
+                case BLUR:
                     if (mousePressed == true) {
-                        cloneEdit(pg);
-                        break;
+                        blurEdit(pg);
                     }
-                }
-                break;
-            case INVERT:
-                invertEdit(pg);
-                break;
+                    break;
+                case CLONE:
+                    if (copying == true) {
+                        if (mousePressed == true) {
+                            cloneEdit(pg);
+                            break;
+                        }
+                    }
+                    break;
+                case INVERT:
+                    invertEdit(pg);
+                    //break;
+            }
         }
         pg.endDraw();
     }
@@ -608,9 +617,9 @@ public class SampleSketch extends PApplet
         float finalR = 0;
         float finalB = 0;
         float finalG = 0;
-        for (int i = (-cloneRadius / 2); i < (cloneRadius / 2); i++) {
-            for (int t = (-cloneRadius / 2); t < (cloneRadius / 2); t++) {
-                if (dist(mouseX, mouseY, (mouseX + i), (mouseY + t)) <= (cloneRadius / 2)) {
+        for (int i = (-cloneR / 2); i < (cloneR / 2); i++) {
+            for (int t = (-cloneR / 2); t < (cloneR / 2); t++) {
+                if (dist(mouseX, mouseY, (mouseX + i), (mouseY + t)) <= (cloneR / 2)) {
                     totalPix++;
                     colour = color(pg.get(mouseX + i, mouseY + t));
                     float r = red(colour);
@@ -626,9 +635,9 @@ public class SampleSketch extends PApplet
         finalR = finalR / totalPix;
         finalG = finalG / totalPix;
         int c = color(finalR, finalG, finalB);
-        for (int i = -cloneRadius / 2; i < cloneRadius / 2; i++) {
-            for (int t = -cloneRadius / 2; t < cloneRadius / 2; t++) {
-                if (dist(mouseX, mouseY, (mouseX + i), (mouseY + t)) <= (cloneRadius / 2)) {
+        for (int i = -cloneR / 2; i < cloneR / 2; i++) {
+            for (int t = -cloneR / 2; t < cloneR / 2; t++) {
+                if (dist(mouseX, mouseY, (mouseX + i), (mouseY + t)) <= (cloneR / 2)) {
                     pg.set(mouseX + i, mouseY + t, c);
                 }
             }
@@ -644,9 +653,9 @@ public class SampleSketch extends PApplet
         //int colour = color(bgImg.get(mouseX - 50, mouseY));
         int staticX = mouseX;
         int staticY = mouseY;
-        for (int i = -cloneRadius / 2; i < cloneRadius / 2; i++) {
-            for (int t = -cloneRadius / 2; t < cloneRadius / 2; t++) {
-                if (dist(mouseX, mouseY, (mouseX + i), (mouseY + t)) <= (cloneRadius / 2)) {
+        for (int i = -cloneR / 2; i < cloneR / 2; i++) {
+            for (int t = -cloneR / 2; t < cloneR / 2; t++) {
+                if (dist(mouseX, mouseY, (mouseX + i), (mouseY + t)) <= (cloneR / 2)) {
                     int colour = color(pg.get((mouseX - distanceX) + i, (mouseY - distanceY) + t));
                     pg.set(mouseX + i, mouseY + t, colour);
                 }
@@ -656,96 +665,109 @@ public class SampleSketch extends PApplet
     }
 
     private void invertEdit(PGraphics pg) {
-        for (int i = 1; i <= sizeWidth; i++) {
-            for (int t = 1; t <= sizeHeight; t++) {
-                int colour = color(get(i, t));
+        boolean fuckTest = false;
+        PGraphics gb = createGraphics(bgImg.width, bgImg.height);
+        pg.endDraw();
+        gb.beginDraw();
+        gb.image(bgImg, 0, 0);
+        gb.endDraw();
+        pg.beginDraw();
+        System.out.println("CLonme:" + cloneR);
+        for (int x = 1; x <= gb.width; x++) {
+            for (int t = 1; t <= gb.height; t++) {
+                int colour = color(gb.get(x, t));
                 float r = red(colour);
                 float b = blue(colour);
-                float g = green(colour);
-                if (cloneRadius > 89) {
-                    int c = color(g, r, r);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 86) {
-                    int c = color(g, b, b);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 83) {
-                    int c = color(g, r, b);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 80) {
-                    int c = color(g, b, r);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 77) {
-                    int c = color(b, g, g);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 74) {
+                float gr = green(colour);
+                if (cloneR > 89) {
+                    int c = color(gr, r, r);
+                    pg.set(x, t, c);
+                } else if (cloneR > 86) {
+                    int c = color(gr, b, b);
+                    pg.set(x, t, c);
+                } else if (cloneR > 83) {
+                    int c = color(gr, r, b);
+                    pg.set(x, t, c);
+                } else if (cloneR > 80) {
+                    int c = color(gr, b, r);
+                    pg.set(x, t, c);
+                } else if (cloneR > 77) {
+                    int c = color(b, gr, gr);
+                    pg.set(x, t, c);
+                    fuckTest = true;
+                } else if (cloneR > 74) {
                     int c = color(b, r, r);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 71) {
-                    int c = color(b, g, r);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 68) {
-                    int c = color(b, r, g);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 65) {
+                    pg.set(x, t, c);
+                } else if (cloneR > 71) {
+                    int c = color(b, gr, r);
+                    pg.set(x, t, c);
+                } else if (cloneR > 68) {
+                    int c = color(b, r, gr);
+                    pg.set(x, t, c);
+                } else if (cloneR > 65) {
                     int c = color(r, b, b);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 62) {
-                    int c = color(r, g, g);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 59) {
-                    int c = color(r, b, g);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 56) {
-                    int c = color(g, b, g);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 53) {
+                    pg.set(x, t, c);
+                } else if (cloneR > 62) {
+                    int c = color(r, gr, gr);
+                    pg.set(x, t, c);
+                } else if (cloneR > 59) {
+                    int c = color(r, b, gr);
+                    pg.set(x, t, c);
+                } else if (cloneR > 56) {
+                    int c = color(gr, b, gr);
+                    pg.set(x, t, c);
+                } else if (cloneR > 53) {
                     int c = color(r, r, r);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 50) {
-                    int c = color(g, g, g);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 47) {
+                    pg.set(x, t, c);
+                } else if (cloneR > 50) {
+                    int c = color(gr, gr, gr);
+                    pg.set(x, t, c);
+                } else if (cloneR > 47) {
                     int c = color(b, b, b);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 44) {
-                    int c = color(g, g, r);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 41) {
-                    int c = color(g, g, b);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 38) {
-                    int c = color(r, r, g);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 35) {
+                    pg.set(x, t, c);
+                } else if (cloneR > 44) {
+                    int c = color(gr, gr, r);
+                    pg.set(x, t, c);
+                } else if (cloneR > 41) {
+                    int c = color(gr, gr, b);
+                    pg.set(x, t, c);
+                } else if (cloneR > 38) {
+                    int c = color(r, r, gr);
+                    pg.set(x, t, c);
+                } else if (cloneR > 35) {
                     int c = color(r, r, b);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 32) {
+                    pg.set(x, t, c);
+                } else if (cloneR > 32) {
                     int c = color(b, b, r);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 29) {
-                    int c = color(b, b, g);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 26) {
-                    int c = color(b, g, b);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 23) {
+                    pg.set(x, t, c);
+                } else if (cloneR > 29) {
+                    int c = color(b, b, gr);
+                    pg.set(x, t, c);
+                } else if (cloneR > 26) {
+                    int c = color(b, gr, b);
+                    pg.set(x, t, c);
+                } else if (cloneR > 23) {
                     int c = color(b, r, b);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 20) {
-                    int c = color(r, g, r);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 17) {
+                    pg.set(x, t, c);
+                } else if (cloneR > 20) {
+                    int c = color(r, gr, r);
+                    pg.set(x, t, c);
+                } else if (cloneR > 17) {
                     int c = color(r, b, r);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 14) {
-                    int c = color(g, r, g);
-                    pg.set(i, t, c);
-                } else if (cloneRadius > 11) {
-                    int c = color(r, g, b);
-                    pg.set(i, t, c);
+                    pg.set(x, t, c);
+                } else if (cloneR > 14) {
+                    int c = color(gr, r, gr);
+                    pg.set(x, t, c);
+                } else if (cloneR > 11) {
+                    int c = color(r, gr, b);
+                    pg.set(x, t, c);
                 }
             }
         }
+        if(fuckTest == true) {
+            System.out.println("we did it");
+        }
+        //tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
     }
 
     private void wrappingEdit(PGraphics pg) {
@@ -759,19 +781,19 @@ public class SampleSketch extends PApplet
         for (int i = 0; i <= bgImg.width; i++) {
             for (int t = 0; t <= bgImg.height; t++) {
                 if (figureState == 1) {
-                    if (dist(i, t, xMid, yMid) > cloneRadius * 3) {
+                    if (dist(i, t, xMid, yMid) > cloneR * 3) {
                         pg.set(i, t, c);
                     }
                 } else if (figureState == 0) {
-                    if ((i < (xMid - (cloneRadius * 3)) || i > (xMid + (cloneRadius * 3))) || ((t < (yMid - (cloneRadius * 3))) || t > (yMid + (cloneRadius * 3)))) {
+                    if ((i < (xMid - (cloneR * 3)) || i > (xMid + (cloneR * 3))) || ((t < (yMid - (cloneR * 3))) || t > (yMid + (cloneR * 3)))) {
                         pg.set(i, t, c);
                     }
                 } else if (figureState == 2) {
-                    if (dist(i, t, xMid, yMid) > cloneRadius * 3) {
-                        if (dist(i, t, xMid, yMid) < cloneRadius * 6) {
+                    if (dist(i, t, xMid, yMid) > cloneR * 3) {
+                        if (dist(i, t, xMid, yMid) < cloneR * 6) {
                             int u = (int) dist(i, t, xMid, yMid);
                             int r = rand.nextInt(u);
-                            if (r > cloneRadius) {
+                            if (r > cloneR) {
                                 pg.set(i, t, c);
                             }
                         }
@@ -780,7 +802,7 @@ public class SampleSketch extends PApplet
             }
         }
     }
-    
+
     public void getLayers() {
         toolWindow.refreshLayerView(layerHandler.getLayerView());
     }
