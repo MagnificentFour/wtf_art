@@ -1,8 +1,7 @@
 package processing_test;
 
 import java.util.ArrayList;
-import processing.core.PApplet;
-import processing.core.PImage;
+import processing.core.*;
 
 /**
  *
@@ -11,6 +10,7 @@ import processing.core.PImage;
 public class Dotting extends PApplet {
     
     PImage bgImg;
+    PGraphics gr;
     int pxSize = 20;
     boolean noSave = true;
     
@@ -35,33 +35,36 @@ public class Dotting extends PApplet {
 
         float[] ave = new float[5000000];
         
-        rectMode(CORNER);
         size(bgImg.width, bgImg.height);
-        noStroke();
+        gr = createGraphics(bgImg.width, bgImg.height);
+        
+        gr.beginDraw();
+        gr.rectMode(CORNER);
+        gr.noStroke();
 
-        image(bgImg, 0, 0);
-        loadPixels();
-        for (int x = 0; x < (width / pxSize); x++) {
-            for (int y = 0; y < (height / pxSize); y++) {
-                loc = (x * pxSize) + ((y * pxSize) * width);
-                r = red(pixels[loc]);
-                g = green(pixels[loc]);
-                b = blue(pixels[loc]);
+        gr.image(bgImg, 0, 0);
+        gr.loadPixels();
+        for (int x = 0; x < (gr.width / pxSize); x++) {
+            for (int y = 0; y < (gr.height / pxSize); y++) {
+                loc = (x * pxSize) + ((y * pxSize) * gr.width);
+                r = red(gr.pixels[loc]);
+                g = green(gr.pixels[loc]);
+                b = blue(gr.pixels[loc]);
                 ave[loc] = ((r + g + b) / 3);
             }
         }
 
-        rectMode(CORNER);
+        gr.rectMode(CORNER);
 
-        fill(0);
-        rect(0, 0, width, height);
-        fill(240, 110, 110);
-        for (int i = 0; i < width / pxSize; i++) {
-            for (int j = 0; j < height / pxSize; j++) {
-                loc = (i * pxSize) + ((j * pxSize) * width);
+        gr.fill(0);
+        gr.rect(0, 0, width, height);
+        gr.fill(240, 110, 110);
+        for (int i = 0; i < gr.width / pxSize; i++) {
+            for (int j = 0; j < gr.height / pxSize; j++) {
+                loc = (i * pxSize) + ((j * pxSize) * gr.width);
                 createSize = (int) constrain(map(ave[loc], 0, 255, 0, (float) (pxSize * 1.1)), 0, (float) (pxSize * 1.1));
                 if (noSave) {
-                    ellipse((i * pxSize) + (pxSize), (j * pxSize) + (pxSize), createSize, createSize);
+                    gr.ellipse((i * pxSize) + (pxSize), (j * pxSize) + (pxSize), createSize, createSize);
                 } else {
                     
                     ellipseList.add(new Ellipse((i * pxSize) + (pxSize), (j * pxSize) + (pxSize), createSize, createSize));
@@ -80,7 +83,7 @@ public class Dotting extends PApplet {
     
     public PImage getResult() {
         
-        return this.get();
+        return gr.get();
         
     }
     
