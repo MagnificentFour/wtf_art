@@ -9,8 +9,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 import static javafx.scene.paint.Color.color;
-import static javafx.scene.paint.Color.color;
-import static javafx.scene.paint.Color.color;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -64,25 +62,10 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         background(255);
         pg = createGraphics(sizeWidth, sizeHeight);
         noLoop();
-        circle = loadImage("graphics/cirlce.png");
     }
 
     @Override
     public void draw() {
-//        if (gogo) {
-//            background(255);
-//            for (Ellipse e : ellipseList) {
-//                
-//                fill(0);
-//                e.setAnimXAndY(mouseX + (rand.nextInt(80) - 40), mouseY + (rand.nextInt(80) - 40));
-//                ellipse(e.getAnimX(), e.getAnimY(), e.getHeight(), e.getWidth());
-//
-//            }
-//        } else if(moveToSpot) {
-//            
-//            moveToSpot();
-//            
-//        }
 
         if (tracker.hasNext()) {
             fwd.setEnabled(true);
@@ -146,68 +129,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
         }
 
-    }
-
-    /**
-     * Animation for the "Dot" function. Moves the dots step by step to their
-     * intended position.
-     */
-    public void moveToSpot() {
-        background(0);
-        for (Ellipse e : ellipseList) {
-            float oldX = e.getAnimX();
-            float oldY = e.getAnimY();
-            float actualX = e.getxCoord();
-            float actualY = e.getyCoord();
-            float newX = 0;
-            float newY = 0;
-
-            if (oldX >= actualX - 11 && oldX <= actualX + 10) {
-                newX = actualX;
-            } else if (oldX > actualX) {
-                newX = oldX - 10;
-            } else if (oldX < actualX) {
-                newX = oldX + 10;
-            }
-
-            if (oldY >= actualY - 11 && oldY <= actualY + 11) {
-                newY = actualY;
-            } else if (oldY > actualY) {
-                newY = oldY - 10;
-            } else if (oldY < actualY) {
-                newY = oldY + 10;
-            }
-            e.setAnimXAndY(newX, newY);
-
-            fill(255, 0, 0);
-            ellipse(e.getAnimX(), e.getAnimY(), e.getHeight(), e.getWidth());
-        }
-
-    }
-
-    public void animateDots() {
-
-        if (!ellipseList.isEmpty()) {
-            drawList.add(ellipseList.remove(rand.nextInt(ellipseList.size())));
-        } else if (done) {
-            noLoop();
-        } else {
-            done = true;
-            drawList.stream().forEach((e) -> {
-                if (e.incrementSize()) {
-                    done = false;
-                }
-            });
-        }
-
-        background(0);
-
-        fill(255);
-
-        drawList.stream().forEach((e) -> {
-            ellipse(e.getxCoord(), e.getyCoord(), e.getWidth(), e.getHeight());
-            e.incrementSize();
-        });
     }
 
     public void mouseClicked() {
@@ -293,17 +214,17 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     private void mapTo() {
         JFrame f = new JFrame();
         f.setSize(bgImg.width, bgImg.height);
-        
+
         MapTo map = new MapTo();
         JPanel p = new JPanel();
-        
+
         f.add(p);
         p.add(map);
-        
+
         map.init();
         map.setupSketch(this.get());
 //        map.function(mouseX);
-        
+
         f.setVisible(true);
     }
 
@@ -382,26 +303,22 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
             case "Dots":
                 noSave = true;
-                //gogo = false;
                 methodState = State.DOTREP;
-                redraw();
                 break;
             case "Squares":
                 gogo = false;
                 background(255);
                 methodState = State.PXLATION;
-                redraw();
                 break;
             case "Original":
                 gogo = false;
                 background(255);
-                redraw();
                 methodState = State.CLEAR;
                 break;
             case "3D":
                 methodState = State.MAPTO;
-                redraw();
         }
+        redraw();
 
     }
 

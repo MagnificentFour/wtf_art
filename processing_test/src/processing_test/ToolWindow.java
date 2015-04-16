@@ -1,5 +1,6 @@
 package processing_test;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -18,36 +19,65 @@ import static javax.swing.SwingConstants.CENTER;
  */
 public class ToolWindow extends JFrame {
 
-    private final SampleSketch sketch;
     private HashMap<String, Component> components;
     private ImageIcon[] functionIcons;
     private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
 
-    public ToolWindow(SampleSketch sketch) {
-        setSize(200, 400);
+    /**
+     * Constructor for the tool window.
+     * @param sketch 
+     */
+    public ToolWindow() {
+        setSize(250, 400);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         components = new HashMap<>();
-        this.sketch = sketch;
 
         makeComboBox();
         components.put("sizeSlider", new JSlider(JSlider.HORIZONTAL, 4, 30, 20));
         components.put("clearButton", new JButton("Clear"));
         components.put("cloneButton", new JButton("Clone"));
 
-        setLayout(new FlowLayout());
+//        setLayout(new FlowLayout());
 
         Set<String> keys = components.keySet();
         for (String key : keys) {
             add(components.get(key));
         }
+        
+        arrangeLayout();
+        
         setVisible(true);
     }
     
+    /**
+     * Arranges the layout of the components in the tool window.
+     */
+    private void arrangeLayout() {
+        setLayout(null);
+        
+        add(new JLabel("Velg funksjon:")).setBounds(15, 5, 200, 10);
+        components.get("functionComboBox").setBounds(20, 20, 180, 100);
+        
+        components.get("cloneButton").setBounds(10, 140, 200, 50);
+        components.get("clearButton").setBounds(10, 210, 200, 50);
+        
+        add(new JLabel("Velg størrelse:")).setBounds(10, 305, 200, 10);
+        components.get("sizeSlider").setBounds(5, 315, 200, 20);
+
+    }
+    
+    /**
+     * Returns a hash map of the components for setting listeners.
+     * @return HashMap of components in this window.
+     */
     public HashMap<String, Component> getToolComponents() {
         return components;
     }
 
+    /**
+     * Creates a combo box.
+     */
     private void makeComboBox() {
 
         functionIcons = new ImageIcon[functionNames.length];

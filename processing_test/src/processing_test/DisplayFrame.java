@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package processing_test;
 
 import java.awt.*;
@@ -104,7 +99,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         add(newTab);
         add(closeTab);
 
-        ToolWindow tw = new ToolWindow(currentSketch);
+        ToolWindow tw = new ToolWindow();
+
         toolWindowComponents = tw.getToolComponents();
         
         componentList.add(backButton);
