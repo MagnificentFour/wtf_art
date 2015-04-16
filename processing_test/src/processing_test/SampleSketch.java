@@ -199,7 +199,7 @@ public class SampleSketch extends PApplet
                     cursorP.background(0, 0);
                     cursorP.image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
                     cursorP.endDraw();
-                }
+                } 
 
             }
             System.out.println(cloneRadius);
@@ -220,6 +220,7 @@ public class SampleSketch extends PApplet
                 clTool.setPoint2(p);
                 waitingPoint = 0;
                 methodState = State.CLONE;
+                selectedLayer.setLayerFunc(methodState);
                 copying = true;
 
             }
@@ -450,7 +451,6 @@ public class SampleSketch extends PApplet
                 background(255);
                 redraw();
                 methodState = State.CLEAR;
-
                 break;
             case "pxlate":
                 background(255);
@@ -482,6 +482,7 @@ public class SampleSketch extends PApplet
                 copying = false;
                 methodState = State.SETPOINTS;
                 mainState = State.EDITING;
+                selectedLayer.setLayerFunc(methodState);
                 loop();
                 break;
             case "setPoints":
@@ -489,6 +490,7 @@ public class SampleSketch extends PApplet
                 copying = false;
                 methodState = State.SETPOINTS;
                 mainState = State.EDITING;
+                selectedLayer.setLayerFunc(methodState);
                 loop();
                 break;
             case "blur":
@@ -496,6 +498,7 @@ public class SampleSketch extends PApplet
                     previousState = methodState;
                     mainState = State.EDITING;
                     methodState = State.BLUR;
+                    selectedLayer.setLayerFunc(methodState);
                     loop();
                     break;
                 } else {
@@ -508,14 +511,16 @@ public class SampleSketch extends PApplet
                     noLoop();
                     firstState = true;
                     methodState = State.INVERT;
+                    selectedLayer.setLayerFunc(methodState);
                     mainState = State.EDITING;
-                    redraw();
+                    //redraw();
                 } else {
                     methodState = previousState;
                 }
                 break;
             case "wrapping":
                 methodState = State.WRAPPING;
+                selectedLayer.setLayerFunc(methodState);
                 mainState = State.EDITING;
                 loop();
                 break;
@@ -545,28 +550,28 @@ public class SampleSketch extends PApplet
     public void stateChanged(ChangeEvent e) {
         source = (JSlider) e.getSource();
         cloneSource = (JSlider) e.getSource();
-
+        cloneRadius = cloneSource.getValue() * 3;
+        circle = loadImage("graphics/circle2.png");
+        circle.resize(cloneRadius, cloneRadius);
         if (!source.getValueIsAdjusting()) {
             pxSize = source.getValue();
             mainState = State.EDITING;
             methodState = selectedLayer.getLayerFunc();
+            if (methodState == State.INVERT && firstState == false) {
+                importState(tracker.getPrevEntry(), methodState);
+                invertEdit(selectedLayer.getGraphics());
+                redraw();
+            }
+            firstState = false;
         }
+        
     }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
         cloneSource = (JSlider) e.getSource();
         if (!cloneSource.getValueIsAdjusting()) {
-            if (methodState == State.INVERT && firstState == false) {
-                importState(tracker.getPrevEntry(), methodState);
-                methodState = State.INVERT;
-            }
-            System.out.println(cloneSource.getValue());
-            cloneRadius = cloneSource.getValue() * 3;
-            circle = loadImage("graphics/circle2.png");
-            circle.resize(cloneRadius, cloneRadius);
-            firstState = false;
-            System.out.println(cloneRadius);
+  
         }
 
     }
@@ -577,23 +582,25 @@ public class SampleSketch extends PApplet
 
     private void drawFunc(PGraphics pg) {
         pg.beginDraw();
-        switch (methodState) {
-            case BLUR:
-                if (mousePressed == true) {
-                    blurEdit(pg);
-                }
-                break;
-            case CLONE:
-                if (copying == true) {
+        if (methodState != null) {
+            switch (methodState) {
+                case BLUR:
                     if (mousePressed == true) {
-                        cloneEdit(pg);
-                        break;
+                        blurEdit(pg);
                     }
-                }
-                break;
-            case INVERT:
-                invertEdit(pg);
-                break;
+                    break;
+                case CLONE:
+                    if (copying == true) {
+                        if (mousePressed == true) {
+                            cloneEdit(pg);
+                            break;
+                        }
+                    }
+                    break;
+                case INVERT:
+                    invertEdit(pg);
+                    break;
+            }
         }
         pg.endDraw();
     }
@@ -653,9 +660,10 @@ public class SampleSketch extends PApplet
 
     private void invertEdit(PGraphics pg) {
         System.out.println("lololo.olol");
+        System.out.println(selectedLayer);
         for (int i = 1; i <= sizeWidth; i++) {
             for (int t = 1; t <= sizeHeight; t++) {
-                int colour = color(get(i, t));
+                int colour = color(pg.get(i, t));
                 float r = red(colour);
                 float b = blue(colour);
                 float g = green(colour);
@@ -743,6 +751,7 @@ public class SampleSketch extends PApplet
                 }
             }
         }
+        //redraw();
     }
 
     private void wrappingEdit(PGraphics pg) {
