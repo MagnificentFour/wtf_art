@@ -69,9 +69,9 @@ public class BigPix extends PApplet{
                 
     }
     
-    public PImage getResult() {
+    public PGraphics getResult() {
         
-        return gr.get();
+        return gr;
         
     }
     
