@@ -3,7 +3,7 @@ package processing_test;
 import java.util.ArrayList;
 
 /**
- *
+ * Layerhandler
  * @author nikla_000
  */
 public class LayerHandler {
@@ -11,14 +11,17 @@ public class LayerHandler {
     private final ArrayList<Layer> layers;
     private int dottingIndex;
     private int bigPixIndex;
+    private LayerView layerView;
 
     public LayerHandler() {
         layers = new ArrayList<>();
         dottingIndex = -1;
         bigPixIndex = -1;
+        layerView = new LayerView();
     }
 
     /**
+     * TODO Document
      *
      * @param layer
      */
@@ -31,13 +34,12 @@ public class LayerHandler {
         } else {
             Layer bgLayer = layers.get(0);
             bgLayer.setGraphics(layer.getGraphics());
-//            layers.remove(0);
-//            layers.add(0, layer);
         }
 
     }
 
     /**
+     * TODO Document
      *
      * @param layer
      */
@@ -47,13 +49,20 @@ public class LayerHandler {
         } else {
             layers.add(layers.size() - 1, layer);
         }
+        layerView.addLayerView(layer);
     }
 
+    /**
+     * Adds a cursorlayer
+     *
+     * @param layer The layer in which the cursor shall be used
+     */
     public void addCursorLayer(Layer layer) {
         layers.add(layer);
     }
 
     /**
+     * TODO Document ples
      *
      * @param layer
      * @param func
@@ -72,6 +81,7 @@ public class LayerHandler {
     }
 
     /**
+     * TODO Document ples
      *
      * @param layer
      */
@@ -85,20 +95,23 @@ public class LayerHandler {
             layer.remove(true);
             layers.remove(layer);
         }
-
     }
 
     /**
+     * TODO Document ples
      *
      * @param index
      */
     public void removeLayer(int index) {
-
         layers.get(index).remove(true);
         layers.remove(index);
-
     }
 
+    /**
+     * TODO Document ples
+     *
+     * @param func
+     */
     public void removeFunc(String func) {
         switch (func) {
             case "BigPix":
@@ -112,6 +125,7 @@ public class LayerHandler {
     }
 
     /**
+     * TODO Document ples
      *
      * @param index
      * @param layer
@@ -126,10 +140,10 @@ public class LayerHandler {
             layers.add(index, layer);
             return true;
         }
-
     }
 
     /**
+     * TODO Document ples
      *
      * @param layerToReplace
      * @param replacementLayer
@@ -152,6 +166,7 @@ public class LayerHandler {
     }
 
     /**
+     * TODO Document ples
      *
      * @return
      */
@@ -161,12 +176,44 @@ public class LayerHandler {
 
     }
 
+    /**
+     * TODO Document ples
+     *
+     * @return
+     */
     public ArrayList<Layer> getLayers() {
 
         return layers;
 
     }
 
+    /**
+     * TODO Document ples
+     *
+     * Kommentera ut for � se om merge fungerer
+     *
+     * @param func
+     * @param stat
+     */
+    public void setFuncStat(String func, boolean stat) {
+
+        switch (func) {
+
+            case "Dotting":
+           //     hasDotting = true;
+                break;
+            case "BigPix":
+            //    hasBigPix = true;
+        }
+
+    }
+
+    /**
+     * TODO Document ples
+     *
+     * @param func
+     * @return
+     */
     public int checkFuncStat(String func) {
 
         switch (func) {
@@ -176,8 +223,14 @@ public class LayerHandler {
             case "BigPix":
                 return bigPixIndex;
         }
-
         return -1;
-
+    }
+    
+    public void refreshLayerView() {
+        layerView.refresh();
+    }
+    
+    public LayerView getLayerView() {
+        return layerView;
     }
 }

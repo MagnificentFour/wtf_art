@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,12 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import static javax.swing.text.StyleConstants.FontFamily;
+
 import processing.core.*;
-import static processing.core.PConstants.RGB;
 
 /**
- *
  * @author nikla_000
  */
 public class SampleSketch extends PApplet
@@ -29,24 +26,33 @@ public class SampleSketch extends PApplet
     int cloneRadius = 60;
     int waitingPoint = 0;
     int figureState = 0;
+    int i;
+
+    Random rand = new Random();
+
     PImage bgImg;
     PImage circle;
     PImage point1;
     PImage point2;
     PImage point3;
+
     PGraphics pg;
     PGraphics cursorP;
+
     boolean noSave = false;
     boolean copying = false;
-    Random rand = new Random();
-    int i;
+
     boolean firstState = false;
     boolean hasChanged = false;
+
     Color currentColor;
     ColorChooserDemo cp;
+
     JButton fwd;
     JButton back;
+
     CloneTool clTool = new CloneTool();
+
     Layer selectedLayer;
     Layer cursorLayer;
 
@@ -54,6 +60,7 @@ public class SampleSketch extends PApplet
     State nextState = State.CLEAR;
     State previousState;
     State mainState = State.VIEWING;
+
     int cellsize = 2; // Dimensions of each cell in the grid
     int cols, rows;   // Number of columns and rows in our system
 
@@ -77,7 +84,6 @@ public class SampleSketch extends PApplet
         point2 = loadImage("graphics/point2.png");
         point3 = loadImage("graphics/point3.png");
         frameRate(25);
-//        noLoop();
         initSetup();
 
     }
@@ -96,18 +102,20 @@ public class SampleSketch extends PApplet
         Layer initLayer = new Layer(initImage);
         initLayer.getRemoveButton().setEnabled(false);
         layerHandler.addLayer(initLayer);
-        toolWindow.addLayerView(initLayer);
+//        toolWindow.addLayerView(initLayer);
         initLayer.isDisplayed(true);
+        initLayer.selected(true);
+        
         cursorLayer = new Layer(cursorP);
         cursorLayer.isDisplayed(true);
         layerHandler.addCursorLayer(cursorLayer);
         cursorLayer.setShow(false);
+        
+        toolWindow.refreshLayerView(layerHandler.getLayerView());
     }
 
     @Override
     public void draw() {
-
-//        background(255);
         if (tracker.hasNext()) {
             fwd.setEnabled(true);
         } else {
@@ -128,12 +136,6 @@ public class SampleSketch extends PApplet
                 rList.add(layer);
             } else {
 
-                if (!layer.isDisplayed()) {
-                    toolWindow.addLayerView(layer);
-                    layer.isDisplayed(true);
-                }
-
-//                    System.out.println("Yap " + layer);
                 if (layer.isBackground()) {
                     image(layer.getLayerImage(), 0, 0);
                 } else if (layer.show()) {
@@ -152,14 +154,8 @@ public class SampleSketch extends PApplet
         }
 
         if (!layerHandler.getLayers().isEmpty()) {//bgImg != null) {
-
-//            if(methodState == State.DOTREP && cp.getColor() != currentColor) {
-//                hasChanged = true;
-//                //not working
-//            }
             if (mainState == State.EDITING) {
                 if (methodState == State.DOTREP) {
-                    System.out.println("gogogogogogoog");
                     dotRep(layerHandler.checkFuncStat("Dotting"));
                 } else if (methodState == State.PXLATION) {
                     pxlation(layerHandler.checkFuncStat("BigPix"));
@@ -202,14 +198,12 @@ public class SampleSketch extends PApplet
                 } 
 
             }
-            System.out.println(cloneRadius);
             drawFunc(selectedLayer.getGraphics());
         }
-        //methodState = State.NOACTION;
+        drawFunc(selectedLayer.getGraphics());
     }
 
     public void mouseClicked() {
-        System.out.println(methodState);
         if (methodState == State.SETPOINTS) {
             if (waitingPoint == 0) {
                 Point p = new Point(mouseX, mouseY);
@@ -225,18 +219,15 @@ public class SampleSketch extends PApplet
 
             }
         }
-
-//        gogo = false;
-//        moveToSpot = true;
     }
 
     /**
      * Loads and displays an image selected by the FileChooser
      *
-     * @param filein Input image
+     * @param fileIn Input image
      */
-    public void loadBgImage(File filein) {
-        bgImg = loadImage(filein.getAbsolutePath());
+    public void loadBgImage(File fileIn) {
+        bgImg = loadImage(fileIn.getAbsolutePath());
         if (bgImg.width > 720) {
             bgImg.resize(0, 720);
         }
@@ -247,9 +238,8 @@ public class SampleSketch extends PApplet
         gr.endDraw();
 
         layerHandler.setBackground(new Layer(gr));
-        toolWindow.refresh();
+        layerHandler.refreshLayerView();
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-//        redraw();
     }
 
     /**
@@ -269,7 +259,6 @@ public class SampleSketch extends PApplet
         dotRep.setupSketch(bgImg, pxSize, noSave);
         dotRep.init();
         dotRep.runFunction(cp.getColor());
-//        methodState = State.NOACTION;
         PGraphics gr = dotRep.getResult();
 
         Layer dotLayer = new Layer(gr);
@@ -278,12 +267,9 @@ public class SampleSketch extends PApplet
         if (index < 0) {
             layerHandler.addLayer(dotLayer, "Dotting");
         } else {
-//            layerHandler.replaceLayer(index, new Layer(dotRep.getResult()));
             layerHandler.getLayers().get(index).setGraphics(gr);
         }
 
-//        image(img, 0, 0);
-//        blend(img, 0, 0, img.width, img.height, 0, 0, width, height, SUBTRACT);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
 
         hasChanged = false;
@@ -309,12 +295,13 @@ public class SampleSketch extends PApplet
             layerHandler.getLayers().get(index).setGraphics(pxlation.getResult());
         }
 
-//        image(pxlation.getResult(), 0, 0);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
         mainState = State.VIEWING;
-//        redraw();
     }
 
+    /**
+     * TODO Document this
+     */
     private void mapTo() {
         JFrame f = new JFrame();
         f.setSize(bgImg.width, bgImg.height);
@@ -327,7 +314,6 @@ public class SampleSketch extends PApplet
 
         map.init();
         map.setupSketch(this.get());
-//        map.function(mouseX);
 
         f.setVisible(true);
     }
@@ -345,19 +331,16 @@ public class SampleSketch extends PApplet
         nextState = state.getRunState();
 
         if (source != null && metState != State.INVERT) {
-
             source.setValue(pxSize);
-
         }
 
         redraw();
-
     }
 
     /**
      * Assigns pointers to the undo and redo buttons.
      *
-     * @param fwd The redo button.
+     * @param fwd  The redo button.
      * @param back The undo button.
      */
     public void setButtons(JButton fwd, JButton back) {
@@ -436,15 +419,11 @@ public class SampleSketch extends PApplet
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("FoR FUCKS SAKE!");
-
         switch (e.getActionCommand()) {
             case "dot":
                 noSave = true;
-                //gogo = false;
                 methodState = State.DOTREP;
                 hasChanged = true;
-                //redraw();
                 loop();
                 break;
             case "clear":
@@ -571,7 +550,7 @@ public class SampleSketch extends PApplet
     public void itemStateChanged(ItemEvent e) {
         cloneSource = (JSlider) e.getSource();
         if (!cloneSource.getValueIsAdjusting()) {
-  
+
         }
 
     }
@@ -659,8 +638,7 @@ public class SampleSketch extends PApplet
     }
 
     private void invertEdit(PGraphics pg) {
-        System.out.println("lololo.olol");
-        System.out.println(selectedLayer);
+
         for (int i = 1; i <= sizeWidth; i++) {
             for (int t = 1; t <= sizeHeight; t++) {
                 int colour = color(pg.get(i, t));
@@ -785,5 +763,9 @@ public class SampleSketch extends PApplet
                 }
             }
         }
+    }
+    
+    public void getLayers() {
+        toolWindow.refreshLayerView(layerHandler.getLayerView());
     }
 }

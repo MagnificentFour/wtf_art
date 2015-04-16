@@ -138,12 +138,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
                 if (tabIndex != sketchTabs.getSelectedIndex()) {
 
-                    //tw.refreshLayers();
+                    currentSketch.noLoop();
                     removeOldActionListeners(currentSketch);
                     SampleSketch newSketch = (SampleSketch) sketchTabs.getSelectedComponent();
                     setActionListeners(newSketch);
                     currentSketch = newSketch;
                     tabIndex = sketchTabs.getSelectedIndex();
+                    currentSketch.loop();
+                    currentSketch.getLayers();
                     
                 }
 
@@ -162,7 +164,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
         sketchTabs.addTab("Sketch " + tabs, createNewSketch());
         sketchTabs.setSelectedIndex(sketchTabs.getTabCount() - 1);
         tabs++;
-        System.out.println(tabs);
     }
 
     /**
@@ -294,7 +295,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
      */
     private void setActionListeners(SampleSketch s) {
         randomShit.addActionListener(s);
-        randomShit.setActionCommand("");
+        randomShit.setActionCommand(""); //TODO IMPLEMENT THIS FUCKER
 
         clearButton.addActionListener(s);
         clearButton.setActionCommand("clear");
@@ -412,7 +413,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "newTab":
-                System.out.println("Yoloswaggins");
                 newTab();
                 break;
             case "closeTab":
