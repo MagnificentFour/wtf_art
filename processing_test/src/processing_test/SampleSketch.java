@@ -12,6 +12,8 @@ import static javafx.scene.paint.Color.color;
 import static javafx.scene.paint.Color.color;
 import static javafx.scene.paint.Color.color;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -45,6 +47,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     State methodState = State.CLEAR;
     State nextState = State.CLEAR;
+    int cellsize = 2; // Dimensions of each cell in the grid
+    int cols, rows;   // Number of columns and rows in our system
 
     ArrayList<Ellipse> ellipseList = new ArrayList<>();
     ArrayList<Ellipse> drawList = new ArrayList<>();
@@ -107,7 +111,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                         }
                     }
                 }
-            } 
+            }
         }
 
         if (tracker.hasPrev()) {
@@ -116,8 +120,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             back.setEnabled(false);
         }
 
-        if (bgImg
-                != null) {
+        if (bgImg != null) {
 
             if (methodState == State.DOTREP) {
                 dotRep();
@@ -128,7 +131,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
             } else if (methodState == State.MAPTO) {
                 mapTo();
-            }  else if (methodState == State.SETPOINTS) {
+            } else if (methodState == State.SETPOINTS) {
 
             } else if (methodState == State.IMPORT) {
                 methodState = nextState;
@@ -149,7 +152,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
      * Animation for the "Dot" function. Moves the dots step by step to their
      * intended position.
      */
-
     public void moveToSpot() {
         background(0);
         for (Ellipse e : ellipseList) {
@@ -225,11 +227,9 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 loop();
             }
         }
-        
+
 //        gogo = false;
 //        moveToSpot = true;
-        
-        
     }
 
     /**
@@ -289,11 +289,22 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
     }
-        private void mapTo() {
+
+    private void mapTo() {
+        JFrame f = new JFrame();
+        f.setSize(bgImg.width, bgImg.height);
+        
         MapTo map = new MapTo();
+        JPanel p = new JPanel();
+        
+        f.add(p);
+        p.add(map);
+        
         map.init();
         map.setupSketch(bgImg);
-        map.function();
+//        map.function(mouseX);
+        
+        f.setVisible(true);
     }
 
     /**
@@ -320,6 +331,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     /**
      * Assigns pointers to the undo and redo buttons.
+     *
      * @param fwd The redo button.
      * @param back The undo button.
      */
@@ -343,6 +355,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     /**
      * Checks if there is a change to redo.
+     *
      * @return True if there is a change to redo. False if not.
      */
     public boolean changeHasNext() {
@@ -351,20 +364,22 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     /**
      * Checks if there is a change to undo.
+     *
      * @return True if there is a change to undo. False if not.
      */
     public boolean changeHasPrev() {
         return tracker.hasPrev();
     }
-    
+
     /**
      * Runs a function based on the string taken as input.
+     *
      * @param function Name of the function.
      */
     public void selectFunction(String function) {
-        
+
         switch (function) {
-            
+
             case "Dots":
                 noSave = true;
                 //gogo = false;
@@ -384,11 +399,10 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 methodState = State.CLEAR;
                 break;
             case "3D":
-               // noSave = true;
                 methodState = State.MAPTO;
                 redraw();
         }
-        
+
     }
 
     /**
@@ -463,14 +477,15 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         }
 
     }
-    
+
     public void cloneRadChanged(int newR) {
         cloneRadius = newR;
     }
 
     /**
      * Changes the variable pxSize with a value based on the slider.
-     * @param e 
+     *
+     * @param e
      */
     @Override
     public void stateChanged(ChangeEvent e) {
