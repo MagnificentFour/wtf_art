@@ -1,9 +1,8 @@
 package processing_test;
 
-import java.awt.Color;
+
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +10,6 @@ import java.util.HashMap;
 import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import static javax.swing.SwingConstants.CENTER;
 
 /**
  *
@@ -23,9 +21,9 @@ public class ToolWindow extends JFrame {
     private ImageIcon[] functionIcons;
     private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
 
+
     /**
-     * Constructor for the tool window.
-     * @param sketch 
+     * Constructor for the toolwindow
      */
     public ToolWindow() {
         setSize(250, 400);

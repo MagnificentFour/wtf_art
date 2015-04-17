@@ -12,10 +12,13 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import net.iharder.dnd.FileDrop;
 
 /**
  * @author nikla_000
+ *
+ * Displayframeclass
  */
 public class DisplayFrame extends JFrame implements ActionListener {
 
@@ -38,12 +41,11 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton closeTab;
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
-//    private final JLabel sliderLabel;
 
     private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
 
     private final JSlider slider;
-    private final JSlider cloneRadiusSlider;
+//    private final JSlider cloneRadiusSlider;
 
     private int tabIndex;
     private int tabs = 2;
@@ -62,7 +64,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        
+
         componentList = new ArrayList<>();
         //button = new JButton("Start");
         fncButton2 = new JButton("Pixelate");
@@ -81,7 +83,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         backButton = new JButton("<");
         forwardButton = new JButton(">");
 
-        cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
+//        cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
         fncButton3.setToolTipText("Show a dot representation for your picture");
 
 
@@ -89,7 +91,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         sketchTabs.addTab("Sketch 1", createNewSketch());
         add(fileChooseButton);
-        add(cloneRadiusSlider);
+//        add(cloneRadiusSlider);
         add(saveButton);
         add(blankButton);
         add(backButton);
@@ -102,16 +104,16 @@ public class DisplayFrame extends JFrame implements ActionListener {
         ToolWindow tw = new ToolWindow();
 
         toolWindowComponents = tw.getToolComponents();
-        
+
         componentList.add(backButton);
         componentList.add(forwardButton);
         componentList.add(blankButton);
         componentList.add(setPoints);
         componentList.add(fileChooseButton);
         componentList.add(saveButton);
-        
+
         Set<String> keys = toolWindowComponents.keySet();
-        for(String key : keys) {
+        for (String key : keys) {
             componentList.add(toolWindowComponents.get(key));
         }
 
@@ -119,7 +121,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         cloneButton = (JButton) toolWindowComponents.get("cloneButton");
         slider = (JSlider) toolWindowComponents.get("sizeSlider");
         functionChooser = (JComboBox) toolWindowComponents.get("functionComboBox");
-        
+
         tabIndex = sketchTabs.getSelectedIndex();
         currentSketch = (SampleSketch) sketchTabs.getSelectedComponent();
         setActionListeners(currentSketch);
@@ -213,7 +215,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         sketchTabs.setBounds(20, 70, 1282, 722);
         doubleSpeed.setBounds(1320, 490, 100, 50);
         tripleSpeed.setBounds(1435, 490, 100, 50);
-        cloneRadiusSlider.setBounds(490, 10, 215, 20);
+//        cloneRadiusSlider.setBounds(490, 10, 215, 20);
 
         //saveButton.setBorder(BorderFactory.createEmptyBorder());
         //saveButton.setContentAreaFilled(false);
@@ -290,58 +292,77 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setPoints.setActionCommand("setPoints");
 
         slider.addChangeListener(s);
-        cloneRadiusSlider.addChangeListener(new ChangeListener() {
 
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                currentSketch.cloneRadChanged(cloneRadiusSlider.getValue());
+//        cloneRadiusSlider.addChangeListener(new ChangeListener() {
+//
+//                                                @Override
+//                                                public void stateChanged(ChangeEvent e) {
+//                                                    currentSketch.cloneRadChanged(cloneRadiusSlider.getValue());
+//                                                }
+//
+//    }
+
+//    );
+
+    fileChooseButton.addActionListener((
+    ActionEvent arg0
+    )->
+
+    {
+        JFileChooser chooser = new JFileChooser();
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "JPG, GIF & PNG", "jpg", "gif", "png");
+        chooser.setFileFilter(filter);
+
+        int returnVal = chooser.showOpenDialog(sketchTabs);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            s.loadBgImage(chooser.getSelectedFile());
+        }
+    }
+
+    );
+
+    saveButton.addActionListener((
+    ActionEvent arg0
+    )->
+
+    {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("PNG: png", "png"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("JPEG: jpg & jpeg", "jpg", "jpeg"));
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("TIF: tif", "tif"));
+
+        int returnVal = chooser.showOpenDialog(sketchTabs);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            s.saveImage(chooser.getSelectedFile());
+        }
+    }
+
+    );
+
+    functionChooser.addItemListener(new
+
+    ItemListener() {
+
+        @Override
+        public void itemStateChanged (ItemEvent e){
+
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+
+                s.selectFunction(functionNames[(int) e.getItem()]);
+
             }
 
-        });
-
-        fileChooseButton.addActionListener((ActionEvent arg0) -> {
-            JFileChooser chooser = new JFileChooser();
-
-            FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                    "JPG, GIF & PNG", "jpg", "gif", "png");
-            chooser.setFileFilter(filter);
-
-            int returnVal = chooser.showOpenDialog(sketchTabs);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                s.loadBgImage(chooser.getSelectedFile());
-            }
-        });
-
-        saveButton.addActionListener((ActionEvent arg0) -> {
-            JFileChooser chooser = new JFileChooser();
-            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-            chooser.addChoosableFileFilter(new FileNameExtensionFilter("PNG: png", "png"));
-            chooser.addChoosableFileFilter(new FileNameExtensionFilter("JPEG: jpg & jpeg", "jpg", "jpeg"));
-            chooser.addChoosableFileFilter(new FileNameExtensionFilter("TIF: tif", "tif"));
-
-            int returnVal = chooser.showOpenDialog(sketchTabs);
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-                s.saveImage(chooser.getSelectedFile());
-            }
-        });
-
-        functionChooser.addItemListener(new ItemListener() {
-
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-
-                if (e.getStateChange() == ItemEvent.SELECTED) {
-
-                    s.selectFunction(functionNames[(int) e.getItem()]);
-
-                }
-
-            }
-
-        });
+        }
 
     }
+
+    );
+
+}
 
     /**
      * Creates a dialog asking the user whether or not they want to reset.
