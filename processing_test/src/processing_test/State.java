@@ -6,7 +6,7 @@ package processing_test;
  */
 public enum State {
     
-    DOTREP("Dotrep"), PXLATION("Pxlation"), CLEAR("Clear"), 
+    DOTREP("Dotrep"), PXLATION("Pxlation"), CLEAR("Clear"), MAPTO("3D"), 
     IMPORT("Import"), NOACTION("No action"), SETPOINTS("setPoints"), CLONE("Clone");
     
     public String state;
