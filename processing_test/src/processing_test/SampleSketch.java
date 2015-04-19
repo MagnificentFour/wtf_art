@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 import static javafx.scene.paint.Color.color;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -32,7 +33,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     PImage bgImg;
     PImage circle;
     PGraphics pg;
-    boolean gogo = false;
     boolean noSave = false;
     boolean moveToSpot = false;
     boolean copying = false;
@@ -48,13 +48,14 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     int cellsize = 2; // Dimensions of each cell in the grid
     int cols, rows;   // Number of columns and rows in our system
 
-    ArrayList<Ellipse> ellipseList = new ArrayList<>();
-    ArrayList<Ellipse> drawList = new ArrayList<>();
+    LayerHandler layerHandler = new LayerHandler();
+    PGraphics dotting;
 
     JSlider source;
     JSlider cloneSource;
 
     ChangeTracker tracker = new ChangeTracker();
+    ToolWindow toolWindow;
 
     @Override
     public void setup() {
@@ -103,14 +104,27 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             back.setEnabled(false);
         }
 
-        if (bgImg != null) {
+        for (Layer layer : layerHandler.getLayers()) {
+            if(!layer.isDisplayed()) {
+                toolWindow.addLayerView(layer);
+                layer.isDisplayed(true);
+            }
+            
+            if (layer.show()) {
+                for (PGraphics graphic : layer.getGraphics()) {
+                    image(graphic, 0, 0);
+                }
+            }
+        }
+
+        if (!layerHandler.getLayers().isEmpty()){//bgImg != null) {
 
             if (methodState == State.DOTREP) {
                 dotRep();
             } else if (methodState == State.PXLATION) {
                 pxlation();
             } else if (methodState == State.CLEAR) {
-                image(bgImg, 0, 0);
+                image(layerHandler.getLayers().get(0).getLayerImage(), 0, 0);
                 tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
             } else if (methodState == State.MAPTO) {
                 mapTo();
@@ -128,7 +142,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             text("Please select an image", width / 2, height / 2);
 
         }
-        
 
     }
 
@@ -165,7 +178,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             bgImg.resize(0, 720);
         }
         size(bgImg.width, bgImg.height);
-        background(bgImg);
+        layerHandler.setBackground(new Layer(bgImg));
+        //background(bgImg);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
         redraw();
     }
@@ -187,14 +201,12 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         dotRep.setupSketch(bgImg, pxSize, noSave);
         dotRep.init();
         dotRep.runFunction();
-        ellipseList = dotRep.getEllipseList();
-        gogo = true;
 //        methodState = State.NOACTION;
 
-//        loop();
-        PImage img = dotRep.getResult();
-        image(img, 0, 0);
+        dotting = dotRep.getResult();
 
+//        PImage img = dotRep.getResult();
+//        image(img, 0, 0);
 //        blend(img, 0, 0, img.width, img.height, 0, 0, width, height, SUBTRACT);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
     }
@@ -262,6 +274,10 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         this.back = back;
     }
 
+    public void setToolWindow(ToolWindow tw) {
+        toolWindow = tw;
+    }
+
     /**
      * Resets the program removing the picture and all changes in the tracker.
      */
@@ -307,12 +323,10 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 methodState = State.DOTREP;
                 break;
             case "Squares":
-                gogo = false;
                 background(255);
                 methodState = State.PXLATION;
                 break;
             case "Original":
-                gogo = false;
                 background(255);
                 methodState = State.CLEAR;
                 break;
@@ -333,7 +347,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
         switch (e.getActionCommand()) {
             case "run":
-                gogo = false;
                 noSave = false;
                 background(255);
                 methodState = State.DOTREP;
@@ -346,14 +359,12 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 redraw();
                 break;
             case "clear":
-                gogo = false;
                 background(255);
                 redraw();
                 methodState = State.CLEAR;
 
                 break;
             case "pxlate":
-                gogo = false;
                 background(255);
                 methodState = State.PXLATION;
                 redraw();

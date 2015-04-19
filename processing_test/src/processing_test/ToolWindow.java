@@ -1,6 +1,7 @@
 package processing_test;
 
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -19,18 +20,20 @@ public class ToolWindow extends JFrame {
 
     private HashMap<String, Component> components;
     private ImageIcon[] functionIcons;
+    private JPanel layerPanel;
     private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
 
 
     /**
-     * Constructor for the toolwindow
+     * Constructor for the tool window
      */
     public ToolWindow() {
-        setSize(250, 400);
+        setSize(250, 850);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         components = new HashMap<>();
-
+        layerPanel = new JPanel();
+        
         makeComboBox();
         components.put("sizeSlider", new JSlider(JSlider.HORIZONTAL, 4, 30, 20));
         components.put("clearButton", new JButton("Clear"));
@@ -48,6 +51,19 @@ public class ToolWindow extends JFrame {
         setVisible(true);
     }
     
+    public void addLayerView(Layer layer) {
+
+        Box hBox = Box.createHorizontalBox();
+        
+//        hBox.add(layer.getCheckBox());
+//        hBox.add(new JLabel(layer.getImageIcon()));
+        hBox.add(new JLabel("Afoisna"));
+        // Add Layer name/number
+        
+        layerPanel.add(hBox, BorderLayout.SOUTH);
+        System.out.println("It was called");
+    }
+    
     /**
      * Arranges the layout of the components in the tool window.
      */
@@ -63,6 +79,8 @@ public class ToolWindow extends JFrame {
         add(new JLabel("Velg størrelse:")).setBounds(10, 305, 200, 10);
         components.get("sizeSlider").setBounds(5, 315, 200, 20);
 
+        add(new JLabel("Layers: ")).setBounds(10, 365, 200, 15);
+        add(layerPanel).setBounds(10, 375, 250, 475);
     }
     
     /**

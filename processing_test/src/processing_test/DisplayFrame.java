@@ -53,6 +53,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private ArrayList<Component> componentList;
     private HashMap<String, Component> toolWindowComponents;
 
+    private ToolWindow tw;
     private SampleSketch currentSketch;
 
     /**
@@ -82,6 +83,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         blankButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/blank.jpg"))));
         backButton = new JButton("<");
         forwardButton = new JButton(">");
+        tw = new ToolWindow();
 
         cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
         fncButton3.setToolTipText("Show a dot representation for your picture");
@@ -101,7 +103,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
         add(newTab);
         add(closeTab);
 
-        ToolWindow tw = new ToolWindow();
 
         toolWindowComponents = tw.getToolComponents();
 
@@ -188,6 +189,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         });
 
+        newSketch.setToolWindow(tw);
         newSketch.init();
 
         return newSketch;
