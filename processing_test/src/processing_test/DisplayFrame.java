@@ -16,9 +16,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import net.iharder.dnd.FileDrop;
 
 /**
- * @author nikla_000
+ * The visual in the main view window
  *
- *  Displayframeclass
+ *  @author nikla_000
  */
 public class DisplayFrame extends JFrame implements ActionListener {
 
@@ -129,13 +129,13 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    /**
+     * Creating a new tab
+     */
     private void newTab() {
-        System.out.println("Swagtest");
         sketchTabs.addTab("Sketch " + tabs, createNewSketch());
-        System.out.println("SwagTest2");
         sketchTabs.setSelectedIndex(sketchTabs.getTabCount() - 1);
         tabs++;
-        System.out.println("Swaggins?");
     }
 
     /**
@@ -194,9 +194,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
     }
 
     /**
-     * Sets the hovertext for toolbar buttons
+     * Sets the hovertext for main window buttons
      */
-    public void setHoverText() {
+    private void setHoverText() {
         closeTab.setToolTipText("Close current tab");
         newTab.setToolTipText("Create new tab");
         fileChooseButton.setToolTipText("Open a file");
@@ -241,7 +241,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     }
 
     /**
-     * Adds actionlisteners to relevant components
+     * Adds actionlisteners to buttons that shall be relevant for all tabs
      */
     private void setLocalActionListeners() {
 
@@ -254,7 +254,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     }
 
     /**
-     * Adds action listener to all relevant components
+     * Adds action listener to all relevant components, in the current tab
      *
      * @param s The processing sketch where buttons execute the listener.
      */
@@ -340,7 +340,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     /**
      * Creates a dialog asking the user whether or not they want to reset.
      *
-     * @return
+     * @return dialogResult
      */
     private boolean wantToReset() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -349,6 +349,12 @@ public class DisplayFrame extends JFrame implements ActionListener {
         return dialogResult == JOptionPane.YES_OPTION;
     }
 
+
+    /**
+     * Actionlistener for creating new tabs and closing.
+     *
+     * @param e Actionevent
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
