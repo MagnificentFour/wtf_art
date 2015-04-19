@@ -35,7 +35,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton closeTab;
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
-
+    ToolWindow tw;
     private String[] functionNames = {"Original", "Dots", "Squares", "3D", "Clone"};
 
     private final JSlider slider;
@@ -74,6 +74,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         arrangeLayout();
         setHoverText();
+        
+        tw = new ToolWindow();
 
         sketchTabs.addTab("Sketch 1", createNewSketch());
         add(fileChooseButton);
@@ -84,7 +86,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         add(newTab);
         add(closeTab);
 
-        ToolWindow tw = new ToolWindow();
+        
 
         toolWindowComponents = tw.getToolComponents();
 
@@ -150,6 +152,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private SampleSketch createNewSketch() {
 
         SampleSketch newSketch = new SampleSketch();
+        newSketch.setToolWindow(tw);
         newSketch.setButtons(forwardButton, backButton);
 
         new FileDrop(newSketch, new FileDrop.Listener() {

@@ -1,5 +1,6 @@
 package processing_test;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import processing.core.*;
 
@@ -24,7 +25,7 @@ public class Dotting extends PApplet {
         
     }
     
-    public void runFunction() {
+    public void runFunction(Color color) {
         
         int loc = 0;
         int createSize = 0;
@@ -58,7 +59,10 @@ public class Dotting extends PApplet {
 
         gr.fill(0);
         gr.rect(0, 0, width, height);
-        gr.fill(240, 110, 110);
+        int ra = color.getRed();
+        int ga = color.getGreen();
+        int ba = color.getBlue();
+        gr.fill(ra,ga,ba);
         for (int i = 0; i < gr.width / pxSize; i++) {
             for (int j = 0; j < gr.height / pxSize; j++) {
                 loc = (i * pxSize) + ((j * pxSize) * gr.width);

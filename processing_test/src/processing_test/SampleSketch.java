@@ -24,8 +24,8 @@ import static processing.core.PConstants.RGB;
  *
  * @author nikla_000
  */
-public class SampleSketch extends PApplet implements ActionListener, ChangeListener {
-
+public class SampleSketch extends PApplet implements ActionListener, ChangeListener  {
+    ToolWindow tw;
     int sizeWidth = 1280;
     int sizeHeight = 720;
     int pxSize = 20;
@@ -48,6 +48,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     State methodState = State.CLEAR;
     State nextState = State.CLEAR;
+    State previousState;
     int cellsize = 2; // Dimensions of each cell in the grid
     int cols, rows;   // Number of columns and rows in our system
 
@@ -274,7 +275,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         Dotting dotRep = new Dotting();
         dotRep.setupSketch(bgImg, pxSize, noSave);
         dotRep.init();
-        dotRep.runFunction();
+        System.out.println(tw);
+        dotRep.runFunction(tw.getColor());
         ellipseList = dotRep.getEllipseList();
         gogo = true;
 //        methodState = State.NOACTION;
@@ -489,18 +491,29 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 loop();
                 break;
             case "blur":
+                if(methodState != State.BLUR) {
+                previousState = methodState;    
                 System.out.println("It's been a hard day's night, and I'd been working like a dog\n"
                         + "It's been a hard day's night, I should be sleeping like a log");
                 methodState = State.BLUR;
                 loop();
                 break;
+                }
+                else {
+                    methodState = previousState;
+                    break;
+                }
             case "invert":
                 if (methodState != State.INVERT) {
+                    previousState = methodState;
                     noLoop();
                     firstState = true;
                     System.out.println("Many that live deserve death.\nAnd some that die deserve life.\nCan you give it to them?\nThen do not be too eager to deal out death in judgement.\nFor even the very wise cannot see all ends.\n");
                     methodState = State.INVERT;
                     redraw();
+                }
+                else {
+                    methodState = previousState;
                 }
         }
 
@@ -535,5 +548,9 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             redraw();
         }
 
+    }
+    
+    public void setToolWindow(ToolWindow t) {
+        tw = t;
     }
 }

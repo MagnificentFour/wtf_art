@@ -1,5 +1,6 @@
 package processing_test;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -19,14 +20,14 @@ public class ToolWindow extends JFrame {
 
     private HashMap<String, Component> components;
     private ImageIcon[] functionIcons;
+    private ColorChooserDemo cs;
     private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
-
 
     /**
      * Constructor for the toolwindow
      */
     public ToolWindow() {
-        setSize(250, 570);
+        setSize(250, 630);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         components = new HashMap<>();
@@ -40,23 +41,24 @@ public class ToolWindow extends JFrame {
         components.put("setPointsButton", new JButton("Set new points"));
 
 //        setLayout(new FlowLayout());
-
         Set<String> keys = components.keySet();
         for (String key : keys) {
             add(components.get(key));
         }
-        
+
         arrangeLayout();
-        
+        cs = new ColorChooserDemo();
+        cs.setBounds(10, 520, 200, 200);
+        add(cs);
         setVisible(true);
     }
-    
+
     /**
      * Arranges the layout of the components in the tool window.
      */
     private void arrangeLayout() {
         setLayout(null);
-        
+
         add(new JLabel("Velg funksjon:")).setBounds(15, 5, 200, 10);
         components.get("functionComboBox").setBounds(20, 20, 180, 100);
         components.get("cloneButton").setBounds(10, 140, 200, 50);
@@ -68,7 +70,6 @@ public class ToolWindow extends JFrame {
         components.get("sizeSlider").setBounds(5, 475, 200, 20);
     }
 
-    
     /**
      * Returns a hash map of the components for setting listeners.
      *
@@ -184,6 +185,10 @@ public class ToolWindow extends JFrame {
             setFont(uhOhFont);
             setText(uhOhText);
         }
+
     }
-    
+
+    public Color getColor() {
+        return cs.getColor();
+    }
 }
