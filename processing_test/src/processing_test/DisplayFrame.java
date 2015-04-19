@@ -215,12 +215,12 @@ public class DisplayFrame extends JFrame implements ActionListener {
         sketchTabs.setBounds(20, 70, 1282, 722);
         doubleSpeed.setBounds(1320, 490, 100, 50);
         tripleSpeed.setBounds(1435, 490, 100, 50);
-        slider.setBounds(1320, 590, 215, 20);
+        //slider.setBounds(1320, 590, 215, 20);
         cloneRadiusSlider.setBounds(720, 30, 215, 20);
         
 
 
-        functionChooser.setBounds(1320, 10, 300, 120);
+        //functionChooser.setBounds(1320, 10, 300, 120);
 
         //Position and size for labels
 
