@@ -37,6 +37,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton forwardButton;
     private final JButton cloneButton;
     private final JButton setPoints;
+    private final JButton blurButton;
+    private final JButton invertButton;
     private final JButton newTab;
     private final JButton closeTab;
     private final JComboBox functionChooser;
@@ -119,6 +121,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         clearButton = (JButton) toolWindowComponents.get("clearButton");
         cloneButton = (JButton) toolWindowComponents.get("cloneButton");
+        blurButton = (JButton) toolWindowComponents.get("blurButton");
+        invertButton = (JButton) toolWindowComponents.get("invertButton");
         setPoints = (JButton) toolWindowComponents.get("setPointsButton");
         slider = (JSlider) toolWindowComponents.get("sizeSlider");
         functionChooser = (JComboBox) toolWindowComponents.get("functionComboBox");
@@ -301,8 +305,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
         cloneButton.addActionListener(s);
         cloneButton.setActionCommand("clone");
 
+        blurButton.addActionListener(s);
+        blurButton.setActionCommand("blur");
+        
         setPoints.addActionListener(s);
         setPoints.setActionCommand("setPoints");
+        
+        invertButton.addActionListener(s);
+        invertButton.setActionCommand("invert");
 
         slider.addChangeListener(s);
 

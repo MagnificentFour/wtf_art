@@ -1,6 +1,7 @@
 package processing_test;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -15,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import static javax.swing.text.StyleConstants.FontFamily;
 import processing.core.*;
 import static processing.core.PConstants.RGB;
 
@@ -61,6 +63,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         size(sizeWidth, sizeHeight);
         background(255);
         pg = createGraphics(sizeWidth, sizeHeight);
+        circle = loadImage("graphics/cirlce.png");
         noLoop();
     }
 
@@ -77,7 +80,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
             //cursor(circle, cloneRadius/2, cloneRadius/2);
             if (mousePressed == true) {
-                System.out.println("heya");
                 Point p1 = clTool.getPoint1();
                 Point p2 = clTool.getPoint2();
                 int distanceX = p2.x - p1.x;
@@ -95,6 +97,98 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                     }
                 }
             }
+        }
+        if (methodState == State.BLUR) {
+            if (mousePressed == true) {
+                int colour;
+                int totalPix = 0;
+                float finalR = 0;
+                float finalB = 0;
+                float finalG = 0;
+                for (int i = -cloneRadius / 2; i < cloneRadius / 2; i++) {
+                    for (int t = -cloneRadius / 2; t < cloneRadius / 2; t++) {
+                        totalPix++;
+                        colour = color(get(mouseX + i, mouseY + t));
+                        float r = red(colour);
+                        float b = blue(colour);
+                        float g = green(colour);
+                        finalB = finalB + b;
+                        finalR = finalR + r;
+                        finalG = finalG + g;
+                    }
+                }
+                finalB = finalB / totalPix;
+                finalR = finalR / totalPix;
+                finalG = finalG / totalPix;
+                int c = color(finalR, finalG, finalB);
+                for (int i = -cloneRadius / 2; i < cloneRadius / 2; i++) {
+                    for (int t = -cloneRadius / 2; t < cloneRadius / 2; t++) {
+                        if (dist(mouseX, mouseY, (mouseX + i), (mouseY + t)) <= (cloneRadius / 2)) {
+                        set(mouseX + i, mouseY + t, c);
+                        }
+                    }
+                }
+            }
+        }
+        
+        if(methodState == State.INVERT) {
+            for (int i = 1; i <= sizeWidth; i++) {
+                for (int t = 1; t <= sizeHeight; t++) {
+                    int colour = color(get(i, t));
+                    float r = red(colour);
+                    float b = blue(colour);
+                    float g = green(colour);
+                    if(cloneRadius > 55) {
+                        int c = color(g, r, r);
+                        set(i, t, c);
+                    }
+                    else if(cloneRadius > 50) {
+                        int c = color(g, b, b);
+                        set(i, t, c);
+                    }
+                    else if(cloneRadius > 45) {
+                        int c = color(g, r, b);
+                        set(i, t, c);
+                    }
+                    else if(cloneRadius > 40) {
+                        int c = color(g, b, r);
+                        set(i, t, c);
+                    }
+                    else if(cloneRadius > 35) {
+                        int c = color(b, g, g);
+                        set(i, t, c);
+                    }
+                    else if(cloneRadius > 30) {
+                        int c = color(b, r, r);
+                        set(i, t, c);
+                    }
+                    else if(cloneRadius > 25) {
+                        int c = color(b, g, r);
+                        set(i, t, c);
+                    }
+                    else if(cloneRadius > 20) {
+                        int c = color(b, r, g);
+                        set(i, t, c);
+                    }
+                    else if(cloneRadius > 15) {
+                        int c = color(r, b, b);
+                        set(i, t, c);
+                    }
+                    else if(cloneRadius > 10) {
+                        int c = color(r, g, g);
+                        set(i, t, c);
+                    }
+                    else if(cloneRadius > 5) {
+                        int c = color(r, b, g);
+                        set(i, t, c);
+                    }
+                    else if(cloneRadius > 0) {
+                        int c = color(r, g, b);
+                        set(i, t, c);
+                    }
+                }
+            }
+            System.out.println("DONEDONEDONE");
         }
 
         if (tracker.hasPrev()) {
@@ -115,10 +209,15 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             } else if (methodState == State.MAPTO) {
                 mapTo();
             } else if (methodState == State.SETPOINTS) {
+                textFont(createFont("Arial", 16, true), 16);
+                fill(0);
+                text("Hello Strings!", mouseX, mouseY);
 
             } else if (methodState == State.IMPORT) {
                 methodState = nextState;
-            } 
+            } else if (methodState == State.CLONE) {
+                image(circle, mouseX, mouseY);
+            }
 
         } else {
 
@@ -128,7 +227,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             text("Please select an image", width / 2, height / 2);
 
         }
-        
 
     }
 
@@ -146,7 +244,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 waitingPoint = 0;
                 methodState = State.CLONE;
                 copying = true;
-                loop();
+
             }
         }
 
@@ -234,14 +332,14 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
      *
      * @param state The state to be loaded.
      */
-    public void importState(StateCapture state) {
+    public void importState(StateCapture state, State metState) {
 
         image(state.getDisplayWindow(), 0, 0);
         pxSize = state.getPxSize();
         methodState = State.IMPORT;
         nextState = state.getRunState();
 
-        if (source != null) {
+        if (source != null && metState != State.INVERT) {
 
             source.setValue(pxSize);
 
@@ -370,7 +468,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 break;
             case "forward":
                 if (tracker.hasChanged()) {
-                    importState(tracker.getNextEntry());
+                    importState(tracker.getNextEntry(), methodState);
                 }
                 if (!tracker.hasNext()) {
                     fwd.setEnabled(false);
@@ -378,20 +476,38 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 break;
             case "back":
                 if (tracker.hasChanged()) {
-                    importState(tracker.getPrevEntry());
+                    importState(tracker.getPrevEntry(), methodState);
                 }
                 if (!tracker.hasPrev()) {
                     back.setEnabled(false);
                 }
                 break;
             case "clone":
-                methodState = State.CLONE;
+                System.out.println("I'm representing for the gangsters all across the world\n"
+                        + "Still hitting them corners in them low low's girl\n"
+                        + "Still taking my time to perfect the beat\n"
+                        + "And I still got love for the streets, it's the D-R-E");
+                cursor(NORMAL);
+                copying = false;
+                methodState = State.SETPOINTS;
+                loop();
                 break;
             case "setPoints":
                 cursor(NORMAL);
                 copying = false;
                 methodState = State.SETPOINTS;
+                loop();
                 break;
+            case "blur":
+                System.out.println("It's been a hard day's night, and I'd been working like a dog\n"
+                        + "It's been a hard day's night, I should be sleeping like a log");
+                methodState = State.BLUR;
+                loop();
+                break;
+            case "invert":
+                System.out.println("Many that live deserve death.\nAnd some that die deserve life.\nCan you give it to them?\nThen do not be too eager to deal out death in judgement.\nFor even the very wise cannot see all ends.\n");
+                methodState = State.INVERT;
+                redraw();
         }
 
     }
@@ -415,8 +531,14 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             redraw();
         }
         if (!cloneSource.getValueIsAdjusting()) {
+            if(methodState == State.INVERT) {
+                importState(tracker.getPrevEntry(), methodState);
+                methodState = State.INVERT;
+            }
             System.out.println(cloneSource.getValue());
             cloneRadius = cloneSource.getValue() * 2;
+            
+            redraw();
         }
 
     }
