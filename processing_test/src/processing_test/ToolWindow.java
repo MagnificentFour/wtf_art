@@ -47,7 +47,7 @@ public class ToolWindow extends JFrame {
         
         arrangeLayout();
         
-        setVisible(true);
+        setLocationByPlatform(true);
     }
     
     /**
