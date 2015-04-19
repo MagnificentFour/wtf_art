@@ -3,7 +3,6 @@ package processing_test;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
@@ -11,9 +10,9 @@ import java.util.HashMap;
 import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import static javax.swing.SwingConstants.CENTER;
 
 /**
+ * The visual in the toolwindow
  *
  * @author nikla_000
  */
@@ -21,14 +20,14 @@ public class ToolWindow extends JFrame {
 
     private HashMap<String, Component> components;
     private ImageIcon[] functionIcons;
+    private ColorChooserDemo cs;
     private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
 
     /**
-     * Constructor for the tool window.
-     * @param sketch 
+     * Constructor for the toolwindow
      */
     public ToolWindow() {
-        setSize(250, 400);
+        setSize(250, 630);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         components = new HashMap<>();
@@ -37,38 +36,44 @@ public class ToolWindow extends JFrame {
         components.put("sizeSlider", new JSlider(JSlider.HORIZONTAL, 4, 30, 20));
         components.put("clearButton", new JButton("Clear"));
         components.put("cloneButton", new JButton("Clone"));
+        components.put("blurButton", new JButton("Blur"));
+        components.put("invertButton", new JButton("Invert Colors"));
+        components.put("setPointsButton", new JButton("Set new points"));
 
 //        setLayout(new FlowLayout());
-
         Set<String> keys = components.keySet();
         for (String key : keys) {
             add(components.get(key));
         }
-        
+
         arrangeLayout();
-        
         setLocationByPlatform(true);
+        cs = new ColorChooserDemo();
+        cs.setBounds(10, 520, 200, 200);
+        add(cs);
+        setVisible(true);
     }
-    
+
     /**
      * Arranges the layout of the components in the tool window.
      */
     private void arrangeLayout() {
         setLayout(null);
-        
+
         add(new JLabel("Velg funksjon:")).setBounds(15, 5, 200, 10);
         components.get("functionComboBox").setBounds(20, 20, 180, 100);
-        
         components.get("cloneButton").setBounds(10, 140, 200, 50);
-        components.get("clearButton").setBounds(10, 210, 200, 50);
-        
-        add(new JLabel("Velg størrelse:")).setBounds(10, 305, 200, 10);
-        components.get("sizeSlider").setBounds(5, 315, 200, 20);
-
+        components.get("setPointsButton").setBounds(10, 200, 200, 50);
+        components.get("clearButton").setBounds(10, 380, 200, 50);
+        components.get("blurButton").setBounds(10, 260, 200, 50);
+        components.get("invertButton").setBounds(10, 320, 200, 50);
+        add(new JLabel("Velg størrelse:")).setBounds(10, 455, 200, 10);
+        components.get("sizeSlider").setBounds(5, 475, 200, 20);
     }
-    
+
     /**
      * Returns a hash map of the components for setting listeners.
+     *
      * @return HashMap of components in this window.
      */
     public HashMap<String, Component> getToolComponents() {
@@ -110,7 +115,7 @@ public class ToolWindow extends JFrame {
      * Creates an ImageIcon
      *
      * @param path
-     * @return
+     * @return icon
      */
     protected static ImageIcon createImageIcon(String path) {
         ImageIcon icon = null;
@@ -181,5 +186,10 @@ public class ToolWindow extends JFrame {
             setFont(uhOhFont);
             setText(uhOhText);
         }
+
+    }
+
+    public Color getColor() {
+        return cs.getColor();
     }
 }
