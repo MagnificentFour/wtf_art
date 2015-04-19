@@ -74,7 +74,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         tripleSpeed = new JButton("3X Speed");
         setPoints = new JButton("Set Points");
         newTab = new JButton("New Tab");
-        closeTab = new JButton("x");
+        closeTab = new JButton("X");
         sketchTabs = new JTabbedPane();
 
         fileChooseButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/OpenButton.gif"))));
@@ -88,6 +88,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
 
         arrangeLayout();
+        setHoverText();
 
         sketchTabs.addTab("Sketch 1", createNewSketch());
         add(fileChooseButton);
@@ -200,12 +201,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private void arrangeLayout() {
         setLayout(null);
 
+        closeTab.setFont(new Font("Arial",Font.PLAIN, 6));
+
         //Position and size for buttons.
-        closeTab.setBounds(1267, 50, 35, 35);
+        closeTab.setBounds(1267, 10, 30,30);
         newTab.setBounds(600, 10, 100, 50);
         blankButton.setBounds(20, 10, 50, 50);
-        saveButton.setBounds(80, 10, 50, 50);
-        fileChooseButton.setBounds(140, 10, 50, 50);
+        fileChooseButton.setBounds(80, 10, 50, 50);
+        saveButton.setBounds(140, 10, 50, 50);
         backButton.setBounds(220, 10, 50, 50);
         forwardButton.setBounds(280, 10, 50, 50);
         setPoints.setBounds(450, 10, 100, 50);
@@ -219,6 +222,13 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         //saveButton.setBorder(BorderFactory.createEmptyBorder());
         //saveButton.setContentAreaFilled(false);
+    }
+
+    /**
+     * Sets the hovertext for toolbar buttons
+     */
+    public void setHoverText() {
+        closeTab.setToolTipText("Close current tab");
     }
 
     /**
@@ -395,14 +405,4 @@ public class DisplayFrame extends JFrame implements ActionListener {
         }
     }
 
-    //    public void chooseFile() {
-//        JFileChooser chooser = new JFileChooser();
-//        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-//                "JPG, GIF & PNG", "jpg", "gif", "png");
-//        chooser.setFileFilter(filter);
-//        int returnVal = chooser.showOpenDialog(this);
-//        if (returnVal == JFileChooser.APPROVE_OPTION) {
-//            imageProcessor.setCurrentImage(chooser.getSelectedFile().getAbsolutePath());
-//        }
-//    }
 }
