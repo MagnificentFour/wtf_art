@@ -42,10 +42,10 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
 
-    private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
+    private String[] functionNames = {"Original", "Dots", "Squares", "3D", "Clone"};
 
     private final JSlider slider;
-//    private final JSlider cloneRadiusSlider;
+    private final JSlider cloneRadiusSlider;
 
     private int tabIndex;
     private int tabs = 2;
@@ -72,7 +72,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         fncButton4 = new JButton("MapTo3D");
         doubleSpeed = new JButton("2X Speed");
         tripleSpeed = new JButton("3X Speed");
-        setPoints = new JButton("Set Points");
+        //setPoints = new JButton("Set Points");
         newTab = new JButton("New Tab");
         closeTab = new JButton("X");
         sketchTabs = new JTabbedPane();
@@ -83,7 +83,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         backButton = new JButton("<");
         forwardButton = new JButton(">");
 
-//        cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
+        cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
         fncButton3.setToolTipText("Show a dot representation for your picture");
 
 
@@ -92,12 +92,12 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         sketchTabs.addTab("Sketch 1", createNewSketch());
         add(fileChooseButton);
-//        add(cloneRadiusSlider);
+        //add(cloneRadiusSlider);
         add(saveButton);
         add(blankButton);
         add(backButton);
         add(forwardButton);
-        add(setPoints);
+        //add(setPoints);
         add(sketchTabs);
         add(newTab);
         add(closeTab);
@@ -109,7 +109,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         componentList.add(backButton);
         componentList.add(forwardButton);
         componentList.add(blankButton);
-        componentList.add(setPoints);
+        //componentList.add(setPoints);
         componentList.add(fileChooseButton);
         componentList.add(saveButton);
 
@@ -120,6 +120,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         clearButton = (JButton) toolWindowComponents.get("clearButton");
         cloneButton = (JButton) toolWindowComponents.get("cloneButton");
+        setPoints = (JButton) toolWindowComponents.get("setPointsButton");
         slider = (JSlider) toolWindowComponents.get("sizeSlider");
         functionChooser = (JComboBox) toolWindowComponents.get("functionComboBox");
 
@@ -211,14 +212,26 @@ public class DisplayFrame extends JFrame implements ActionListener {
         saveButton.setBounds(140, 10, 50, 50);
         backButton.setBounds(220, 10, 50, 50);
         forwardButton.setBounds(280, 10, 50, 50);
-        setPoints.setBounds(450, 10, 100, 50);
+        //setPoints.setBounds(450, 10, 100, 50);
         fncButton2.setBounds(1320, 275, 100, 50);
         fncButton3.setBounds(1435, 275, 100, 50);
         fncButton4.setBounds(1320, 330, 100, 50);
         sketchTabs.setBounds(20, 70, 1282, 722);
         doubleSpeed.setBounds(1320, 490, 100, 50);
         tripleSpeed.setBounds(1435, 490, 100, 50);
-//        cloneRadiusSlider.setBounds(490, 10, 215, 20);
+        //slider.setBounds(1320, 590, 215, 20);
+        cloneRadiusSlider.setBounds(720, 30, 215, 20);
+        
+
+
+        //functionChooser.setBounds(1320, 10, 300, 120);
+
+        //Position and size for labels
+
+        //step2.setBounds(1320, 235, 150, 30);
+        //step3.setBounds(1320, 380, 150, 30);
+        //sliderLabel.setBounds(1360, 560, 150, 30);
+
 
         //saveButton.setBorder(BorderFactory.createEmptyBorder());
         //saveButton.setContentAreaFilled(false);
