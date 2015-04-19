@@ -40,6 +40,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     boolean copying = false;
     Random rand = new Random();
     int i;
+    boolean firstState = false;
     boolean done = false;
     JButton fwd;
     JButton back;
@@ -124,65 +125,54 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 for (int i = -cloneRadius / 2; i < cloneRadius / 2; i++) {
                     for (int t = -cloneRadius / 2; t < cloneRadius / 2; t++) {
                         if (dist(mouseX, mouseY, (mouseX + i), (mouseY + t)) <= (cloneRadius / 2)) {
-                        set(mouseX + i, mouseY + t, c);
+                            set(mouseX + i, mouseY + t, c);
                         }
                     }
                 }
             }
         }
-        
-        if(methodState == State.INVERT) {
+
+        if (methodState == State.INVERT) {
             for (int i = 1; i <= sizeWidth; i++) {
                 for (int t = 1; t <= sizeHeight; t++) {
                     int colour = color(get(i, t));
                     float r = red(colour);
                     float b = blue(colour);
                     float g = green(colour);
-                    if(cloneRadius > 55) {
+                    if (cloneRadius > 55) {
                         int c = color(g, r, r);
                         set(i, t, c);
-                    }
-                    else if(cloneRadius > 50) {
+                    } else if (cloneRadius > 50) {
                         int c = color(g, b, b);
                         set(i, t, c);
-                    }
-                    else if(cloneRadius > 45) {
+                    } else if (cloneRadius > 45) {
                         int c = color(g, r, b);
                         set(i, t, c);
-                    }
-                    else if(cloneRadius > 40) {
+                    } else if (cloneRadius > 40) {
                         int c = color(g, b, r);
                         set(i, t, c);
-                    }
-                    else if(cloneRadius > 35) {
+                    } else if (cloneRadius > 35) {
                         int c = color(b, g, g);
                         set(i, t, c);
-                    }
-                    else if(cloneRadius > 30) {
+                    } else if (cloneRadius > 30) {
                         int c = color(b, r, r);
                         set(i, t, c);
-                    }
-                    else if(cloneRadius > 25) {
+                    } else if (cloneRadius > 25) {
                         int c = color(b, g, r);
                         set(i, t, c);
-                    }
-                    else if(cloneRadius > 20) {
+                    } else if (cloneRadius > 20) {
                         int c = color(b, r, g);
                         set(i, t, c);
-                    }
-                    else if(cloneRadius > 15) {
+                    } else if (cloneRadius > 15) {
                         int c = color(r, b, b);
                         set(i, t, c);
-                    }
-                    else if(cloneRadius > 10) {
+                    } else if (cloneRadius > 10) {
                         int c = color(r, g, g);
                         set(i, t, c);
-                    }
-                    else if(cloneRadius > 5) {
+                    } else if (cloneRadius > 5) {
                         int c = color(r, b, g);
                         set(i, t, c);
-                    }
-                    else if(cloneRadius > 0) {
+                    } else if (cloneRadius > 0) {
                         int c = color(r, g, b);
                         set(i, t, c);
                     }
@@ -505,9 +495,13 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 loop();
                 break;
             case "invert":
-                System.out.println("Many that live deserve death.\nAnd some that die deserve life.\nCan you give it to them?\nThen do not be too eager to deal out death in judgement.\nFor even the very wise cannot see all ends.\n");
-                methodState = State.INVERT;
-                redraw();
+                if (methodState != State.INVERT) {
+                    noLoop();
+                    firstState = true;
+                    System.out.println("Many that live deserve death.\nAnd some that die deserve life.\nCan you give it to them?\nThen do not be too eager to deal out death in judgement.\nFor even the very wise cannot see all ends.\n");
+                    methodState = State.INVERT;
+                    redraw();
+                }
         }
 
     }
@@ -531,13 +525,13 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             redraw();
         }
         if (!cloneSource.getValueIsAdjusting()) {
-            if(methodState == State.INVERT) {
+            if (methodState == State.INVERT && firstState == false) {
                 importState(tracker.getPrevEntry(), methodState);
                 methodState = State.INVERT;
             }
             System.out.println(cloneSource.getValue());
             cloneRadius = cloneSource.getValue() * 2;
-            
+            firstState = false;
             redraw();
         }
 
