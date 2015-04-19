@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -20,8 +22,9 @@ public class ToolWindow extends JFrame {
 
     private HashMap<String, Component> components;
     private ImageIcon[] functionIcons;
-    private JPanel layerPanel;
     private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
+    private JPanel layerPanel;
+    private Box layerDisplay;
 
 
     /**
@@ -33,6 +36,9 @@ public class ToolWindow extends JFrame {
 
         components = new HashMap<>();
         layerPanel = new JPanel();
+        layerDisplay = Box.createVerticalBox();
+        layerPanel.add(layerDisplay);
+//        addLayerView(new Layer());
         
         makeComboBox();
         components.put("sizeSlider", new JSlider(JSlider.HORIZONTAL, 4, 30, 20));
@@ -52,16 +58,18 @@ public class ToolWindow extends JFrame {
     }
     
     public void addLayerView(Layer layer) {
-
+        
+        ImageIcon icon = layer.getImageIcon();
         Box hBox = Box.createHorizontalBox();
         
-//        hBox.add(layer.getCheckBox());
-//        hBox.add(new JLabel(layer.getImageIcon()));
-        hBox.add(new JLabel("Afoisna"));
+        hBox.add(layer.getCheckBox());
+        hBox.add(new JLabel(icon));
+        hBox.add(Box.createVerticalStrut(100));
+//        hBox.add(new JLabel("Afoisna"));
         // Add Layer name/number
         
-        layerPanel.add(hBox, BorderLayout.SOUTH);
-        System.out.println("It was called");
+        layerDisplay.add(hBox);
+        revalidate();
     }
     
     /**

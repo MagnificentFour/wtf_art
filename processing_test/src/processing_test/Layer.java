@@ -1,10 +1,12 @@
 package processing_test;
 
+import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import processing.core.PGraphics;
@@ -116,9 +118,12 @@ public class Layer implements ItemListener {
         if (layerGraphics.size() > 0) {
             data = layerGraphics.get(0).pixels;
         }
-
+        
         if (layerImage != null) {
-            data = layerImage.pixels;
+            PImage p = layerImage.get();
+            p.resize(0, 75);
+            Image image = p.getImage();
+            return new ImageIcon(image);
         }
 
         if (data != null) {
@@ -127,8 +132,8 @@ public class Layer implements ItemListener {
             intBuffer.put(data);
 
             byte[] array = byteBuffer.array();
-
-            return new ImageIcon(array);
+            ImageIcon icon = new ImageIcon(array);
+            return icon;
         } else
             return null;
     }
@@ -136,5 +141,6 @@ public class Layer implements ItemListener {
     @Override
     public void itemStateChanged(ItemEvent e) {
         show = !show;
+        System.out.println("Kurwa: " + show);
     }
 }
