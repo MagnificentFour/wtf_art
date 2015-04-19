@@ -18,7 +18,7 @@ import net.iharder.dnd.FileDrop;
 /**
  * The visual in the main view window
  *
- *  @author nikla_000
+ * @author nikla_000
  */
 public class DisplayFrame extends JFrame implements ActionListener {
 
@@ -60,9 +60,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
 
         componentList = new ArrayList<>();
-        closeTab = new JButton("X");
         sketchTabs = new JTabbedPane();
 
+        closeTab = new JButton(new ImageIcon(ImageIO.read(new File("graphics/X.gif"))));
         fileChooseButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/OpenButton.gif"))));
         saveButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/Save-icon.png"))));
         newTab = new JButton(new ImageIcon(ImageIO.read(new File("graphics/blank.jpg"))));
@@ -142,6 +142,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         sketchTabs.addTab("Sketch " + tabs, createNewSketch());
         sketchTabs.setSelectedIndex(sketchTabs.getTabCount() - 1);
         tabs++;
+        System.out.println(tabs);
     }
 
     /**
@@ -282,10 +283,10 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         blurButton.addActionListener(s);
         blurButton.setActionCommand("blur");
-        
+
         setPoints.addActionListener(s);
         setPoints.setActionCommand("setPoints");
-        
+
         invertButton.addActionListener(s);
         invertButton.setActionCommand("invert");
 
@@ -323,7 +324,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
                     chooser.addChoosableFileFilter(new FileNameExtensionFilter("JPEG: jpg & jpeg", "jpg", "jpeg"));
                     chooser.addChoosableFileFilter(new FileNameExtensionFilter("TIF: tif", "tif"));
 
-                    int returnVal = chooser.showOpenDialog(sketchTabs);
+                    int returnVal = chooser.showSaveDialog(sketchTabs);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
                         s.saveImage(chooser.getSelectedFile());
                     }
@@ -377,6 +378,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
                 break;
             case "closeTab":
                 sketchTabs.remove(sketchTabs.getSelectedIndex());
+                tabs--;
+                System.out.println(tabs);
                 if (sketchTabs.getTabCount() < 1) {
                     newTab();
                 }
