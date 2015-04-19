@@ -22,6 +22,7 @@ public class Layer implements ItemListener {
     private PImage layerImage;
     private boolean show;
     private boolean isDisplayed;
+    private boolean isBackground;
     private JCheckBox checkShow;
 
     /**
@@ -31,6 +32,7 @@ public class Layer implements ItemListener {
         layerGraphics = new ArrayList<>();
         show = true;
         isDisplayed = false;
+        isBackground = false;
 
         setUp();
     }
@@ -111,36 +113,53 @@ public class Layer implements ItemListener {
     public void setShow(boolean show) {
         this.show = show;
     }
+    
+    /**
+     * 
+     * @return 
+     */
+    public boolean isBackground() {
+        return isBackground;
+    }
+    
+    /**
+     * 
+     * @param val 
+     */
+    public void isBackground(boolean val) {
+        isBackground = val;
+    }
 
     public ImageIcon getImageIcon() {
-        int[] data = null;
 
         if (layerGraphics.size() > 0) {
-            data = layerGraphics.get(0).pixels;
-        }
-        
-        if (layerImage != null) {
+            PGraphics gr = layerGraphics.get(0);
+            gr.beginDraw();
+            for (PGraphics g : layerGraphics) {
+                if (layerGraphics.indexOf(g) != 0) {
+                    gr.image(g, 0, 0);
+                    layerGraphics.remove(g);
+                }
+            }
+            gr.endDraw();
+            
+            PImage img = gr.get();
+            img.resize(0, 75);
+            
+            return new ImageIcon(img.getImage());
+            
+        }else if (layerImage != null) {
             PImage p = layerImage.get();
             p.resize(0, 75);
             Image image = p.getImage();
             return new ImageIcon(image);
         }
-
-        if (data != null) {
-            ByteBuffer byteBuffer = ByteBuffer.allocate(data.length * 4);
-            IntBuffer intBuffer = byteBuffer.asIntBuffer();
-            intBuffer.put(data);
-
-            byte[] array = byteBuffer.array();
-            ImageIcon icon = new ImageIcon(array);
-            return icon;
-        } else
-            return null;
+        
+        return null;
     }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
         show = !show;
-        System.out.println("Kurwa: " + show);
     }
 }

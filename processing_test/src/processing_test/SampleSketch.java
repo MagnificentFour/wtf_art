@@ -65,13 +65,13 @@ public class SampleSketch extends PApplet
         size(sizeWidth, sizeHeight);
         background(255);
         pg = createGraphics(sizeWidth, sizeHeight);
-        frameRate(25);
+        frameRate(1);
 //        noLoop();
     }
 
     @Override
     public void draw() {
-        background(255);
+//        background(255);
         if (tracker.hasNext()) {
             fwd.setEnabled(true);
         } else {
@@ -109,25 +109,29 @@ public class SampleSketch extends PApplet
         }
 
         for (Layer layer : layerHandler.getLayers()) {
+            
             if (!layer.isDisplayed()) {
                 toolWindow.addLayerView(layer);
                 layer.isDisplayed(true);
                 layer.getCheckBox().addItemListener(this);
             }
 
-            if (layer.show()) {
+            if(layer.isBackground())
+                image(layer.getLayerImage(), 0, 0);
+            else if (layer.show()) {
                 for (PGraphics graphic : layer.getGraphics()) {
                     image(graphic, 0, 0);
                 }
-            }
+            } 
         }
 
         if (!layerHandler.getLayers().isEmpty()) {//bgImg != null) {
 
             if (methodState == State.DOTREP) {
-                dotRep();
+                if(!layerHandler.checkFuncStat("Dotting"))
+                    dotRep();
             } else if (methodState == State.PXLATION) {
-                pxlation();
+//                pxlation();
             } else if (methodState == State.CLEAR) {
                 image(layerHandler.getLayers().get(0).getLayerImage(), 0, 0);
                 tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
@@ -147,9 +151,6 @@ public class SampleSketch extends PApplet
             text("Please select an image", width / 2, height / 2);
 
         }
-        ellipseMode(CENTER);
-        fill(0);
-        ellipse(mouseX, mouseY, 20, 20);
     }
 
     public void mouseClicked() {
@@ -211,12 +212,15 @@ public class SampleSketch extends PApplet
         dotRep.runFunction();
 //        methodState = State.NOACTION;
 
-        dotting = dotRep.getResult();
+        layerHandler.addLayer(new Layer(dotRep.getResult()));
+        layerHandler.setFuncStat("Dotting", true);
 
 //        PImage img = dotRep.getResult();
 //        image(img, 0, 0);
 //        blend(img, 0, 0, img.width, img.height, 0, 0, width, height, SUBTRACT);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
+        
+//        redraw();
     }
 
     /**
@@ -227,9 +231,14 @@ public class SampleSketch extends PApplet
         pxlation.setupSketch(bgImg, pxSize);
         pxlation.init();
         pxlation.runFunction();
-        image(pxlation.getResult(), 0, 0);
+        
+        layerHandler.addLayer(new Layer(pxlation.getResult()));
+        
+//        image(pxlation.getResult(), 0, 0);
 
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
+        
+//        redraw();
     }
 
     private void mapTo() {

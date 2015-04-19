@@ -1,10 +1,11 @@
 package processing_test;
 
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -26,7 +27,6 @@ public class ToolWindow extends JFrame {
     private JPanel layerPanel;
     private Box layerDisplay;
 
-
     /**
      * Constructor for the tool window
      */
@@ -39,60 +39,74 @@ public class ToolWindow extends JFrame {
         layerDisplay = Box.createVerticalBox();
         layerPanel.add(layerDisplay);
 //        addLayerView(new Layer());
-        
+
         makeComboBox();
         components.put("sizeSlider", new JSlider(JSlider.HORIZONTAL, 4, 30, 20));
         components.put("clearButton", new JButton("Clear"));
         components.put("cloneButton", new JButton("Clone"));
 
 //        setLayout(new FlowLayout());
-
         Set<String> keys = components.keySet();
         for (String key : keys) {
             add(components.get(key));
         }
-        
+
         arrangeLayout();
-        
+
+        layerPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                int count = mouseEvent.getClickCount();
+                if (count == 1) {
+                    Component panel = mouseEvent.getComponent();
+                    System.out.println(panel);
+                }
+            }
+        });
+
         setVisible(true);
     }
-    
+
     public void addLayerView(Layer layer) {
-        
+
         ImageIcon icon = layer.getImageIcon();
         Box hBox = Box.createHorizontalBox();
-        
-        hBox.add(layer.getCheckBox());
+
         hBox.add(new JLabel(icon));
+        hBox.add(layer.getCheckBox());
         hBox.add(Box.createVerticalStrut(100));
 //        hBox.add(new JLabel("Afoisna"));
         // Add Layer name/number
+
+        JPanel newPanel = new JPanel();
+        newPanel.add(hBox);
         
-        layerDisplay.add(hBox);
+        layerDisplay.add(newPanel);
         revalidate();
     }
-    
+
     /**
      * Arranges the layout of the components in the tool window.
      */
     private void arrangeLayout() {
         setLayout(null);
-        
+
         add(new JLabel("Velg funksjon:")).setBounds(15, 5, 200, 10);
         components.get("functionComboBox").setBounds(20, 20, 180, 100);
-        
+
         components.get("cloneButton").setBounds(10, 140, 200, 50);
         components.get("clearButton").setBounds(10, 210, 200, 50);
-        
+
         add(new JLabel("Velg størrelse:")).setBounds(10, 305, 200, 10);
         components.get("sizeSlider").setBounds(5, 315, 200, 20);
 
         add(new JLabel("Layers: ")).setBounds(10, 365, 200, 15);
         add(layerPanel).setBounds(10, 375, 250, 475);
     }
-    
+
     /**
      * Returns a hash map of the components for setting listeners.
+     *
      * @return HashMap of components in this window.
      */
     public HashMap<String, Component> getToolComponents() {
