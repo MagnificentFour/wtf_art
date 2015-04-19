@@ -118,7 +118,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
             } else if (methodState == State.IMPORT) {
                 methodState = nextState;
-            }
+            } 
 
         } else {
 
@@ -413,6 +413,10 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         if (!source.getValueIsAdjusting()) {
             pxSize = source.getValue();
             redraw();
+        }
+        if (!cloneSource.getValueIsAdjusting()) {
+            System.out.println(cloneSource.getValue());
+            cloneRadius = cloneSource.getValue() * 2;
         }
 
     }

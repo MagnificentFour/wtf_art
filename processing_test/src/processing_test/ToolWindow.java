@@ -26,7 +26,7 @@ public class ToolWindow extends JFrame {
      * Constructor for the toolwindow
      */
     public ToolWindow() {
-        setSize(250, 400);
+        setSize(250, 450);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         components = new HashMap<>();
@@ -35,6 +35,7 @@ public class ToolWindow extends JFrame {
         components.put("sizeSlider", new JSlider(JSlider.HORIZONTAL, 4, 30, 20));
         components.put("clearButton", new JButton("Clear"));
         components.put("cloneButton", new JButton("Clone"));
+        components.put("setPointsButton", new JButton("Set new points"));
 
 //        setLayout(new FlowLayout());
 
@@ -58,10 +59,11 @@ public class ToolWindow extends JFrame {
         components.get("functionComboBox").setBounds(20, 20, 180, 100);
         
         components.get("cloneButton").setBounds(10, 140, 200, 50);
-        components.get("clearButton").setBounds(10, 210, 200, 50);
+        components.get("setPointsButton").setBounds(10, 200, 200, 50);
+        components.get("clearButton").setBounds(10, 260, 200, 50);
         
-        add(new JLabel("Velg størrelse:")).setBounds(10, 305, 200, 10);
-        components.get("sizeSlider").setBounds(5, 315, 200, 20);
+        add(new JLabel("Velg størrelse:")).setBounds(10, 335, 200, 10);
+        components.get("sizeSlider").setBounds(5, 355, 200, 20);
 
     }
     
@@ -180,4 +182,5 @@ public class ToolWindow extends JFrame {
             setText(uhOhText);
         }
     }
+    
 }

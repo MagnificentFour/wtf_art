@@ -42,7 +42,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
 
-    private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
+    private String[] functionNames = {"Original", "Dots", "Squares", "3D", "Clone"};
 
     private final JSlider slider;
     private final JSlider cloneRadiusSlider;
@@ -72,7 +72,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         fncButton4 = new JButton("MapTo3D");
         doubleSpeed = new JButton("2X Speed");
         tripleSpeed = new JButton("3X Speed");
-        setPoints = new JButton("Set Points");
+        //setPoints = new JButton("Set Points");
         newTab = new JButton("New Tab");
         closeTab = new JButton("x");
         sketchTabs = new JTabbedPane();
@@ -91,12 +91,12 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         sketchTabs.addTab("Sketch 1", createNewSketch());
         add(fileChooseButton);
-        add(cloneRadiusSlider);
+        //add(cloneRadiusSlider);
         add(saveButton);
         add(blankButton);
         add(backButton);
         add(forwardButton);
-        add(setPoints);
+        //add(setPoints);
         add(sketchTabs);
         add(newTab);
         add(closeTab);
@@ -108,7 +108,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         componentList.add(backButton);
         componentList.add(forwardButton);
         componentList.add(blankButton);
-        componentList.add(setPoints);
+        //componentList.add(setPoints);
         componentList.add(fileChooseButton);
         componentList.add(saveButton);
 
@@ -119,6 +119,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         clearButton = (JButton) toolWindowComponents.get("clearButton");
         cloneButton = (JButton) toolWindowComponents.get("cloneButton");
+        setPoints = (JButton) toolWindowComponents.get("setPointsButton");
         slider = (JSlider) toolWindowComponents.get("sizeSlider");
         functionChooser = (JComboBox) toolWindowComponents.get("functionComboBox");
 
@@ -208,7 +209,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         fileChooseButton.setBounds(140, 10, 50, 50);
         backButton.setBounds(220, 10, 50, 50);
         forwardButton.setBounds(280, 10, 50, 50);
-        setPoints.setBounds(450, 10, 100, 50);
+        //setPoints.setBounds(450, 10, 100, 50);
         fncButton2.setBounds(1320, 275, 100, 50);
         fncButton3.setBounds(1435, 275, 100, 50);
         fncButton4.setBounds(1320, 330, 100, 50);
