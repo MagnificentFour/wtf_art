@@ -15,5 +15,4 @@ public class Processing_test {
     public static void main(String[] args) throws IOException {
         new DisplayFrame().setVisible(true);
     }
-
 }

@@ -1,6 +1,5 @@
 package processing_test;
 
-
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -12,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
+ * The visual in the toolwindow
  *
  * @author nikla_000
  */
@@ -67,9 +67,11 @@ public class ToolWindow extends JFrame {
         add(new JLabel("Velg størrelse:")).setBounds(10, 455, 200, 10);
         components.get("sizeSlider").setBounds(5, 475, 200, 20);
     }
+
     
     /**
      * Returns a hash map of the components for setting listeners.
+     *
      * @return HashMap of components in this window.
      */
     public HashMap<String, Component> getToolComponents() {
@@ -111,7 +113,7 @@ public class ToolWindow extends JFrame {
      * Creates an ImageIcon
      *
      * @param path
-     * @return
+     * @return icon
      */
     protected static ImageIcon createImageIcon(String path) {
         ImageIcon icon = null;

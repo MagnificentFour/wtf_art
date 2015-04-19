@@ -16,23 +16,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import net.iharder.dnd.FileDrop;
 
 /**
- * @author nikla_000
+ * The visual in the main view window
  *
- * Displayframeclass
+ *  @author nikla_000
  */
 public class DisplayFrame extends JFrame implements ActionListener {
 
-    //private final CircleSketch sketch;
     private final JButton fileChooseButton;
-    //private final JButton button;
-    private final JButton fncButton2;
-    private final JButton fncButton3;
-    private final JButton fncButton4;
     private final JButton clearButton;
-    private final JButton doubleSpeed;
-    private final JButton tripleSpeed;
     private final JButton saveButton;
-    private final JButton blankButton;
     private final JButton backButton;
     private final JButton forwardButton;
     private final JButton cloneButton;
@@ -68,37 +60,26 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
 
         componentList = new ArrayList<>();
-        //button = new JButton("Start");
-        fncButton2 = new JButton("Pixelate");
-        fncButton3 = new JButton("Show dots");
-        fncButton4 = new JButton("MapTo3D");
-        doubleSpeed = new JButton("2X Speed");
-        tripleSpeed = new JButton("3X Speed");
-        //setPoints = new JButton("Set Points");
-        newTab = new JButton("New Tab");
-        closeTab = new JButton("x");
+        closeTab = new JButton("X");
         sketchTabs = new JTabbedPane();
 
         fileChooseButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/OpenButton.gif"))));
         saveButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/Save-icon.png"))));
-        blankButton = new JButton(new ImageIcon(ImageIO.read(new File("graphics/blank.jpg"))));
+        newTab = new JButton(new ImageIcon(ImageIO.read(new File("graphics/blank.jpg"))));
         backButton = new JButton("<");
         forwardButton = new JButton(">");
 
         cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
-        fncButton3.setToolTipText("Show a dot representation for your picture");
 
 
         arrangeLayout();
+        setHoverText();
 
         sketchTabs.addTab("Sketch 1", createNewSketch());
         add(fileChooseButton);
-        //add(cloneRadiusSlider);
         add(saveButton);
-        add(blankButton);
         add(backButton);
         add(forwardButton);
-        //add(setPoints);
         add(sketchTabs);
         add(newTab);
         add(closeTab);
@@ -109,8 +90,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         componentList.add(backButton);
         componentList.add(forwardButton);
-        componentList.add(blankButton);
-        //componentList.add(setPoints);
         componentList.add(fileChooseButton);
         componentList.add(saveButton);
 
@@ -154,12 +133,13 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    /**
+     * Creating a new tab
+     */
     private void newTab() {
-
         sketchTabs.addTab("Sketch " + tabs, createNewSketch());
         sketchTabs.setSelectedIndex(sketchTabs.getTabCount() - 1);
         tabs++;
-
     }
 
     /**
@@ -205,37 +185,29 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private void arrangeLayout() {
         setLayout(null);
 
+
         //Position and size for buttons.
-        closeTab.setBounds(1267, 50, 35, 35);
-        newTab.setBounds(600, 10, 100, 50);
-        blankButton.setBounds(20, 10, 50, 50);
-        saveButton.setBounds(80, 10, 50, 50);
-        fileChooseButton.setBounds(140, 10, 50, 50);
+        closeTab.setBounds(1267, 10, 30, 30);
+        newTab.setBounds(20, 10, 50, 50);
+        fileChooseButton.setBounds(80, 10, 50, 50);
+        saveButton.setBounds(140, 10, 50, 50);
         backButton.setBounds(220, 10, 50, 50);
         forwardButton.setBounds(280, 10, 50, 50);
-        //setPoints.setBounds(450, 10, 100, 50);
-        fncButton2.setBounds(1320, 275, 100, 50);
-        fncButton3.setBounds(1435, 275, 100, 50);
-        fncButton4.setBounds(1320, 330, 100, 50);
         sketchTabs.setBounds(20, 70, 1282, 722);
-        doubleSpeed.setBounds(1320, 490, 100, 50);
-        tripleSpeed.setBounds(1435, 490, 100, 50);
-        //slider.setBounds(1320, 590, 215, 20);
         cloneRadiusSlider.setBounds(720, 30, 215, 20);
-        
+    }
 
+    /**
+     * Sets the hovertext for main window buttons
+     */
+    private void setHoverText() {
+        closeTab.setToolTipText("Close current tab");
+        newTab.setToolTipText("Create new tab");
+        fileChooseButton.setToolTipText("Open a file");
+        saveButton.setToolTipText("Save current work");
+        forwardButton.setToolTipText("Redo");
+        backButton.setToolTipText("Undo");
 
-        //functionChooser.setBounds(1320, 10, 300, 120);
-
-        //Position and size for labels
-
-        //step2.setBounds(1320, 235, 150, 30);
-        //step3.setBounds(1320, 380, 150, 30);
-        //sliderLabel.setBounds(1360, 560, 150, 30);
-
-
-        //saveButton.setBorder(BorderFactory.createEmptyBorder());
-        //saveButton.setContentAreaFilled(false);
     }
 
     /**
@@ -272,13 +244,13 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * Adds actionlisteners to buttons that shall be relevant for all tabs
+     */
     private void setLocalActionListeners() {
 
         newTab.addActionListener(this);
         newTab.setActionCommand("newTab");
-
-        blankButton.addActionListener(this);
-        blankButton.setActionCommand("blank");
 
         closeTab.addActionListener(this);
         closeTab.setActionCommand("closeTab");
@@ -286,7 +258,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     }
 
     /**
-     * Adds action listener to all relevant components
+     * Adds action listener to all relevant components, in the current tab
      *
      * @param s The processing sketch where buttons execute the listener.
      */
@@ -316,81 +288,69 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         slider.addChangeListener(s);
 
-//        cloneRadiusSlider.addChangeListener(new ChangeListener() {
-//
-//                                                @Override
-//                                                public void stateChanged(ChangeEvent e) {
-//                                                    currentSketch.cloneRadChanged(cloneRadiusSlider.getValue());
-//                                                }
-//
-//    }
 
-//    );
+        fileChooseButton.addActionListener((
+                        ActionEvent arg0
+                ) ->
 
-    fileChooseButton.addActionListener((
-    ActionEvent arg0
-    )->
+                {
+                    JFileChooser chooser = new JFileChooser();
 
-    {
-        JFileChooser chooser = new JFileChooser();
+                    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                            "JPG, GIF & PNG", "jpg", "gif", "png");
+                    chooser.setFileFilter(filter);
 
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "JPG, GIF & PNG", "jpg", "gif", "png");
-        chooser.setFileFilter(filter);
+                    int returnVal = chooser.showOpenDialog(sketchTabs);
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        s.loadBgImage(chooser.getSelectedFile());
+                    }
+                }
 
-        int returnVal = chooser.showOpenDialog(sketchTabs);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            s.loadBgImage(chooser.getSelectedFile());
-        }
-    }
+        );
 
-    );
+        saveButton.addActionListener((
+                        ActionEvent arg0
+                ) ->
 
-    saveButton.addActionListener((
-    ActionEvent arg0
-    )->
+                {
+                    JFileChooser chooser = new JFileChooser();
+                    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-    {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                    chooser.addChoosableFileFilter(new FileNameExtensionFilter("PNG: png", "png"));
+                    chooser.addChoosableFileFilter(new FileNameExtensionFilter("JPEG: jpg & jpeg", "jpg", "jpeg"));
+                    chooser.addChoosableFileFilter(new FileNameExtensionFilter("TIF: tif", "tif"));
 
-        chooser.addChoosableFileFilter(new FileNameExtensionFilter("PNG: png", "png"));
-        chooser.addChoosableFileFilter(new FileNameExtensionFilter("JPEG: jpg & jpeg", "jpg", "jpeg"));
-        chooser.addChoosableFileFilter(new FileNameExtensionFilter("TIF: tif", "tif"));
+                    int returnVal = chooser.showOpenDialog(sketchTabs);
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        s.saveImage(chooser.getSelectedFile());
+                    }
+                }
 
-        int returnVal = chooser.showOpenDialog(sketchTabs);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            s.saveImage(chooser.getSelectedFile());
-        }
-    }
+        );
 
-    );
+        functionChooser.addItemListener(new ItemListener() {
 
-    functionChooser.addItemListener(new
+                                            @Override
+                                            public void itemStateChanged(ItemEvent e) {
 
-    ItemListener() {
+                                                if (e.getStateChange() == ItemEvent.SELECTED) {
 
-        @Override
-        public void itemStateChanged (ItemEvent e){
+                                                    s.selectFunction(functionNames[(int) e.getItem()]);
 
-            if (e.getStateChange() == ItemEvent.SELECTED) {
+                                                }
 
-                s.selectFunction(functionNames[(int) e.getItem()]);
+                                            }
 
-            }
+                                        }
 
-        }
+        );
 
     }
-
-    );
-
-}
 
     /**
      * Creates a dialog asking the user whether or not they want to reset.
      *
-     * @return
+     * @return dialogResult
      */
     private boolean wantToReset() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -399,15 +359,17 @@ public class DisplayFrame extends JFrame implements ActionListener {
         return dialogResult == JOptionPane.YES_OPTION;
     }
 
+
+    /**
+     * Actionlistener for creating new tabs and closing.
+     *
+     * @param e Actionevent
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
-            case "blank":
-                if (wantToReset()) {
-                    currentSketch.reset();
-                }
-                break;
             case "newTab":
+                System.out.println("Yoloswaggins");
                 newTab();
                 break;
             case "closeTab":
@@ -418,14 +380,4 @@ public class DisplayFrame extends JFrame implements ActionListener {
         }
     }
 
-    //    public void chooseFile() {
-//        JFileChooser chooser = new JFileChooser();
-//        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-//                "JPG, GIF & PNG", "jpg", "gif", "png");
-//        chooser.setFileFilter(filter);
-//        int returnVal = chooser.showOpenDialog(this);
-//        if (returnVal == JFileChooser.APPROVE_OPTION) {
-//            imageProcessor.setCurrentImage(chooser.getSelectedFile().getAbsolutePath());
-//        }
-//    }
 }
