@@ -36,6 +36,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton wrappingButton;
     private final JButton squareButton;
     private final JButton ellipseButton;
+    private final JButton hazeButton;
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
     ToolWindow tw;
@@ -116,6 +117,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         squareButton = (JButton) toolWindowComponents.get("squareButton");
         ellipseButton = (JButton) toolWindowComponents.get("ellipseButton");
         functionChooser = (JComboBox) toolWindowComponents.get("functionComboBox");
+        hazeButton = (JButton) toolWindowComponents.get("hazeButton");
 
         tabIndex = sketchTabs.getSelectedIndex();
         currentSketch = (SampleSketch) sketchTabs.getSelectedComponent();
@@ -312,6 +314,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
         
         ellipseButton.addActionListener(s);
         ellipseButton.setActionCommand("ellipse");
+        
+        hazeButton.addActionListener(s);
+        hazeButton.setActionCommand("haze");
 
         slider.addChangeListener(s);
 
