@@ -42,10 +42,13 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     int i;
     boolean firstState = false;
     boolean done = false;
+    boolean hasChanged = false;
+    Color currentColor;
+    colorPicker cp;
     JButton fwd;
     JButton back;
     CloneTool clTool = new CloneTool();
-
+    
     State methodState = State.CLEAR;
     State nextState = State.CLEAR;
     State previousState;
@@ -78,6 +81,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             fwd.setEnabled(false);
         }
 
+        
         if (copying == true) {
 
             //cursor(circle, cloneRadius/2, cloneRadius/2);
@@ -187,9 +191,13 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         } else {
             back.setEnabled(false);
         }
-
         if (bgImg != null) {
-
+            
+//            if(methodState == State.DOTREP && cp.getColor() != currentColor) {
+//                hasChanged = true;
+//                //not working
+//            }
+//            
             if (methodState == State.DOTREP) {
                 dotRep();
             } else if (methodState == State.PXLATION) {
@@ -275,8 +283,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         Dotting dotRep = new Dotting();
         dotRep.setupSketch(bgImg, pxSize, noSave);
         dotRep.init();
-        System.out.println(tw);
-        dotRep.runFunction(tw.getColor());
+        dotRep.runFunction(cp.getColor());
         ellipseList = dotRep.getEllipseList();
         gogo = true;
 //        methodState = State.NOACTION;
@@ -287,6 +294,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
 //        blend(img, 0, 0, img.width, img.height, 0, 0, width, height, SUBTRACT);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
+        hasChanged = false;
+        currentColor = cp.getColor();
     }
 
     /**
@@ -433,7 +442,9 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 noSave = true;
                 //gogo = false;
                 methodState = State.DOTREP;
-                redraw();
+                hasChanged = true;
+                //redraw();
+                loop();
                 break;
             case "clear":
                 gogo = false;
@@ -552,5 +563,9 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     
     public void setToolWindow(ToolWindow t) {
         tw = t;
+    }
+    
+    public void setColorPicker(colorPicker c) {
+        cp = c;
     }
 }

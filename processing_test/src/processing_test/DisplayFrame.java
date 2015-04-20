@@ -40,10 +40,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
     private final JSlider slider;
     private final JSlider cloneRadiusSlider;
-
+    colorPicker cp;
     private int tabIndex;
     private int tabs = 2;
-
     private ArrayList<Component> componentList;
     private HashMap<String, Component> toolWindowComponents;
 
@@ -57,8 +56,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.setSize(1350, 850);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
-
+        cp = new colorPicker();
         componentList = new ArrayList<>();
         sketchTabs = new JTabbedPane();
 
@@ -154,6 +152,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         SampleSketch newSketch = new SampleSketch();
         newSketch.setToolWindow(tw);
+        newSketch.setColorPicker(cp);
         newSketch.setButtons(forwardButton, backButton);
 
         new FileDrop(newSketch, new FileDrop.Listener() {

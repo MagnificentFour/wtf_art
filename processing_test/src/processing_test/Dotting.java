@@ -17,6 +17,7 @@ public class Dotting extends PApplet {
     
     ArrayList<Ellipse> ellipseList = new ArrayList<>();
     
+    
     public void setupSketch(PImage image, int pixelSize, boolean noSave) {
         
         bgImg = image;

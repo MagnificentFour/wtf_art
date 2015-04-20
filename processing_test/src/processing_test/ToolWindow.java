@@ -27,9 +27,9 @@ public class ToolWindow extends JFrame {
      * Constructor for the toolwindow
      */
     public ToolWindow() {
-        setSize(250, 630);
+        setSize(240, 560);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
+        this.setAlwaysOnTop (true);
         components = new HashMap<>();
 
         makeComboBox();
@@ -47,9 +47,6 @@ public class ToolWindow extends JFrame {
         }
 
         arrangeLayout();
-        cs = new ColorChooserDemo();
-        cs.setBounds(10, 520, 200, 200);
-        add(cs);
         setVisible(true);
     }
 
