@@ -29,10 +29,13 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     int sizeWidth = 1280;
     int sizeHeight = 720;
     int pxSize = 20;
-    int cloneRadius = 40;
+    int cloneRadius = 60;
     int waitingPoint = 0;
     PImage bgImg;
     PImage circle;
+    PImage point1;
+    PImage point2;
+    PImage point3;
     PGraphics pg;
     boolean gogo = false;
     boolean noSave = false;
@@ -70,6 +73,9 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         pg = createGraphics(sizeWidth, sizeHeight);
         circle = loadImage("graphics/circle2.png");
         circle.resize(cloneRadius, cloneRadius);
+        point1 = loadImage("graphics/point1.png");
+        point2 = loadImage("graphics/point2.png");
+        point3 = loadImage("graphics/point3.png");
         noLoop();
     }
 
@@ -264,7 +270,17 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             } else if (methodState == State.IMPORT) {
                 methodState = nextState;
             } else if (methodState == State.CLONE) {
-                
+                image(circle, mouseX - (cloneRadius/2), mouseY - (cloneRadius/2));
+                Point ppoint1 = clTool.getPoint1();
+                Point ppoint2 = clTool.getPoint2();
+                int p1x = ppoint1.x;
+                int p1y = ppoint1.y;
+                int p2x = ppoint2.x;
+                int p2y = ppoint2.y;
+                image(point1, p1x, p1y);
+                image(point2, p2x, p2y);
+                image(point3, mouseX + (p1x - p2x), mouseY + (p1y - p2y));
+            } else if (methodState == State.BLUR) {
                 image(circle, mouseX - (cloneRadius/2), mouseY - (cloneRadius/2));
             }
 
@@ -604,7 +620,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 methodState = State.INVERT;
             }
             System.out.println(cloneSource.getValue());
-            cloneRadius = cloneSource.getValue() * 2;
+            cloneRadius = cloneSource.getValue() * 3;
             circle = loadImage("graphics/circle2.png");
             circle.resize(cloneRadius, cloneRadius);
             firstState = false;
