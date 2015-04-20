@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,10 +17,10 @@ import javax.swing.border.EtchedBorder;
  *
  * @author nikla_000
  */
-public class ToolWindow extends JFrame implements ActionListener{
+public class ToolWindow extends JFrame implements ActionListener {
 
     private HashMap<String, Component> components;
-    private HashMap<JPanel, Layer> layerList;
+    private LinkedHashMap<JPanel, Layer> layerList;
     private ImageIcon[] functionIcons;
     private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
     private JPanel layerPanel;
@@ -33,7 +34,7 @@ public class ToolWindow extends JFrame implements ActionListener{
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         components = new HashMap<>();
-        layerList = new HashMap<>();
+        layerList = new LinkedHashMap<>();
         layerPanel = new JPanel();
         layerDisplay = Box.createVerticalBox();
         layerPanel.add(layerDisplay);
@@ -55,6 +56,10 @@ public class ToolWindow extends JFrame implements ActionListener{
         setVisible(true);
     }
 
+    /**
+     * Adds a view of the newly added layer to the tool window.
+     * @param layer The new layer.
+     */
     public void addLayerView(Layer layer) {
 
         ImageIcon icon = layer.getImageIcon();
@@ -62,17 +67,19 @@ public class ToolWindow extends JFrame implements ActionListener{
         JButton b = layer.getRemoveButton();
 
         b.addActionListener(this);
-        
+
+        layer.setLayerNum(layerList.size() + 1);
+
+        hBox.add(new JLabel(Integer.toString(layer.layerNum()) + ". "));
         hBox.add(new JLabel(icon));
         hBox.add(layer.getCheckBox());
         hBox.add(b);
         hBox.add(Box.createVerticalStrut(100));
-//        hBox.add(new JLabel("Afoisna"));
-        // Add Layer name/number
 
         JPanel newPanel = new JPanel();
         newPanel.add(hBox);
 
+        // Add a mouse listener to the panel view of the layer.
         newPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
@@ -88,21 +95,20 @@ public class ToolWindow extends JFrame implements ActionListener{
         setSelected(newPanel);
     }
 
+    /**
+     * Remove and repaint the view of layers.
+     */
     private void refresh() {
-
         layerDisplay.removeAll();
 
         Set<JPanel> keys = layerList.keySet();
-        Iterator it = keys.iterator();
-        while (it.hasNext()) {
-            JPanel panel = (JPanel) it.next();
+
+        for (JPanel panel : keys) {
             Layer layer = layerList.get(panel);
 
             if (layer.remove()) {
-                it.remove();
-                System.out.println("Remove is " + layer.remove());
+                layerDisplay.remove(panel);
             } else {
-
                 layerDisplay.add(panel, BorderLayout.WEST);
                 if (layer.selected()) {
                     panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
@@ -112,9 +118,16 @@ public class ToolWindow extends JFrame implements ActionListener{
             }
         }
 
-        revalidate();
+        layerDisplay.revalidate();
+        layerDisplay.repaint();
+        validate();
+        repaint();
     }
-
+    
+    /**
+     * Set the selected layer.
+     * @param selectedPanel Currently selected layer panel.
+     */
     private void setSelected(JPanel selectedPanel) {
 
         layerList.get(selectedPanel).selected(true);
@@ -207,6 +220,20 @@ public class ToolWindow extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        JButton source = (JButton) e.getSource();
+        
+        Set<JPanel> keys = layerList.keySet();
+        Iterator it = keys.iterator();
+        while (it.hasNext()) {
+            JPanel panel = (JPanel) it.next();
+            Layer layer = layerList.get(panel);
+
+            if (source == layer.getRemoveButton()) {
+                it.remove();
+                System.out.println("one to remove");
+                layerDisplay.remove(panel);
+            }
+        }
         refresh();
     }
 

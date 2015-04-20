@@ -1,18 +1,11 @@
 package processing_test;
 
-import java.awt.Color;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
-import static javafx.scene.paint.Color.color;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -29,8 +22,6 @@ import static processing.core.PConstants.RGB;
 public class SampleSketch extends PApplet
         implements ActionListener, ChangeListener, ItemListener {
 
-    int sizeWidth = 1280;
-    int sizeHeight = 720;
     int pxSize = 20;
     int cloneRadius = 25;
     int waitingPoint = 0;
@@ -38,23 +29,18 @@ public class SampleSketch extends PApplet
     PImage circle;
     PGraphics pg;
     boolean noSave = false;
-    boolean moveToSpot = false;
     boolean copying = false;
     Random rand = new Random();
-    int i;
     boolean done = false;
-    JButton fwd;
-    JButton back;
     CloneTool clTool = new CloneTool();
 
     State methodState = State.CLEAR;
     State nextState = State.CLEAR;
-    int cellsize = 2; // Dimensions of each cell in the grid
-    int cols, rows;   // Number of columns and rows in our system
 
     LayerHandler layerHandler = new LayerHandler();
-    PGraphics dotting;
 
+    JButton fwd;
+    JButton back;
     JSlider source;
     JSlider cloneSource;
 
@@ -63,10 +49,10 @@ public class SampleSketch extends PApplet
 
     @Override
     public void setup() {
-        size(sizeWidth, sizeHeight);
+        size(1280, 720);
         background(255);
-        pg = createGraphics(sizeWidth, sizeHeight);
-        frameRate(1);
+        pg = createGraphics(1280, 720);
+        frameRate(25);
 //        noLoop();
     }
 
@@ -109,22 +95,33 @@ public class SampleSketch extends PApplet
             back.setEnabled(false);
         }
 
+        ArrayList<Layer> rList = new ArrayList<>();
+
         for (Layer layer : layerHandler.getLayers()) {
-            
-            if (!layer.isDisplayed()) {
-                toolWindow.addLayerView(layer);
-                layer.isDisplayed(true);
-                layer.getCheckBox().addItemListener(this);
-            }
+
+            if (layer.remove()) {
+                rList.add(layer);
+            } else {
+
+                if (!layer.isDisplayed()) {
+                    toolWindow.addLayerView(layer);
+                    layer.isDisplayed(true);
+                    layer.getCheckBox().addItemListener(this);
+                }
 
 //                    System.out.println("Yap " + layer);
-            if (layer.isBackground()) {
-                image(layer.getLayerImage(), 0, 0);
-            } else if (layer.show()) {
-                for (PGraphics graphic : layer.getAllGraphics()) {
-                    image(graphic, 0, 0);
+                if (layer.isBackground()) {
+                    image(layer.getLayerImage(), 0, 0);
+                } else if (layer.show()) {
+                    for (PGraphics graphic : layer.getAllGraphics()) {
+                        image(graphic, 0, 0);
+                    }
                 }
             }
+        }
+
+        for (Layer layer : rList) {
+            layerHandler.removeLayer(layer);
         }
 
         if (!layerHandler.getLayers().isEmpty()) {//bgImg != null) {
@@ -151,6 +148,8 @@ public class SampleSketch extends PApplet
             text("Please select an image", width / 2, height / 2);
 
         }
+        
+        methodState = State.NOACTION;
     }
 
     public void mouseClicked() {
@@ -212,7 +211,7 @@ public class SampleSketch extends PApplet
         dotRep.runFunction();
 //        methodState = State.NOACTION;
         PGraphics gr = dotRep.getResult();
-        
+
         if (index < 0) {
             layerHandler.addLayer(new Layer(gr), "Dotting");
         } else {

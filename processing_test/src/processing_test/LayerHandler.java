@@ -55,7 +55,7 @@ public class LayerHandler {
      * @param func
      */
     public void addLayer(Layer layer, String func) {
-        
+
         layers.add(layer);
 
         switch (func) {
@@ -75,8 +75,14 @@ public class LayerHandler {
      */
     public void removeLayer(Layer layer) {
 
-        layer.remove(true);
-        layers.remove(layer);
+        if (layers.indexOf(layer) == dottingIndex) {
+            removeFunc("Dotting");
+        } else if (layers.indexOf(layer) == bigPixIndex) {
+            removeFunc("BigPix");
+        } else {
+            layer.remove(true);
+            layers.remove(layer);
+        }
 
     }
 
@@ -89,6 +95,19 @@ public class LayerHandler {
         layers.get(index).remove(true);
         layers.remove(index);
 
+    }
+
+    public void removeFunc(String func) {
+        switch (func) {
+            case "BigPix":
+                layers.remove(bigPixIndex);
+                bigPixIndex = -1;
+                break;
+            case "Dotting":
+                layers.remove(dottingIndex);
+                dottingIndex = -1;
+        }
+        setFuncStat(func, false);
     }
 
     /**

@@ -26,6 +26,7 @@ public class Layer implements ItemListener, ActionListener {
     private boolean isBackground;
     private boolean selected;
     private boolean remove;
+    private int currentLayerNum;
     private JCheckBox checkShow;
     private JButton removeButton;
 
@@ -44,7 +45,7 @@ public class Layer implements ItemListener, ActionListener {
 
     private void setUp() {
         checkShow = new JCheckBox();
-        removeButton = new JButton();
+        removeButton = new JButton("x");
         
         checkShow.setSelected(true);
         checkShow.addItemListener(this);
@@ -127,6 +128,14 @@ public class Layer implements ItemListener, ActionListener {
     
     public JButton getRemoveButton() {
         return removeButton;
+    }
+    
+    public int layerNum() {
+        return currentLayerNum;
+    }
+    
+    public void setLayerNum(int num) {
+        currentLayerNum = num;
     }
 
     /**
