@@ -143,7 +143,6 @@ public class SampleSketch extends PApplet
             } else if (methodState == State.IMPORT) {
                 methodState = nextState;
             }
-
         } else {
 
             fill(0);
