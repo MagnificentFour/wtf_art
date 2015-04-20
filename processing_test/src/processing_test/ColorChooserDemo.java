@@ -36,7 +36,7 @@ public class ColorChooserDemo extends JPanel
                                              "Choose Text Color"));
  
         //add(bannerPanel, BorderLayout.CENTER);
-        add(tcc, BorderLayout.PAGE_START);
+        add(tcc, BorderLayout.CENTER);
     }
  
     public void stateChanged(ChangeEvent e) {
