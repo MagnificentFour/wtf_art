@@ -26,8 +26,8 @@ public class ToolWindow extends JFrame {
     /**
      * Constructor for the toolwindow
      */
-    public ToolWindow() {
-        setSize(240, 560);
+    public ToolWindow() throws IOException {
+        setSize(240, 760);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setAlwaysOnTop (true);
         components = new HashMap<>();
@@ -39,6 +39,9 @@ public class ToolWindow extends JFrame {
         components.put("blurButton", new JButton("Blur"));
         components.put("invertButton", new JButton("Invert Colors"));
         components.put("setPointsButton", new JButton("Set new points"));
+        components.put("wrappingButton", new JButton("Wrapping"));
+        components.put("squareButton", new JButton(new ImageIcon(ImageIO.read(new File("graphics/square.png")))));
+        components.put("ellipseButton", new JButton(new ImageIcon(ImageIO.read(new File("graphics/ellipse.png")))));
 
 //        setLayout(new FlowLayout());
         Set<String> keys = components.keySet();
@@ -49,9 +52,6 @@ public class ToolWindow extends JFrame {
         arrangeLayout();
 
         setLocationByPlatform(true);
-        cs = new ColorChooserDemo();
-        cs.setBounds(10, 520, 200, 200);
-        add(cs);
 
         setVisible(true);
     }
@@ -66,11 +66,14 @@ public class ToolWindow extends JFrame {
         components.get("functionComboBox").setBounds(20, 20, 180, 100);
         components.get("cloneButton").setBounds(10, 140, 200, 50);
         components.get("setPointsButton").setBounds(10, 200, 200, 50);
-        components.get("clearButton").setBounds(10, 380, 200, 50);
+        components.get("clearButton").setBounds(10, 440, 200, 50);
         components.get("blurButton").setBounds(10, 260, 200, 50);
         components.get("invertButton").setBounds(10, 320, 200, 50);
-        add(new JLabel("Velg størrelse:")).setBounds(10, 455, 200, 10);
-        components.get("sizeSlider").setBounds(5, 475, 200, 20);
+        components.get("wrappingButton").setBounds(10, 380, 200, 50);
+        add(new JLabel("Velg størrelse:")).setBounds(10, 575, 200, 10);
+        components.get("sizeSlider").setBounds(5, 595, 200, 20);
+        components.get("squareButton").setBounds(5, 635, 50, 50);
+        components.get("ellipseButton").setBounds(65, 635, 50, 50);
     }
 
     /**

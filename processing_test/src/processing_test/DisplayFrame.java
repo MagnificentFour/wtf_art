@@ -33,6 +33,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton invertButton;
     private final JButton newTab;
     private final JButton closeTab;
+    private final JButton wrappingButton;
+    private final JButton squareButton;
+    private final JButton ellipseButton;
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
     ToolWindow tw;
@@ -107,8 +110,11 @@ public class DisplayFrame extends JFrame implements ActionListener {
         cloneButton = (JButton) toolWindowComponents.get("cloneButton");
         blurButton = (JButton) toolWindowComponents.get("blurButton");
         invertButton = (JButton) toolWindowComponents.get("invertButton");
+        wrappingButton = (JButton) toolWindowComponents.get("wrappingButton");
         setPoints = (JButton) toolWindowComponents.get("setPointsButton");
         slider = (JSlider) toolWindowComponents.get("sizeSlider");
+        squareButton = (JButton) toolWindowComponents.get("squareButton");
+        ellipseButton = (JButton) toolWindowComponents.get("ellipseButton");
         functionChooser = (JComboBox) toolWindowComponents.get("functionComboBox");
 
         tabIndex = sketchTabs.getSelectedIndex();
@@ -206,6 +212,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         cloneRadiusSlider.setBounds(720, 30, 215, 20);
         ccd.setBounds(407, -173, 500, 500);
         
+        
     }
 
     /**
@@ -296,6 +303,15 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         invertButton.addActionListener(s);
         invertButton.setActionCommand("invert");
+        
+        wrappingButton.addActionListener(s);
+        wrappingButton.setActionCommand("wrapping");
+        
+        squareButton.addActionListener(s);
+        squareButton.setActionCommand("square");
+        
+        ellipseButton.addActionListener(s);
+        ellipseButton.setActionCommand("ellipse");
 
         slider.addChangeListener(s);
 
