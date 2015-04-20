@@ -3,10 +3,7 @@ package processing_test;
 import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import processing.core.PGraphics;
@@ -23,6 +20,8 @@ public class Layer implements ItemListener {
     private boolean show;
     private boolean isDisplayed;
     private boolean isBackground;
+    private boolean selected;
+    private boolean remove;
     private JCheckBox checkShow;
 
     /**
@@ -33,6 +32,7 @@ public class Layer implements ItemListener {
         show = true;
         isDisplayed = false;
         isBackground = false;
+        remove = false;
 
         setUp();
     }
@@ -81,6 +81,11 @@ public class Layer implements ItemListener {
     public ArrayList<PGraphics> getGraphics() {
         return layerGraphics;
     }
+    
+    public void setGraphics(PGraphics graphics) {
+        layerGraphics.clear();
+        layerGraphics.add(graphics);
+    }
 
     /**
      *
@@ -112,6 +117,22 @@ public class Layer implements ItemListener {
      */
     public void setShow(boolean show) {
         this.show = show;
+    }
+    
+    public boolean selected() {
+        return selected;
+    }
+    
+    public void selected(boolean selected) {
+        this.selected = selected;
+    }
+    
+    public boolean remove() {
+        return remove;
+    }
+    
+    public void remove(boolean remove) {
+        this.remove = remove;
     }
     
     /**

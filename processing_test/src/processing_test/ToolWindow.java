@@ -1,19 +1,16 @@
 package processing_test;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 
 /**
  *
@@ -22,6 +19,7 @@ import javax.swing.*;
 public class ToolWindow extends JFrame {
 
     private HashMap<String, Component> components;
+    private HashMap<JPanel, Layer> layerList;
     private ImageIcon[] functionIcons;
     private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
     private JPanel layerPanel;
@@ -35,6 +33,7 @@ public class ToolWindow extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         components = new HashMap<>();
+        layerList = new HashMap<>();
         layerPanel = new JPanel();
         layerDisplay = Box.createVerticalBox();
         layerPanel.add(layerDisplay);
@@ -53,17 +52,6 @@ public class ToolWindow extends JFrame {
 
         arrangeLayout();
 
-        layerPanel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent mouseEvent) {
-                int count = mouseEvent.getClickCount();
-                if (count == 1) {
-                    Component panel = mouseEvent.getComponent();
-                    System.out.println(panel);
-                }
-            }
-        });
-
         setVisible(true);
     }
 
@@ -74,15 +62,64 @@ public class ToolWindow extends JFrame {
 
         hBox.add(new JLabel(icon));
         hBox.add(layer.getCheckBox());
+        hBox.add(new JLabel("New Layer"));
         hBox.add(Box.createVerticalStrut(100));
 //        hBox.add(new JLabel("Afoisna"));
         // Add Layer name/number
 
         JPanel newPanel = new JPanel();
         newPanel.add(hBox);
+
+        newPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                int count = mouseEvent.getClickCount();
+                if (count == 1 && mouseEvent.getSource() instanceof JPanel) {
+                    JPanel panel = (JPanel) mouseEvent.getSource();
+                    setSelected(panel);
+                }
+            }
+        });
+
+        layerList.put(newPanel, layer);
+        setSelected(newPanel);
+    }
+
+    private void refresh() {
+
+        layerDisplay.removeAll();
         
-        layerDisplay.add(newPanel);
+        Set<JPanel> keys = layerList.keySet();
+        Iterator it = keys.iterator();
+        while (it.hasNext()) {
+            JPanel panel = (JPanel) it.next();
+            Layer layer = layerList.get(panel);
+            
+            if(layer.remove())
+                it.remove();
+            
+            layerDisplay.add(panel, BorderLayout.WEST);
+            if (layer.selected()) {
+                panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+            } else {
+                panel.setBorder(BorderFactory.createEmptyBorder());
+            }
+        }
+
         revalidate();
+    }
+
+    private void setSelected(JPanel selectedPanel) {
+
+        layerList.get(selectedPanel).selected(true);
+        Set<JPanel> keys = layerList.keySet();
+        for (JPanel p : keys) {
+            if (p != selectedPanel) {
+                layerList.get(p).selected(false);
+            }
+        }
+        refresh();
+
     }
 
     /**

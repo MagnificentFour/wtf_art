@@ -18,23 +18,25 @@ public class LayerHandler {
         layers = new ArrayList<>();
         hasDotting = false;
         hasBigPix = false;
+        dottingIndex = -1;
+        bigPixIndex = -1;
     }
-    
+
     /**
-     * 
-     * @param layer 
+     *
+     * @param layer
      */
     public void setBackground(Layer layer) {
-        
+
         layer.isBackground(true);
-        
-        if(layers.size() < 1)
+
+        if (layers.size() < 1) {
             layers.add(layer);
-        else {
+        } else {
             layers.remove(0);
             layers.add(0, layer);
         }
-        
+
     }
 
     /**
@@ -42,9 +44,29 @@ public class LayerHandler {
      * @param layer
      */
     public void addLayer(Layer layer) {
-        System.out.println("Layer added");
+
         layers.add(layer);
 
+    }
+
+    /**
+     *
+     * @param layer
+     * @param func
+     */
+    public void addLayer(Layer layer, String func) {
+        
+        layers.add(layer);
+
+        switch (func) {
+            case "BigPix":
+                bigPixIndex = layers.indexOf(layer);
+                break;
+            case "Dotting":
+                dottingIndex = layers.indexOf(layer);
+        }
+
+        setFuncStat(func, true);
     }
 
     /**
@@ -53,6 +75,7 @@ public class LayerHandler {
      */
     public void removeLayer(Layer layer) {
 
+        layer.remove(true);
         layers.remove(layer);
 
     }
@@ -63,6 +86,7 @@ public class LayerHandler {
      */
     public void removeLayer(int index) {
 
+        layers.get(index).remove(true);
         layers.remove(index);
 
     }
@@ -77,11 +101,12 @@ public class LayerHandler {
         if (index < 0 || index > layers.size()) {
             return false;
         } else {
+            layers.get(index).remove(true);
             layers.remove(index);
             layers.add(index, layer);
             return true;
         }
-        
+
     }
 
     /**
@@ -96,6 +121,7 @@ public class LayerHandler {
 
         if (layers.contains(layerToReplace)) {
             index = layers.indexOf(layerToReplace);
+            layerToReplace.remove(true);
             layers.remove(layerToReplace);
         } else {
             return false;
@@ -104,47 +130,47 @@ public class LayerHandler {
         layers.add(index, replacementLayer);
         return true;
     }
-    
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public Layer getBackgroud() {
-        
+
         return layers.get(0);
-        
+
     }
-    
+
     public ArrayList<Layer> getLayers() {
-        
+
         return layers;
-        
+
     }
-    
+
     public void setFuncStat(String func, boolean stat) {
-        
-        switch(func) {
-            
+
+        switch (func) {
+
             case "Dotting":
                 hasDotting = true;
                 break;
             case "BigPix":
                 hasBigPix = true;
         }
-        
+
     }
-    
-    public boolean checkFuncStat(String func) {
-        
-        switch(func) {
-            
+
+    public int checkFuncStat(String func) {
+
+        switch (func) {
+
             case "Dotting":
-                return hasDotting;
+                return dottingIndex;
             case "BigPix":
-                return hasBigPix;
+                return bigPixIndex;
         }
-        
-        return false;
-        
+
+        return -1;
+
     }
 }

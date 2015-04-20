@@ -116,22 +116,23 @@ public class SampleSketch extends PApplet
                 layer.getCheckBox().addItemListener(this);
             }
 
-            if(layer.isBackground())
+//                    System.out.println("Yap " + layer);
+            if (layer.isBackground()) {
                 image(layer.getLayerImage(), 0, 0);
-            else if (layer.show()) {
+            } else if (layer.show()) {
                 for (PGraphics graphic : layer.getGraphics()) {
+                    System.out.println("myeees");
                     image(graphic, 0, 0);
                 }
-            } 
+            }
         }
 
         if (!layerHandler.getLayers().isEmpty()) {//bgImg != null) {
 
             if (methodState == State.DOTREP) {
-                if(!layerHandler.checkFuncStat("Dotting"))
-                    dotRep();
+                dotRep(layerHandler.checkFuncStat("Dotting"));
             } else if (methodState == State.PXLATION) {
-//                pxlation();
+                pxlation(layerHandler.checkFuncStat("BigPix"));
             } else if (methodState == State.CLEAR) {
                 image(layerHandler.getLayers().get(0).getLayerImage(), 0, 0);
                 tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
@@ -205,39 +206,45 @@ public class SampleSketch extends PApplet
     /**
      * Makes a representation of the image in dots.
      */
-    private void dotRep() {
+    private void dotRep(int index) {
         Dotting dotRep = new Dotting();
         dotRep.setupSketch(bgImg, pxSize, noSave);
         dotRep.init();
         dotRep.runFunction();
 //        methodState = State.NOACTION;
-
-        layerHandler.addLayer(new Layer(dotRep.getResult()));
-        layerHandler.setFuncStat("Dotting", true);
+        
+        if (index < 0) {
+            layerHandler.addLayer(new Layer(dotRep.getResult()), "Dotting");
+        } else {
+            layerHandler.getLayers().get(index).setGraphics(dotRep.getResult());
+        }
 
 //        PImage img = dotRep.getResult();
 //        image(img, 0, 0);
 //        blend(img, 0, 0, img.width, img.height, 0, 0, width, height, SUBTRACT);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-        
+
 //        redraw();
     }
 
     /**
      * Makes a pixelated representation of the image with two colors.
      */
-    private void pxlation() {
+    private void pxlation(int index) {
         BigPix pxlation = new BigPix();
         pxlation.setupSketch(bgImg, pxSize);
         pxlation.init();
         pxlation.runFunction();
-        
-        layerHandler.addLayer(new Layer(pxlation.getResult()));
-        
-//        image(pxlation.getResult(), 0, 0);
 
+        if (index < 0) {
+            layerHandler.addLayer(new Layer(pxlation.getResult()), "BigPix");
+        } else {
+//            layerHandler.getLayers().get(index).setGraphics(pxlation.getResult());
+        }
+
+//        image(pxlation.getResult(), 0, 0);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-        
+
 //        redraw();
     }
 
