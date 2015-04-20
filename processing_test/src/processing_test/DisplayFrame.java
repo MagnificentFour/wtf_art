@@ -55,8 +55,12 @@ public class DisplayFrame extends JFrame implements ActionListener {
     public DisplayFrame() throws IOException {
         this.setSize(1350, 850);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+
+        
         cp = new colorPicker();
+
+        setLocationByPlatform(true);
+
         componentList = new ArrayList<>();
         sketchTabs = new JTabbedPane();
 
@@ -131,6 +135,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         });
 
         setVisible(true);
+        tw.setVisible(true);
     }
 
     /**

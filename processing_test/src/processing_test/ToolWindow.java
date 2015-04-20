@@ -47,6 +47,12 @@ public class ToolWindow extends JFrame {
         }
 
         arrangeLayout();
+
+        setLocationByPlatform(true);
+        cs = new ColorChooserDemo();
+        cs.setBounds(10, 520, 200, 200);
+        add(cs);
+
         setVisible(true);
     }
 
