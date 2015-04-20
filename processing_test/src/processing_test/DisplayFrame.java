@@ -221,7 +221,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
     /**
      * Sets the hovertext for main window buttons
-     * Gives a description of buttonfunctions   
+     * Gives a description of buttonfunctions
      */
     private void setHoverText() {
         closeTab.setToolTipText("Close current tab");

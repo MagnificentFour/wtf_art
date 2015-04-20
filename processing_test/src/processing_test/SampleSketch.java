@@ -43,7 +43,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     boolean noSave = false;
     boolean moveToSpot = false;
     boolean copying = false;
-    Random rand = new Random();
     int i;
     boolean firstState = false;
     boolean done = false;
@@ -63,10 +62,14 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     ArrayList<Ellipse> ellipseList = new ArrayList<>();
     ArrayList<Ellipse> drawList = new ArrayList<>();
 
+    Random rand = new Random();
+    ArrayList<String> randomFunc = new ArrayList<>();
+
     JSlider source;
     JSlider cloneSource;
 
     ChangeTracker tracker = new ChangeTracker();
+
 
     @Override
     public void setup() {
@@ -515,8 +518,16 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+        int max = 5;
+        int min = 1;
+
+        //YOLOSWAGGINS GIVES NO FUCKS ABOUT RESOURCES!
         System.out.println("FoR FUCKS SAKE!");
-        
+        int randomInt = rand.nextInt((max - min) + 1) + min;
+        System.out.println(randomInt);
+
+
+        //carry on
         switch (e.getActionCommand()) {
             case "run":
                 gogo = false;
