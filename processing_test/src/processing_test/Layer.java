@@ -1,10 +1,13 @@
 package processing_test;
 
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -13,9 +16,10 @@ import processing.core.PImage;
  *
  * @author nikla_000
  */
-public class Layer implements ItemListener {
+public class Layer implements ItemListener, ActionListener {
 
     private ArrayList<PGraphics> layerGraphics;
+    private PGraphics mainGraphics;
     private PImage layerImage;
     private boolean show;
     private boolean isDisplayed;
@@ -23,6 +27,7 @@ public class Layer implements ItemListener {
     private boolean selected;
     private boolean remove;
     private JCheckBox checkShow;
+    private JButton removeButton;
 
     /**
      *
@@ -39,9 +44,12 @@ public class Layer implements ItemListener {
 
     private void setUp() {
         checkShow = new JCheckBox();
+        removeButton = new JButton();
+        
         checkShow.setSelected(true);
         checkShow.addItemListener(this);
 
+        removeButton.addActionListener(this);
     }
 
     /**
@@ -63,6 +71,7 @@ public class Layer implements ItemListener {
 
         this();
         layerGraphics.add(graphic);
+        mainGraphics = graphic;
 
     }
 
@@ -78,13 +87,18 @@ public class Layer implements ItemListener {
      *
      * @return
      */
-    public ArrayList<PGraphics> getGraphics() {
+    public ArrayList<PGraphics> getAllGraphics() {
         return layerGraphics;
     }
     
+    public PGraphics getGraphics() {
+        return mainGraphics;
+    }
+    
     public void setGraphics(PGraphics graphics) {
-        layerGraphics.clear();
-        layerGraphics.add(graphics);
+//        layerGraphics.clear();
+//        layerGraphics.add(graphics);
+        mainGraphics = graphics;
     }
 
     /**
@@ -109,6 +123,10 @@ public class Layer implements ItemListener {
      */
     public JCheckBox getCheckBox() {
         return checkShow;
+    }
+    
+    public JButton getRemoveButton() {
+        return removeButton;
     }
 
     /**
@@ -182,5 +200,11 @@ public class Layer implements ItemListener {
     @Override
     public void itemStateChanged(ItemEvent e) {
         show = !show;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        remove = true;
+        System.out.println("Roger remove is " + remove);
     }
 }

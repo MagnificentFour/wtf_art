@@ -16,7 +16,7 @@ import javax.swing.border.EtchedBorder;
  *
  * @author nikla_000
  */
-public class ToolWindow extends JFrame {
+public class ToolWindow extends JFrame implements ActionListener{
 
     private HashMap<String, Component> components;
     private HashMap<JPanel, Layer> layerList;
@@ -59,10 +59,13 @@ public class ToolWindow extends JFrame {
 
         ImageIcon icon = layer.getImageIcon();
         Box hBox = Box.createHorizontalBox();
+        JButton b = layer.getRemoveButton();
 
+        b.addActionListener(this);
+        
         hBox.add(new JLabel(icon));
         hBox.add(layer.getCheckBox());
-        hBox.add(new JLabel("New Layer"));
+        hBox.add(b);
         hBox.add(Box.createVerticalStrut(100));
 //        hBox.add(new JLabel("Afoisna"));
         // Add Layer name/number
@@ -88,21 +91,24 @@ public class ToolWindow extends JFrame {
     private void refresh() {
 
         layerDisplay.removeAll();
-        
+
         Set<JPanel> keys = layerList.keySet();
         Iterator it = keys.iterator();
         while (it.hasNext()) {
             JPanel panel = (JPanel) it.next();
             Layer layer = layerList.get(panel);
-            
-            if(layer.remove())
+
+            if (layer.remove()) {
                 it.remove();
-            
-            layerDisplay.add(panel, BorderLayout.WEST);
-            if (layer.selected()) {
-                panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+                System.out.println("Remove is " + layer.remove());
             } else {
-                panel.setBorder(BorderFactory.createEmptyBorder());
+
+                layerDisplay.add(panel, BorderLayout.WEST);
+                if (layer.selected()) {
+                    panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+                } else {
+                    panel.setBorder(BorderFactory.createEmptyBorder());
+                }
             }
         }
 
@@ -197,6 +203,11 @@ public class ToolWindow extends JFrame {
         }
 
         return icon;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        refresh();
     }
 
     class ComboBoxRenderer extends JLabel

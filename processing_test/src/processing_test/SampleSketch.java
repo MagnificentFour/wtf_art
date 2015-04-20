@@ -9,6 +9,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import static javafx.scene.paint.Color.color;
 import javax.swing.ImageIcon;
@@ -120,8 +121,7 @@ public class SampleSketch extends PApplet
             if (layer.isBackground()) {
                 image(layer.getLayerImage(), 0, 0);
             } else if (layer.show()) {
-                for (PGraphics graphic : layer.getGraphics()) {
-                    System.out.println("myeees");
+                for (PGraphics graphic : layer.getAllGraphics()) {
                     image(graphic, 0, 0);
                 }
             }
@@ -212,14 +212,15 @@ public class SampleSketch extends PApplet
         dotRep.init();
         dotRep.runFunction();
 //        methodState = State.NOACTION;
+        PGraphics gr = dotRep.getResult();
         
         if (index < 0) {
-            layerHandler.addLayer(new Layer(dotRep.getResult()), "Dotting");
+            layerHandler.addLayer(new Layer(gr), "Dotting");
         } else {
-            layerHandler.getLayers().get(index).setGraphics(dotRep.getResult());
+//            layerHandler.replaceLayer(index, new Layer(dotRep.getResult()));
+            layerHandler.getLayers().get(index).setGraphics(gr);
         }
 
-//        PImage img = dotRep.getResult();
 //        image(img, 0, 0);
 //        blend(img, 0, 0, img.width, img.height, 0, 0, width, height, SUBTRACT);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
@@ -239,7 +240,7 @@ public class SampleSketch extends PApplet
         if (index < 0) {
             layerHandler.addLayer(new Layer(pxlation.getResult()), "BigPix");
         } else {
-//            layerHandler.getLayers().get(index).setGraphics(pxlation.getResult());
+            layerHandler.getLayers().get(index).setGraphics(pxlation.getResult());
         }
 
 //        image(pxlation.getResult(), 0, 0);
