@@ -56,7 +56,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
      * components of the GUI as well as the processing sketch.
      */
     public DisplayFrame() throws IOException {
-        this.setSize(1360, 850);
+        this.setSize(1340, 890);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         
@@ -208,9 +208,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
         saveButton.setBounds(140, 10, 50, 50);
         backButton.setBounds(220, 10, 50, 50);
         forwardButton.setBounds(280, 10, 50, 50);
-        sketchTabs.setBounds(20, 80, 1282, 722);
+        sketchTabs.setBounds(20, 110, 1282, 722);
         cloneRadiusSlider.setBounds(720, 30, 215, 20);
-        ccd.setBounds(407, -173, 500, 500);
+        ccd.setBounds(407, -163, 500, 500);
         
         
     }
