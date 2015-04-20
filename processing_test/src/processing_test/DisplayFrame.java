@@ -33,6 +33,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton invertButton;
     private final JButton newTab;
     private final JButton closeTab;
+    private final JButton randomShit;
     private final JButton wrappingButton;
     private final JButton squareButton;
     private final JButton ellipseButton;
@@ -74,6 +75,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         newTab = new JButton(new ImageIcon(ImageIO.read(new File("graphics/blank.jpg"))));
         backButton = new JButton("<");
         forwardButton = new JButton(">");
+        randomShit = new JButton("Surprise motherfucker!");
 
         cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
 
@@ -91,6 +93,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         add(sketchTabs);
         add(newTab);
         add(closeTab);
+        add(randomShit);
         add(ccd);
 
         
@@ -101,6 +104,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         componentList.add(forwardButton);
         componentList.add(fileChooseButton);
         componentList.add(saveButton);
+        componentList.add(randomShit);
 
         Set<String> keys = toolWindowComponents.keySet();
         for (String key : keys) {
@@ -212,13 +216,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
         forwardButton.setBounds(280, 10, 50, 50);
         sketchTabs.setBounds(20, 110, 1282, 722);
         cloneRadiusSlider.setBounds(720, 30, 215, 20);
+        randomShit.setBounds(340,10,200,50);
+        ccd.setBounds(407, -173, 500, 500);
         ccd.setBounds(407, -163, 500, 500);
-        
-        
     }
 
     /**
      * Sets the hovertext for main window buttons
+     * Gives a description of buttonfunctions   
      */
     private void setHoverText() {
         closeTab.setToolTipText("Close current tab");
@@ -283,7 +288,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
      * @param s The processing sketch where buttons execute the listener.
      */
     private void setActionListeners(SampleSketch s) {
-
+        randomShit.addActionListener(s);
+        randomShit.setActionCommand("");
 
         clearButton.addActionListener(s);
         clearButton.setActionCommand("clear");
