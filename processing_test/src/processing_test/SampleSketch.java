@@ -429,7 +429,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        System.out.println("FoR FUCKS SAKE!");
+        
         switch (e.getActionCommand()) {
             case "run":
                 gogo = false;

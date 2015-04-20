@@ -33,6 +33,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton invertButton;
     private final JButton newTab;
     private final JButton closeTab;
+    private final JButton randomShit;
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
     ToolWindow tw;
@@ -70,6 +71,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         newTab = new JButton(new ImageIcon(ImageIO.read(new File("graphics/blank.jpg"))));
         backButton = new JButton("<");
         forwardButton = new JButton(">");
+        randomShit = new JButton("Surprise motherfucker!");
 
         cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
 
@@ -87,6 +89,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         add(sketchTabs);
         add(newTab);
         add(closeTab);
+        add(randomShit);
 
         
 
@@ -96,6 +99,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         componentList.add(forwardButton);
         componentList.add(fileChooseButton);
         componentList.add(saveButton);
+        componentList.add(randomShit);
 
         Set<String> keys = toolWindowComponents.keySet();
         for (String key : keys) {
@@ -203,6 +207,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         forwardButton.setBounds(280, 10, 50, 50);
         sketchTabs.setBounds(20, 70, 1282, 722);
         cloneRadiusSlider.setBounds(720, 30, 215, 20);
+        randomShit.setBounds(340,10,200,50);
     }
 
     /**
@@ -271,7 +276,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
      * @param s The processing sketch where buttons execute the listener.
      */
     private void setActionListeners(SampleSketch s) {
-
+        randomShit.addActionListener(s);
+        randomShit.setActionCommand("");
 
         clearButton.addActionListener(s);
         clearButton.setActionCommand("clear");
