@@ -34,11 +34,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton newTab;
     private final JButton closeTab;
     private final JButton randomShit;
+    private final JButton wrappingButton;
+    private final JButton squareButton;
+    private final JButton ellipseButton;
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
     ToolWindow tw;
     private String[] functionNames = {"Original", "Dots", "Squares", "3D", "Clone"};
-
+    ColorChooserDemo ccd;
     private final JSlider slider;
     private final JSlider cloneRadiusSlider;
     colorPicker cp;
@@ -54,12 +57,12 @@ public class DisplayFrame extends JFrame implements ActionListener {
      * components of the GUI as well as the processing sketch.
      */
     public DisplayFrame() throws IOException {
-        this.setSize(1350, 850);
+        this.setSize(1360, 850);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         
-        cp = new colorPicker();
-
+        //cp = new colorPicker();
+        ccd = new ColorChooserDemo();
         setLocationByPlatform(true);
 
         componentList = new ArrayList<>();
@@ -90,6 +93,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         add(newTab);
         add(closeTab);
         add(randomShit);
+        add(ccd);
 
         
 
@@ -110,8 +114,11 @@ public class DisplayFrame extends JFrame implements ActionListener {
         cloneButton = (JButton) toolWindowComponents.get("cloneButton");
         blurButton = (JButton) toolWindowComponents.get("blurButton");
         invertButton = (JButton) toolWindowComponents.get("invertButton");
+        wrappingButton = (JButton) toolWindowComponents.get("wrappingButton");
         setPoints = (JButton) toolWindowComponents.get("setPointsButton");
         slider = (JSlider) toolWindowComponents.get("sizeSlider");
+        squareButton = (JButton) toolWindowComponents.get("squareButton");
+        ellipseButton = (JButton) toolWindowComponents.get("ellipseButton");
         functionChooser = (JComboBox) toolWindowComponents.get("functionComboBox");
 
         tabIndex = sketchTabs.getSelectedIndex();
@@ -161,7 +168,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         SampleSketch newSketch = new SampleSketch();
         newSketch.setToolWindow(tw);
-        newSketch.setColorPicker(cp);
+        newSketch.setColorPicker(ccd);
         newSketch.setButtons(forwardButton, backButton);
 
         new FileDrop(newSketch, new FileDrop.Listener() {
@@ -205,9 +212,10 @@ public class DisplayFrame extends JFrame implements ActionListener {
         saveButton.setBounds(140, 10, 50, 50);
         backButton.setBounds(220, 10, 50, 50);
         forwardButton.setBounds(280, 10, 50, 50);
-        sketchTabs.setBounds(20, 70, 1282, 722);
+        sketchTabs.setBounds(20, 80, 1282, 722);
         cloneRadiusSlider.setBounds(720, 30, 215, 20);
         randomShit.setBounds(340,10,200,50);
+        ccd.setBounds(407, -173, 500, 500);
     }
 
     /**
@@ -299,6 +307,15 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         invertButton.addActionListener(s);
         invertButton.setActionCommand("invert");
+        
+        wrappingButton.addActionListener(s);
+        wrappingButton.setActionCommand("wrapping");
+        
+        squareButton.addActionListener(s);
+        squareButton.setActionCommand("square");
+        
+        ellipseButton.addActionListener(s);
+        ellipseButton.setActionCommand("ellipse");
 
         slider.addChangeListener(s);
 
