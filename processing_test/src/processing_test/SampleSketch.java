@@ -102,12 +102,16 @@ public class SampleSketch extends PApplet
         Layer initLayer = new Layer(initImage);
         initLayer.getRemoveButton().setEnabled(false);
         layerHandler.addLayer(initLayer);
-        toolWindow.addLayerView(initLayer);
+//        toolWindow.addLayerView(initLayer);
         initLayer.isDisplayed(true);
+        initLayer.selected(true);
+        
         cursorLayer = new Layer(cursorP);
         cursorLayer.isDisplayed(true);
         layerHandler.addCursorLayer(cursorLayer);
         cursorLayer.setShow(false);
+        
+        toolWindow.refreshLayerView(layerHandler.getLayerView());
     }
 
     @Override
@@ -131,11 +135,6 @@ public class SampleSketch extends PApplet
             if (layer.remove()) {
                 rList.add(layer);
             } else {
-
-                if (!layer.isDisplayed()) {
-                    toolWindow.addLayerView(layer);
-                    layer.isDisplayed(true);
-                }
 
                 if (layer.isBackground()) {
                     image(layer.getLayerImage(), 0, 0);
@@ -238,7 +237,7 @@ public class SampleSketch extends PApplet
         gr.endDraw();
 
         layerHandler.setBackground(new Layer(gr));
-        toolWindow.refresh();
+        layerHandler.refreshLayerView();
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
     }
 
@@ -752,5 +751,9 @@ public class SampleSketch extends PApplet
                 }
             }
         }
+    }
+    
+    public void getLayers() {
+        toolWindow.refreshLayerView(layerHandler.getLayerView());
     }
 }

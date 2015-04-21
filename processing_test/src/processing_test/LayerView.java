@@ -1,71 +1,150 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package processing_test;
 
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Set;
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 
 /**
+ *
  * @author nikla_000
  */
-public class LayerView extends JPanel {
-
-    private ImageIcon layerIcon;
-    private final Box hBox;
-    private final JButton b;
-    private final JCheckBox checkBox;
-    private final JLabel iconLabel;
-    private Integer layerNum;
-
+public class LayerView extends JPanel implements ActionListener {
+    
+    private final LinkedHashMap<LayerViewItem, Layer> layerList;
+    private final Box layerDisplay;
+    
+    public LayerView() {
+        layerList = new LinkedHashMap<>();
+        layerDisplay = Box.createVerticalBox();
+        add(layerDisplay);
+    }
+    
     /**
-     * Constructor for instances of LayerView. Creates a JPanel witch shows
-     * a layer with layer number, icon, check box for show and remove button.
+     * Adds a view of the newly added layer to the tool window.
      *
-     * @param layerIcon An icon showing the current look of the layer
-     * @param button    A button to remove the layer.
-     * @param layerNum  The number of the layer, 1 being the background.
-     * @param checkBox  A check box which toggles whether or not the layer is viewed.
+     * @param layer The new layer.
      */
-    public LayerView(ImageIcon layerIcon, JButton button,
-                     int layerNum, JCheckBox checkBox) {
-        this.layerNum = layerNum;
-        this.checkBox = checkBox;
-        b = button;
-        iconLabel = new JLabel();
-        hBox = Box.createHorizontalBox();
+    public void addLayerView(Layer layer) {
+        ImageIcon icon = layer.getImageIcon();
+        JButton b = layer.getRemoveButton();
+        int layerNum = layerList.size() + 1;
+        layer.setLayerNum(layerNum);
 
-        setLayerIcon(layerIcon);
+        b.addActionListener(this);
 
-        addComponents();
+        LayerViewItem newLayerView = new LayerViewItem(icon, b, layerNum, layer.getCheckBox());
+
+        // Add a mouse listener to the panel view of the layer.
+        newLayerView.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                int count = mouseEvent.getClickCount();
+                if (count == 1 && mouseEvent.getSource() instanceof JPanel) {
+                    LayerViewItem panel = (LayerViewItem) mouseEvent.getSource();
+                    setSelected(panel);
+                }
+            }
+        });
+
+        layerList.put(newLayerView, layer);
+        setSelected(newLayerView);
     }
 
     /**
-     * Adds all the components to their container.
+     * Remove and repaint the view of layers.
      */
-    private void addComponents() {
+    public void refresh() {
+        layerDisplay.removeAll();
 
-        hBox.add(new JLabel(layerNum.toString()));
-        hBox.add(Box.createHorizontalStrut(3));
-        hBox.add(iconLabel);
-        hBox.add(checkBox);
-        hBox.add(b);
-        hBox.add(Box.createVerticalStrut(100));
+        Set<LayerViewItem> keys = layerList.keySet();
+        Iterator it = keys.iterator();
+        while(it.hasNext()) {
+            LayerViewItem panel = (LayerViewItem) it.next();
+            Layer layer = layerList.get(panel);
 
-        add(hBox);
+            if (layer.remove()) {
+                it.remove();
+            } else {
+                panel.setLayerIcon(layer.getImageIcon());
+                layerDisplay.add(panel, BorderLayout.WEST);
+                if (layer.selected()) {
+                    panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+                } else {
+                    panel.setBorder(BorderFactory.createEmptyBorder());
+                }
+            }
+        }
 
+        layerDisplay.revalidate();
+        layerDisplay.repaint();
+        validate();
+        repaint();
+    }
+    
+    public void refreshLayers(ArrayList<Layer> layers) {
+        
+        layerDisplay.removeAll();
+        
+        Set<LayerViewItem> keys = layerList.keySet();
+        
+        for(LayerViewItem panel : keys) {
+            Layer layer = layerList.get(panel);
+            layer.isDisplayed(false);
+        }
+        
+        layerList.clear();
+        
+        for(Layer layer : layers) {
+            addLayerView(layer);
+            layer.isDisplayed(true);
+        }
     }
 
     /**
-     * Updates the icon.
+     * Set the selected layer.
      *
-     * @param icon New icon representing the layer.
+     * @param selectedPanel Currently selected layer panel.
      */
-    public void setLayerIcon(ImageIcon icon) {
-        layerIcon = icon;
-        iconLabel.setIcon(layerIcon);
+    private void setSelected(LayerViewItem selectedPanel) {
+
+        layerList.get(selectedPanel).selected(true);
+        Set<LayerViewItem> keys = layerList.keySet();
+        for (LayerViewItem p : keys) {
+            if (p != selectedPanel) {
+                layerList.get(p).selected(false);
+            }
+        }
+        refresh();
+
     }
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JButton source = (JButton) e.getSource();
 
+        Set<LayerViewItem> keys = layerList.keySet();
+        Iterator it = keys.iterator();
+        while (it.hasNext()) {
+            JPanel panel = (JPanel) it.next();
+            Layer layer = layerList.get(panel);
 
+            if (source == layer.getRemoveButton()) {
+                it.remove();
+                layerDisplay.remove(panel);
+            }
+        }
+        refresh();
+    }
+    
 }

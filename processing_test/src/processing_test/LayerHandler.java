@@ -11,11 +11,13 @@ public class LayerHandler {
     private final ArrayList<Layer> layers;
     private int dottingIndex;
     private int bigPixIndex;
+    private LayerView layerView;
 
     public LayerHandler() {
         layers = new ArrayList<>();
         dottingIndex = -1;
         bigPixIndex = -1;
+        layerView = new LayerView();
     }
 
     /**
@@ -47,6 +49,7 @@ public class LayerHandler {
         } else {
             layers.add(layers.size() - 1, layer);
         }
+        layerView.addLayerView(layer);
     }
 
     /**
@@ -187,7 +190,7 @@ public class LayerHandler {
     /**
      * TODO Document ples
      *
-     * Kommentera ut for å se om merge fungerer
+     * Kommentera ut for ï¿½ se om merge fungerer
      *
      * @param func
      * @param stat
@@ -221,5 +224,13 @@ public class LayerHandler {
                 return bigPixIndex;
         }
         return -1;
+    }
+    
+    public void refreshLayerView() {
+        layerView.refresh();
+    }
+    
+    public LayerView getLayerView() {
+        return layerView;
     }
 }
