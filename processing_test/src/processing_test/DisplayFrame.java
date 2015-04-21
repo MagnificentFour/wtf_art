@@ -62,10 +62,15 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.setSize(1340, 890);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        /**
+         * Sets location of main window in relation to toolwindow.
+         * Recommended that first parameter is 290 larger than x-pos for toolwindow
+         */
+        setLocation(350,100);
         
         //cp = new colorPicker();
         ccd = new ColorChooserDemo();
-        setLocationByPlatform(true);
+        //setLocationByPlatform(true);
 
         componentList = new ArrayList<>();
         sketchTabs = new JTabbedPane();
@@ -215,7 +220,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         forwardButton.setBounds(280, 10, 50, 50);
         sketchTabs.setBounds(20, 110, 1282, 722);
         cloneRadiusSlider.setBounds(720, 30, 215, 20);
-        randomShit.setBounds(340,10,200,50);
+        randomShit.setBounds(927,10,200,50);
         ccd.setBounds(407, -173, 500, 500);
         ccd.setBounds(407, -163, 500, 500);
     }

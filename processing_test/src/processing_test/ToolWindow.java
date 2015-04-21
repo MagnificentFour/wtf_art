@@ -36,9 +36,15 @@ public class ToolWindow extends JFrame implements ActionListener {
      * Constructor for the tool window
      */
     public ToolWindow() throws IOException {
-        setSize(240, 760);
+        setSize(280, 890);
+
+        /**
+         * Sets location of main window in relation to toolwindow.
+         */
+        setLocation(60,100);
+
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setAlwaysOnTop (true);
+        this.setAlwaysOnTop (false);
         components = new HashMap<>();
         layerList = new LinkedHashMap<>();
         layerPanel = new JPanel();
@@ -65,9 +71,6 @@ public class ToolWindow extends JFrame implements ActionListener {
         }
 
         arrangeLayout();
-
-        setLocationByPlatform(true);
-
         setVisible(true);
     }
 
@@ -156,27 +159,36 @@ public class ToolWindow extends JFrame implements ActionListener {
     private void arrangeLayout() {
         setLayout(null);
 
-        add(new JLabel("Velg funksjon:")).setBounds(15, 5, 200, 10);
-        components.get("functionComboBox").setBounds(20, 20, 180, 100);
+        //button.setFont(new Font("Arial", Font.Plain, 40));
 
-        components.get("cloneButton").setBounds(10, 140, 200, 50);
-        components.get("clearButton").setBounds(10, 440, 200, 50);
+        add(new JLabel("Velg funksjon:")).setBounds(10, 10, 220, 15);
+        components.get("functionComboBox").setBounds(10, 30, 240, 100);
 
-        add(new JLabel("Velg størrelse:")).setBounds(10, 305, 200, 10);
-        components.get("sizeSlider").setBounds(5, 315, 200, 20);
+        //First row of buttons
+        components.get("cloneButton").setBounds(10, 140, 120, 50);
+        components.get("setPointsButton").setBounds(130, 140, 120, 50);
 
-        add(new JLabel("Layers: ")).setBounds(10, 365, 200, 15);
-        add(layerPanel).setBounds(10, 375, 250, 475);
+        //Second row
+        components.get("blurButton").setBounds(10, 200, 120, 50);
+        components.get("invertButton").setBounds(130, 200, 120, 50);
 
-        components.get("setPointsButton").setBounds(10, 200, 200, 50);
-        components.get("blurButton").setBounds(10, 260, 200, 50);
-        components.get("invertButton").setBounds(10, 320, 200, 50);
-        components.get("wrappingButton").setBounds(10, 380, 200, 50);
-        add(new JLabel("Velg størrelse:")).setBounds(10, 575, 200, 10);
-        components.get("sizeSlider").setBounds(5, 595, 200, 20);
-        //components.get("squareButton").setBounds(25, 635, 50, 50);
-        //components.get("ellipseButton").setBounds(85, 635, 50, 50);
-        //components.get("hazeButton").setBounds(145, 635, 50, 50);
+
+        //Third row
+        components.get("wrappingButton").setBounds(10, 260, 120, 50);
+        components.get("clearButton").setBounds(130, 260, 120, 50);
+
+        //Fourth row slider+label
+        add(new JLabel("Velg størrelse:")).setBounds(35, 320, 200, 15);
+        components.get("sizeSlider").setBounds(30, 335, 200, 20);
+
+        //Fifth row three somethingbuttons
+        components.get("squareButton").setBounds(50, 375, 50, 50);
+        components.get("ellipseButton").setBounds(110, 375, 50, 50);
+        components.get("hazeButton").setBounds(170, 375, 50, 50);
+
+        //Layerpanel takes rest of window
+        add(new JLabel("Layers: ")).setBounds(10, 445, 200, 15);
+        add(layerPanel).setBounds(10, 465, 250, 475);
     }
 
     /**
@@ -316,6 +328,10 @@ public class ToolWindow extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * Colorgetter
+     * @return color
+     */
     public Color getColor() {
         return cs.getColor();
     }

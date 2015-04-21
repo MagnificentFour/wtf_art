@@ -476,10 +476,6 @@ public class SampleSketch extends PApplet
                 }
                 break;
             case "clone":
-                System.out.println("I'm representing for the gangsters all across the world\n"
-                        + "Still hitting them corners in them low low's girl\n"
-                        + "Still taking my time to perfect the beat\n"
-                        + "And I still got love for the streets, it's the D-R-E");
                 cursor(NORMAL);
                 copying = false;
                 methodState = State.SETPOINTS;
