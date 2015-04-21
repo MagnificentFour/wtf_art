@@ -9,15 +9,11 @@ import java.util.ArrayList;
 public class LayerHandler {
 
     private final ArrayList<Layer> layers;
-    private boolean hasDotting;
     private int dottingIndex;
     private int bigPixIndex;
-    private boolean hasBigPix;
 
     public LayerHandler() {
         layers = new ArrayList<>();
-        hasDotting = false;
-        hasBigPix = false;
         dottingIndex = -1;
         bigPixIndex = -1;
     }
@@ -73,8 +69,6 @@ public class LayerHandler {
             case "Dotting":
                 dottingIndex = layers.indexOf(layer);
         }
-
-        setFuncStat(func, true);
     }
 
     /**
@@ -115,7 +109,6 @@ public class LayerHandler {
                 layers.remove(dottingIndex);
                 dottingIndex = -1;
         }
-        setFuncStat(func, false);
     }
 
     /**
@@ -171,19 +164,6 @@ public class LayerHandler {
     public ArrayList<Layer> getLayers() {
 
         return layers;
-
-    }
-
-    public void setFuncStat(String func, boolean stat) {
-
-        switch (func) {
-
-            case "Dotting":
-                hasDotting = true;
-                break;
-            case "BigPix":
-                hasBigPix = true;
-        }
 
     }
 

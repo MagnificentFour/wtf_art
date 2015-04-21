@@ -271,8 +271,11 @@ public class SampleSketch extends PApplet
 //        methodState = State.NOACTION;
         PGraphics gr = dotRep.getResult();
 
+        Layer dotLayer = new Layer(gr);
+        dotLayer.setLayerFunc(methodState);
+
         if (index < 0) {
-            layerHandler.addLayer(new Layer(gr), "Dotting");
+            layerHandler.addLayer(dotLayer, "Dotting");
         } else {
 //            layerHandler.replaceLayer(index, new Layer(dotRep.getResult()));
             layerHandler.getLayers().get(index).setGraphics(gr);
@@ -296,8 +299,11 @@ public class SampleSketch extends PApplet
         pxlation.init();
         pxlation.runFunction();
 
+        Layer pxlLayer = new Layer(pxlation.getResult());
+        pxlLayer.setLayerFunc(methodState);
+
         if (index < 0) {
-            layerHandler.addLayer(new Layer(pxlation.getResult()), "BigPix");
+            layerHandler.addLayer(pxlLayer, "BigPix");
         } else {
             layerHandler.getLayers().get(index).setGraphics(pxlation.getResult());
         }
@@ -542,15 +548,14 @@ public class SampleSketch extends PApplet
 
         if (!source.getValueIsAdjusting()) {
             pxSize = source.getValue();
-            redraw();
-            return;
+            mainState = State.EDITING;
+            methodState = selectedLayer.getLayerFunc();
         }
     }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        redraw();
-        System.out.println("state changed");
+        cloneSource = (JSlider) e.getSource();
         if (!cloneSource.getValueIsAdjusting()) {
             if (methodState == State.INVERT && firstState == false) {
                 importState(tracker.getPrevEntry(), methodState);
@@ -562,7 +567,6 @@ public class SampleSketch extends PApplet
             circle.resize(cloneRadius, cloneRadius);
             firstState = false;
             System.out.println(cloneRadius);
-            redraw();
         }
 
     }
