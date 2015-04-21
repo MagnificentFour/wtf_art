@@ -549,7 +549,7 @@ public class SampleSketch extends PApplet
         if (!source.getValueIsAdjusting()) {
             pxSize = source.getValue();
             mainState = State.EDITING;
-            //methodState = selectedLayer.getLayerFunc();
+            methodState = selectedLayer.getLayerFunc();
         }
     }
 
