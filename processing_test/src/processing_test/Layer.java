@@ -226,6 +226,5 @@ public class Layer implements ItemListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         remove = true;
-        System.out.println("Roger remove is " + remove);
     }
 }
