@@ -37,6 +37,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     int pxSize = 20;
     int cloneRadius = 60;
     int waitingPoint = 0;
+    int figureState = 0;
     PImage bgImg;
     PImage circle;
     PImage point1;
@@ -97,8 +98,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         }
 
         if (copying == true) {
-
-            //cursor(circle, cloneRadius/2, cloneRadius/2);
             if (mousePressed == true) {
                 Point p1 = clTool.getPoint1();
                 Point p2 = clTool.getPoint2();
@@ -158,85 +157,85 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                     float r = red(colour);
                     float b = blue(colour);
                     float g = green(colour);
-                    if (cloneRadius > 59) {
+                    if (cloneRadius > 89) {
                         int c = color(g, r, r);
                         set(i, t, c);
-                    } else if (cloneRadius > 57) {
+                    } else if (cloneRadius > 86) {
                         int c = color(g, b, b);
                         set(i, t, c);
-                    } else if (cloneRadius > 55) {
+                    } else if (cloneRadius > 83) {
                         int c = color(g, r, b);
                         set(i, t, c);
-                    } else if (cloneRadius > 53) {
+                    } else if (cloneRadius > 80) {
                         int c = color(g, b, r);
                         set(i, t, c);
-                    } else if (cloneRadius > 51) {
+                    } else if (cloneRadius > 77) {
                         int c = color(b, g, g);
                         set(i, t, c);
-                    } else if (cloneRadius > 49) {
+                    } else if (cloneRadius > 74) {
                         int c = color(b, r, r);
                         set(i, t, c);
-                    } else if (cloneRadius > 47) {
+                    } else if (cloneRadius > 71) {
                         int c = color(b, g, r);
                         set(i, t, c);
-                    } else if (cloneRadius > 45) {
+                    } else if (cloneRadius > 68) {
                         int c = color(b, r, g);
                         set(i, t, c);
-                    } else if (cloneRadius > 43) {
+                    } else if (cloneRadius > 65) {
                         int c = color(r, b, b);
                         set(i, t, c);
-                    } else if (cloneRadius > 41) {
+                    } else if (cloneRadius > 62) {
                         int c = color(r, g, g);
                         set(i, t, c);
-                    } else if (cloneRadius > 39) {
+                    } else if (cloneRadius > 59) {
                         int c = color(r, b, g);
                         set(i, t, c);
-                    } else if (cloneRadius > 37) {
+                    } else if (cloneRadius > 56) {
                         int c = color(g, b, g);
                         set(i, t, c);
-                    } else if (cloneRadius > 35) {
+                    } else if (cloneRadius > 53) {
                         int c = color(r, r, r);
                         set(i, t, c);
-                    } else if (cloneRadius > 33) {
+                    } else if (cloneRadius > 50) {
                         int c = color(g, g, g);
                         set(i, t, c);
-                    } else if (cloneRadius > 31) {
+                    } else if (cloneRadius > 47) {
                         int c = color(b, b, b);
                         set(i, t, c);
-                    } else if (cloneRadius > 29) {
+                    } else if (cloneRadius > 44) {
                         int c = color(g, g, r);
                         set(i, t, c);
-                    } else if (cloneRadius > 27) {
+                    } else if (cloneRadius > 41) {
                         int c = color(g, g, b);
                         set(i, t, c);
-                    } else if (cloneRadius > 25) {
+                    } else if (cloneRadius > 38) {
                         int c = color(r, r, g);
                         set(i, t, c);
-                    } else if (cloneRadius > 23) {
+                    } else if (cloneRadius > 35) {
                         int c = color(r, r, b);
                         set(i, t, c);
-                    } else if (cloneRadius > 21) {
+                    } else if (cloneRadius > 32) {
                         int c = color(b, b, r);
                         set(i, t, c);
-                    } else if (cloneRadius > 19) {
+                    } else if (cloneRadius > 29) {
                         int c = color(b, b, g);
                         set(i, t, c);
-                    } else if (cloneRadius > 17) {
+                    } else if (cloneRadius > 26) {
                         int c = color(b, g, b);
                         set(i, t, c);
-                    } else if (cloneRadius > 15) {
+                    } else if (cloneRadius > 23) {
                         int c = color(b, r, b);
                         set(i, t, c);
-                    } else if (cloneRadius > 13) {
+                    } else if (cloneRadius > 20) {
                         int c = color(r, g, r);
                         set(i, t, c);
-                    } else if (cloneRadius > 11) {
+                    } else if (cloneRadius > 17) {
                         int c = color(r, b, r);
                         set(i, t, c);
-                    } else if (cloneRadius > 9) {
+                    } else if (cloneRadius > 14) {
                         int c = color(g, r, g);
                         set(i, t, c);
-                    } else if (cloneRadius > 7) {
+                    } else if (cloneRadius > 11) {
                         int c = color(r, g, b);
                         set(i, t, c);
                     }
@@ -289,6 +288,39 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 image(point3, mouseX + (p1x - p2x), mouseY + (p1y - p2y));
             } else if (methodState == State.BLUR) {
                 image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
+
+            } else if (methodState == State.WRAPPING) {
+                int xMid = bgImg.width / 2;
+                int yMid = bgImg.height / 2;
+                currentColor = cp.getColor();
+                float cr = currentColor.getRed();
+                float cb = currentColor.getBlue();
+                float cg = currentColor.getGreen();
+                int c = color(cr, cg, cb);
+                for (int i = 0; i <= bgImg.width; i++) {
+                    for (int t = 0; t <= bgImg.height; t++) {
+                        if (figureState == 1) {
+                            if (dist(i, t, xMid, yMid) > cloneRadius * 3) {
+                                set(i, t, c);
+                            }
+                        } else if (figureState == 0) {
+                            if ((i < (xMid - (cloneRadius * 3)) || i > (xMid + (cloneRadius * 3))) || ((t < (yMid - (cloneRadius * 3))) || t > (yMid + (cloneRadius * 3)))) {
+                                set(i, t, c);
+                            }
+                        } else if (figureState == 2) {
+                            if (dist(i, t, xMid, yMid) > cloneRadius * 3) {
+                                if(dist(i, t, xMid, yMid) < cloneRadius * 6) {
+                                    int u = (int)dist(i, t, xMid, yMid);
+                                    int r = rand.nextInt(u);
+                                    if(r > cloneRadius) {
+                                        set(i, t, c);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
 
         } else {
@@ -361,7 +393,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         gogo = true;
 //        methodState = State.NOACTION;
 
-//        loop();
+        loop();
         PImage img = dotRep.getResult();
         image(img, 0, 0);
 
@@ -546,7 +578,8 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        System.out.println("FoR FUCKS SAKE!");
+        
         switch (e.getActionCommand()) {
             case "run":
                 gogo = false;
@@ -641,6 +674,20 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 } else {
                     methodState = previousState;
                 }
+                break;
+            case "wrapping":
+                methodState = State.WRAPPING;
+                loop();
+                break;
+            case "square":
+                figureState = 0;
+                break;
+            case "ellipse":
+                figureState = 1;
+                break;
+            case "haze":
+                figureState = 2;
+                break;
         }
 
     }
@@ -677,6 +724,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             circle = loadImage("graphics/circle2.png");
             circle.resize(cloneRadius, cloneRadius);
             firstState = false;
+            System.out.println(cloneRadius);
             redraw();
         }
 

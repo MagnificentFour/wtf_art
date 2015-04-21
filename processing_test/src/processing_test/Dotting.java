@@ -73,7 +73,7 @@ public class Dotting extends PApplet {
                 } else {
                     
                     ellipseList.add(new Ellipse((i * pxSize) + (pxSize), (j * pxSize) + (pxSize), createSize, createSize));
-                    //loop();
+                    loop();
                 }
             }
         }
