@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package processing_test;
 
 import java.awt.BorderLayout;
@@ -16,7 +10,9 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 
 /**
- *
+ * Instances of this class manages the view of layers belonging to a specific sketch.
+ * It keeps track of layer view items and makes a JPanel of the components so that
+ * it can easily be displayed in the tool window.
  * @author nikla_000
  */
 public class LayerView extends JPanel implements ActionListener {
@@ -92,25 +88,6 @@ public class LayerView extends JPanel implements ActionListener {
         repaint();
     }
     
-    public void refreshLayers(ArrayList<Layer> layers) {
-        
-        layerDisplay.removeAll();
-        
-        Set<LayerViewItem> keys = layerList.keySet();
-        
-        for(LayerViewItem panel : keys) {
-            Layer layer = layerList.get(panel);
-            layer.isDisplayed(false);
-        }
-        
-        layerList.clear();
-        
-        for(Layer layer : layers) {
-            addLayerView(layer);
-            layer.isDisplayed(true);
-        }
-    }
-
     /**
      * Set the selected layer.
      *

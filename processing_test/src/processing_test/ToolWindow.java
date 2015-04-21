@@ -69,6 +69,11 @@ public class ToolWindow extends JFrame {
         setVisible(true);
     }
     
+    /**
+     * Removes a layer view and replaces it. Used when switching between sketches using
+     * tabs.
+     * @param layerView Sketch-specific layer view.
+     */
     public void refreshLayerView(LayerView layerView) {
         
         remove(scrollPane);
