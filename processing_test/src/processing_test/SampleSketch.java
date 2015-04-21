@@ -426,14 +426,11 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         
         MapTo map = new MapTo();
         JPanel p = new JPanel();
-//        JPanel pTool = new JPanel();
         p.setSize(bgImg.width, bgImg.height);
-//        pTool.setSize(80, 850);
         p.add(mapDone);
         p.add(mapSlider);
         f.add(p);
         p.add(map);
-        
         
         mapSlider.addChangeListener(map);
         mapDone.addActionListener(new ActionListener() {
@@ -443,35 +440,13 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 image(map.function(), 0, 0);
                 //p.removeAll();
                 f.dispose();
-                redraw();
-                
+                redraw();       
         }
-    });
-//        f.addMouseListener(new MouseAdapter() {
-//            
-//            public void mousePressed(MouseEvent s) {
-//             System.out.print("FUCKING ANGRY SHIAT FUCK THIS SHIAT  SKADSKSMDASKSDM");
-//                
-//                f.setVisible(false);
-//                p.setVisible(false);
-//                image(map.function(), 0, 0);
-//                redraw();;
-//                f.dispose();
-//                
-//            } 
-//        });
+    });  
         map.init();
         map.setupSketch(this.get());
-        // map.function();
-
+        
         f.setVisible(true);
-//        f.addWindowListener(new WindowAdapter() {
-//
-//            public void windowClosing(WindowEvent e) {
-//                image(map.function(), 0, 0);
-//                 System.out.println("WINDOW IS FUCKING CLOSED");
-//            }
-//        });
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
                 
 
