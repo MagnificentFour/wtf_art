@@ -31,6 +31,7 @@ public class ToolWindow extends JFrame implements ActionListener {
     private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
     private JPanel layerPanel;
     private Box layerDisplay;
+    private JScrollPane scrollPane;
 
     /**
      * Constructor for the tool window
@@ -41,13 +42,14 @@ public class ToolWindow extends JFrame implements ActionListener {
         /**
          * Sets location of main window in relation to toolwindow.
          */
-        setLocation(60,100);
+        setLocation(60, 100);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setAlwaysOnTop (false);
+        this.setAlwaysOnTop(false);
         components = new HashMap<>();
         layerList = new LinkedHashMap<>();
         layerPanel = new JPanel();
+        scrollPane = new JScrollPane(layerPanel);
         layerDisplay = Box.createVerticalBox();
         layerPanel.add(layerDisplay);
 //        addLayerView(new Layer());
@@ -76,18 +78,17 @@ public class ToolWindow extends JFrame implements ActionListener {
 
     /**
      * Adds a view of the newly added layer to the tool window.
+     *
      * @param layer The new layer.
      */
     public void addLayerView(Layer layer) {
-
-        
         ImageIcon icon = layer.getImageIcon();
         JButton b = layer.getRemoveButton();
         int layerNum = layerList.size() + 1;
         layer.setLayerNum(layerNum);
-        
+
         b.addActionListener(this);
-        
+
         LayerView newLayerView = new LayerView(icon, b, layerNum, layer.getCheckBox());
 
         // Add a mouse listener to the panel view of the layer.
@@ -135,9 +136,10 @@ public class ToolWindow extends JFrame implements ActionListener {
         validate();
         repaint();
     }
-    
+
     /**
      * Set the selected layer.
+     *
      * @param selectedPanel Currently selected layer panel.
      */
     private void setSelected(LayerView selectedPanel) {
@@ -187,7 +189,7 @@ public class ToolWindow extends JFrame implements ActionListener {
 
         //Layerpanel takes rest of window
         add(new JLabel("Layers: ")).setBounds(10, 445, 200, 15);
-        add(layerPanel).setBounds(10, 465, 250, 475);
+        add(scrollPane).setBounds(10, 465, 250, 380);
     }
 
     /**
@@ -208,8 +210,8 @@ public class ToolWindow extends JFrame implements ActionListener {
         Integer[] intArray = new Integer[functionNames.length];
 
         for (int i = 0;
-                i < functionNames.length;
-                i++) {
+             i < functionNames.length;
+             i++) {
 
             intArray[i] = i;
             functionIcons[i] = createImageIcon("graphics/" + functionNames[i] + ".png");
@@ -251,7 +253,7 @@ public class ToolWindow extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton source = (JButton) e.getSource();
-        
+
         Set<LayerView> keys = layerList.keySet();
         Iterator it = keys.iterator();
         while (it.hasNext()) {
@@ -329,6 +331,7 @@ public class ToolWindow extends JFrame implements ActionListener {
 
     /**
      * Colorgetter
+     *
      * @return color
      */
     public Color getColor() {

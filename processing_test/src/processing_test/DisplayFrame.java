@@ -82,7 +82,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         backButton = new JButton("<");
         forwardButton = new JButton(">");
         tw = new ToolWindow();
-        randomShit = new JButton("Surprise motherfucker!");
+        randomShit = new JButton("Surprise!");
 
         cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
 
@@ -220,7 +220,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         forwardButton.setBounds(280, 10, 50, 50);
         sketchTabs.setBounds(20, 110, 1282, 722);
         cloneRadiusSlider.setBounds(720, 30, 215, 20);
-        randomShit.setBounds(927,10,200,50);
+        randomShit.setBounds(927,10,90,30);
         ccd.setBounds(407, -173, 500, 500);
         ccd.setBounds(407, -163, 500, 500);
     }

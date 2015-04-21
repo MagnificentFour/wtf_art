@@ -48,6 +48,7 @@ public class LayerView extends JPanel{
     private void addComponents() {
         
         hBox.add(new JLabel(layerNum.toString()));
+        hBox.add(Box.createHorizontalStrut(3));
         hBox.add(iconLabel);
         hBox.add(checkBox);
         hBox.add(b);
