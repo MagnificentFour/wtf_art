@@ -327,6 +327,10 @@ public class ToolWindow extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * Colorgetter
+     * @return color
+     */
     public Color getColor() {
         return cs.getColor();
     }
