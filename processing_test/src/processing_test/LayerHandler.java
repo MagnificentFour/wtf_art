@@ -42,9 +42,15 @@ public class LayerHandler {
      * @param layer
      */
     public void addLayer(Layer layer) {
+        if (layers.isEmpty()) {
+            layers.add(layer);
+        } else {
+            layers.add(layers.size() - 1, layer);
+        }
+    }
 
+    public void addCursorLayer(Layer layer) {
         layers.add(layer);
-
     }
 
     /**
@@ -54,7 +60,7 @@ public class LayerHandler {
      */
     public void addLayer(Layer layer, String func) {
 
-        layers.add(layer);
+        addLayer(layer);
 
         switch (func) {
             case "BigPix":
