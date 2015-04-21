@@ -174,9 +174,9 @@ public class ToolWindow extends JFrame implements ActionListener {
         components.get("wrappingButton").setBounds(10, 380, 200, 50);
         add(new JLabel("Velg størrelse:")).setBounds(10, 575, 200, 10);
         components.get("sizeSlider").setBounds(5, 595, 200, 20);
-        components.get("squareButton").setBounds(25, 635, 50, 50);
-        components.get("ellipseButton").setBounds(85, 635, 50, 50);
-        components.get("hazeButton").setBounds(145, 635, 50, 50);
+        //components.get("squareButton").setBounds(25, 635, 50, 50);
+        //components.get("ellipseButton").setBounds(85, 635, 50, 50);
+        //components.get("hazeButton").setBounds(145, 635, 50, 50);
     }
 
     /**
