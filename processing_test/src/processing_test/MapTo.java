@@ -38,10 +38,6 @@ public class MapTo extends PApplet implements ChangeListener, ActionListener{
 
     }
 
-//    public void setSize(int sizeWidth, int sizeHeight) {
-//        size(sizeWidth, sizeHeight, P3D);
-//        
-//    }
     public void setupSketch(PImage image) {
         bgImg = image;
         sizeWidth = bgImg.width;
@@ -93,7 +89,7 @@ public class MapTo extends PApplet implements ChangeListener, ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-       this.cellsize = cellsize + 5;
+       this.cellsize = cellsize + 2;
        setup();
        
     }
