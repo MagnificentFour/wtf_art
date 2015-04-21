@@ -35,7 +35,7 @@ public class SampleSketch extends PApplet
     PImage point2;
     PImage point3;
     PGraphics pg;
-    PGraphics cursorP ;
+    PGraphics cursorP;
     boolean noSave = false;
     boolean copying = false;
     Random rand = new Random();
@@ -53,6 +53,7 @@ public class SampleSketch extends PApplet
     State methodState = State.CLEAR;
     State nextState = State.CLEAR;
     State previousState;
+    State mainState = State.VIEWING;
     int cellsize = 2; // Dimensions of each cell in the grid
     int cols, rows;   // Number of columns and rows in our system
 
@@ -105,7 +106,7 @@ public class SampleSketch extends PApplet
 
     @Override
     public void draw() {
-        
+
 //        background(255);
         if (tracker.hasNext()) {
             fwd.setEnabled(true);
@@ -156,50 +157,54 @@ public class SampleSketch extends PApplet
 //                hasChanged = true;
 //                //not working
 //            }
-//            
-            if (methodState == State.DOTREP) {
-                dotRep(layerHandler.checkFuncStat("Dotting"));
-            } else if (methodState == State.PXLATION) {
-                pxlation(layerHandler.checkFuncStat("BigPix"));
-            } else if (methodState == State.CLEAR) {
-                //image(layerHandler.getLayers().get(0).getLayerImage(), 0, 0);
-                tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-            } else if (methodState == State.MAPTO) {
-                mapTo();
-            } else if (methodState == State.SETPOINTS) {
-                textFont(createFont("Arial", 16, true), 16);
-                fill(0);
-                if (waitingPoint == 0) {
-                    text("Set 1st reference point", mouseX, mouseY);
-                } else {
-                    text("Set 2nd reference point", mouseX, mouseY);
+            if (mainState == State.EDITING) {
+                if (methodState == State.DOTREP) {
+                    System.out.println("gogogogogogoog");
+                    dotRep(layerHandler.checkFuncStat("Dotting"));
+                } else if (methodState == State.PXLATION) {
+                    pxlation(layerHandler.checkFuncStat("BigPix"));
+                } else if (methodState == State.CLEAR) {
+                    //image(layerHandler.getLayers().get(0).getLayerImage(), 0, 0);
+                    tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
+                } else if (methodState == State.MAPTO) {
+                    mapTo();
+                } else if (methodState == State.SETPOINTS) {
+                    textFont(createFont("Arial", 16, true), 16);
+                    fill(0);
+                    if (waitingPoint == 0) {
+                        text("Set 1st reference point", mouseX, mouseY);
+                    } else {
+                        text("Set 2nd reference point", mouseX, mouseY);
+                    }
+                } else if (methodState == State.IMPORT) {
+                    methodState = nextState;
+                } else if (methodState == State.CLONE) {
+                    cursorLayer.setShow(true);
+                    cursorP.beginDraw();
+                    cursorP.background(0, 0);
+                    cursorP.image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
+                    Point ppoint1 = clTool.getPoint1();
+                    Point ppoint2 = clTool.getPoint2();
+                    int p1x = ppoint1.x;
+                    int p1y = ppoint1.y;
+                    int p2x = ppoint2.x;
+                    int p2y = ppoint2.y;
+                    cursorP.image(point1, p1x, p1y);
+                    cursorP.image(point2, p2x, p2y);
+                    cursorP.image(point3, mouseX + (p1x - p2x), mouseY + (p1y - p2y));
+                    cursorP.endDraw();
+                } else if (methodState == State.BLUR) {
+                    cursorLayer.setShow(true);
+                    cursorP.beginDraw();
+                    cursorP.background(0, 0);
+                    cursorP.image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
+                    cursorP.endDraw();
                 }
-            } else if (methodState == State.IMPORT) {
-                methodState = nextState;
-            } else if (methodState == State.CLONE) {
-                cursorLayer.setShow(true);
-                cursorP.beginDraw();
-                cursorP.background(0, 0);
-                cursorP.image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
-                Point ppoint1 = clTool.getPoint1();
-                Point ppoint2 = clTool.getPoint2();
-                int p1x = ppoint1.x;
-                int p1y = ppoint1.y;
-                int p2x = ppoint2.x;
-                int p2y = ppoint2.y;
-                cursorP.image(point1, p1x, p1y);
-                cursorP.image(point2, p2x, p2y);
-                cursorP.image(point3, mouseX + (p1x - p2x), mouseY + (p1y - p2y));
-                cursorP.endDraw();
-            } else if (methodState == State.BLUR) {
-                cursorLayer.setShow(true);
-                cursorP.beginDraw();
-                cursorP.background(0, 0);
-                cursorP.image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
-                cursorP.endDraw();
+
             }
+            System.out.println(cloneRadius);
+            drawFunc(selectedLayer.getGraphics());
         }
-        drawFunc(selectedLayer.getGraphics());
         //methodState = State.NOACTION;
     }
 
@@ -279,6 +284,7 @@ public class SampleSketch extends PApplet
 
         hasChanged = false;
         currentColor = cp.getColor();
+        mainState = State.VIEWING;
     }
 
     /**
@@ -298,7 +304,7 @@ public class SampleSketch extends PApplet
 
 //        image(pxlation.getResult(), 0, 0);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-
+        mainState = State.VIEWING;
 //        redraw();
     }
 
@@ -399,10 +405,12 @@ public class SampleSketch extends PApplet
             case "Dots":
                 noSave = true;
                 methodState = State.DOTREP;
+                mainState = State.EDITING;
                 break;
             case "Squares":
                 background(255);
                 methodState = State.PXLATION;
+                mainState = State.EDITING;
                 break;
             case "Original":
                 background(255);
@@ -424,12 +432,6 @@ public class SampleSketch extends PApplet
         System.out.println("FoR FUCKS SAKE!");
 
         switch (e.getActionCommand()) {
-            case "run":
-                noSave = false;
-                background(255);
-                methodState = State.DOTREP;
-                redraw();
-                break;
             case "dot":
                 noSave = true;
                 //gogo = false;
@@ -453,12 +455,6 @@ public class SampleSketch extends PApplet
                 noSave = false;
                 methodState = State.MAPTO;
                 redraw();
-            case "double":
-                frameRate(120);
-                break;
-            case "triple":
-                frameRate(180);
-                break;
             case "forward":
                 if (tracker.hasChanged()) {
                     importState(tracker.getNextEntry(), methodState);
@@ -479,19 +475,20 @@ public class SampleSketch extends PApplet
                 cursor(NORMAL);
                 copying = false;
                 methodState = State.SETPOINTS;
+                mainState = State.EDITING;
                 loop();
                 break;
             case "setPoints":
                 cursor(NORMAL);
                 copying = false;
                 methodState = State.SETPOINTS;
+                mainState = State.EDITING;
                 loop();
                 break;
             case "blur":
                 if (methodState != State.BLUR) {
                     previousState = methodState;
-                    System.out.println("It's been a hard day's night, and I'd been working like a dog\n"
-                            + "It's been a hard day's night, I should be sleeping like a log");
+                    mainState = State.EDITING;
                     methodState = State.BLUR;
                     loop();
                     break;
@@ -504,8 +501,8 @@ public class SampleSketch extends PApplet
                     previousState = methodState;
                     noLoop();
                     firstState = true;
-                    System.out.println("Many that live deserve death.\nAnd some that die deserve life.\nCan you give it to them?\nThen do not be too eager to deal out death in judgement.\nFor even the very wise cannot see all ends.\n");
                     methodState = State.INVERT;
+                    mainState = State.EDITING;
                     redraw();
                 } else {
                     methodState = previousState;
@@ -513,6 +510,7 @@ public class SampleSketch extends PApplet
                 break;
             case "wrapping":
                 methodState = State.WRAPPING;
+                mainState = State.EDITING;
                 loop();
                 break;
             case "square":
@@ -552,7 +550,7 @@ public class SampleSketch extends PApplet
     @Override
     public void itemStateChanged(ItemEvent e) {
         redraw();
-
+        System.out.println("state changed");
         if (!cloneSource.getValueIsAdjusting()) {
             if (methodState == State.INVERT && firstState == false) {
                 importState(tracker.getPrevEntry(), methodState);
@@ -589,6 +587,7 @@ public class SampleSketch extends PApplet
                         break;
                     }
                 }
+                break;
             case INVERT:
                 invertEdit(pg);
                 break;
@@ -648,6 +647,7 @@ public class SampleSketch extends PApplet
     }
 
     private void invertEdit(PGraphics pg) {
+        System.out.println("lololo.olol");
         for (int i = 1; i <= sizeWidth; i++) {
             for (int t = 1; t <= sizeHeight; t++) {
                 int colour = color(get(i, t));

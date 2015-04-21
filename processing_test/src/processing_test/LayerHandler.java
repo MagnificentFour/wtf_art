@@ -49,7 +49,7 @@ public class LayerHandler {
         if (layers.isEmpty()) {
             layers.add(layer);
         } else {
-            layers.add(layers.size() - 2, layer);
+            layers.add(layers.size() - 1, layer);
         }
     }
 
