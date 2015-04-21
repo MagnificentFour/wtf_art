@@ -77,7 +77,6 @@ public class MapTo extends PApplet implements ChangeListener {
                     popMatrix();
 
                 }
-
             }
         }
     }
