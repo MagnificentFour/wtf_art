@@ -9,15 +9,11 @@ import java.util.ArrayList;
 public class LayerHandler {
 
     private final ArrayList<Layer> layers;
-    private boolean hasDotting;
     private int dottingIndex;
     private int bigPixIndex;
-    private boolean hasBigPix;
 
     public LayerHandler() {
         layers = new ArrayList<>();
-        hasDotting = false;
-        hasBigPix = false;
         dottingIndex = -1;
         bigPixIndex = -1;
     }
@@ -49,7 +45,7 @@ public class LayerHandler {
         if (layers.isEmpty()) {
             layers.add(layer);
         } else {
-            layers.add(layers.size() - 2, layer);
+            layers.add(layers.size() - 1, layer);
         }
     }
 
@@ -79,8 +75,6 @@ public class LayerHandler {
             case "Dotting":
                 dottingIndex = layers.indexOf(layer);
         }
-
-        setFuncStat(func, true);
     }
 
     /**
@@ -125,7 +119,6 @@ public class LayerHandler {
                 layers.remove(dottingIndex);
                 dottingIndex = -1;
         }
-        setFuncStat(func, false);
     }
 
     /**
@@ -194,6 +187,8 @@ public class LayerHandler {
     /**
      * TODO Document ples
      *
+     * Kommentera ut for å se om merge fungerer
+     *
      * @param func
      * @param stat
      */
@@ -202,10 +197,10 @@ public class LayerHandler {
         switch (func) {
 
             case "Dotting":
-                hasDotting = true;
+           //     hasDotting = true;
                 break;
             case "BigPix":
-                hasBigPix = true;
+            //    hasBigPix = true;
         }
 
     }

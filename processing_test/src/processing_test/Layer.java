@@ -29,6 +29,7 @@ public class Layer implements ItemListener, ActionListener {
     private int currentLayerNum;
     private JCheckBox checkShow;
     private JButton removeButton;
+    private State layerFunction;
 
     /**
      * Constructor with no parameters. Generally only called by the other constructors.
@@ -173,6 +174,14 @@ public class Layer implements ItemListener, ActionListener {
         this.remove = remove;
     }
 
+    public void setLayerFunc(State layerFunc) {
+        layerFunction = layerFunc;
+    }
+    
+    public State getLayerFunc() {
+        return layerFunction;
+    }
+    
     /**
      * @return
      */
@@ -223,6 +232,5 @@ public class Layer implements ItemListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         remove = true;
-        System.out.println("Roger remove is " + remove);
     }
 }
