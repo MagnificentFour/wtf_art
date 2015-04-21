@@ -17,30 +17,29 @@ import processing.opengl.*;
  *
  * @author Oystein
  */
-public class MapTo extends PApplet implements ChangeListener{
- 
+public class MapTo extends PApplet implements ChangeListener {
+
     PImage bgImg;
-    int cellsize = 10; // Dimensions of each cell in the grid
+    int cellsize = 1; // Dimensions of each cell in the grid
     int cols, rows;   // Number of columns and rows in our system
     int sizeWidth;
     int sizeHeight;
     int changeValue = 0;
-    
+
     @Override
     public void setup() {
-       size(1280, 960, P3D);
+        size(1280, 960, P3D);
 
         cols = sizeWidth / cellsize;             // Calculate # of columns
         rows = sizeHeight / cellsize;            // Calculate # of rows
         background(0);
-        
+
     }
-    
+
 //    public void setSize(int sizeWidth, int sizeHeight) {
 //        size(sizeWidth, sizeHeight, P3D);
 //        
 //    }
-
     public void setupSketch(PImage image) {
         bgImg = image;
         sizeWidth = bgImg.width;
@@ -49,9 +48,12 @@ public class MapTo extends PApplet implements ChangeListener{
         rows = bgImg.height / cellsize;            // Calculate # of rows
     }
 
+//    public void incrementSize() {
+//        cellsize = cellsize + 5;
+//    }
+
     public void draw() {
-        
-        
+
         if (bgImg != null) {
             loadPixels();
             // Begin loop for columns
@@ -73,7 +75,7 @@ public class MapTo extends PApplet implements ChangeListener{
                     fill(c);
                     rect(0, 0, cellsize, cellsize);
                     popMatrix();
-                    
+
                 }
 
             }
@@ -82,15 +84,13 @@ public class MapTo extends PApplet implements ChangeListener{
 
     public PImage function() {
 
- System.out.print("FUCKING ANGRY SHIAT FUCK THIS SHIAT  SKADSKSMDASKSDMmakdamdasasdmasmdq22222");
- return this.get();
-    } 
+        return this.get();
+    }
 
     @Override
     public void stateChanged(ChangeEvent e) {
-       JSlider source = (JSlider) e.getSource();
-       changeValue = source.getValue();
+        JSlider source = (JSlider) e.getSource();
+        changeValue = source.getValue();
     }
-   
-   
+
 }

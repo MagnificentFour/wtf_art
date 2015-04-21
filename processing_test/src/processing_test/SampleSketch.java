@@ -58,6 +58,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     JButton fwd;
     JButton back;
     JButton mapDone;
+    JButton cellSize;
     CloneTool clTool = new CloneTool();
 
     State methodState = State.CLEAR;
@@ -72,6 +73,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     JSlider source;
     JSlider cloneSource;
     JSlider mapSlider;
+    JSlider pxSlider;
 
     ChangeTracker tracker = new ChangeTracker();
 
@@ -420,14 +422,17 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         JFrame f = new JFrame();
         f.setSize(1360, 850);
         mapDone = new JButton("Done");
+        cellSize = new JButton("Performance");
         mapSlider = new JSlider(JSlider.HORIZONTAL, 1, 1280, 100);
-        mapSlider.setBounds(50, 10, 15, 15);
+        mapSlider.setBounds(20, 10, 15, 15);
+        cellSize.setBounds(10, 10, 15, 15);
         mapDone.setBounds(1, 10, 20, 20);
         
         MapTo map = new MapTo();
         JPanel p = new JPanel();
         p.setSize(bgImg.width, bgImg.height);
         p.add(mapDone);
+        p.add(cellSize);
         p.add(mapSlider);
         f.add(p);
         p.add(map);
@@ -438,11 +443,16 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
              f.setVisible(false);
                 p.setVisible(false);
                 image(map.function(), 0, 0);
-                //p.removeAll();
-                f.dispose();
+                methodState = State.NOACTION;
                 redraw();       
+                f.dispose();
         }
     });  
+//        cellSize.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent s) {
+//             map.incrementSize();
+//            }
+//        });
         map.init();
         map.setupSketch(this.get());
         
@@ -681,13 +691,13 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         source = (JSlider) e.getSource();
         cloneSource = (JSlider) e.getSource();
         
-        if(source == mapSlider) {
-            
-        }
         
         if (!source.getValueIsAdjusting()) {
             pxSize = source.getValue();
             redraw();
+        }
+        if(cloneSource == pxSlider) {
+            
         }
         if (!cloneSource.getValueIsAdjusting()) {
             if (methodState == State.INVERT && firstState == false) {
