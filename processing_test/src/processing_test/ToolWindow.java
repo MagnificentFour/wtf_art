@@ -136,6 +136,24 @@ public class ToolWindow extends JFrame implements ActionListener {
         validate();
         repaint();
     }
+    
+    public void refreshLayers() {
+        
+        layerDisplay.removeAll();
+        
+        Set<LayerView> keys = layerList.keySet();
+        
+        for(LayerView panel : keys) {
+            Layer layer = layerList.get(panel);
+            layer.isDisplayed(false);
+        }
+        
+        layerList.clear();
+        layerDisplay.revalidate();
+        layerDisplay.repaint();
+        validate();
+        repaint();
+    }
 
     /**
      * Set the selected layer.
