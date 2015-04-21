@@ -33,8 +33,10 @@ public class LayerHandler {
         if (layers.size() < 1) {
             layers.add(layer);
         } else {
-            layers.remove(0);
-            layers.add(0, layer);
+            Layer bgLayer = layers.get(0);
+            bgLayer.setGraphics(layer.getGraphics());
+//            layers.remove(0);
+//            layers.add(0, layer);
         }
 
     }

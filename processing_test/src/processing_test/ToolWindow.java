@@ -20,7 +20,7 @@ import javax.swing.border.EtchedBorder;
 public class ToolWindow extends JFrame implements ActionListener {
 
     private HashMap<String, Component> components;
-    private LinkedHashMap<JPanel, Layer> layerList;
+    private LinkedHashMap<LayerView, Layer> layerList;
     private ImageIcon[] functionIcons;
     private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
     private JPanel layerPanel;
@@ -55,60 +55,54 @@ public class ToolWindow extends JFrame implements ActionListener {
 
         setVisible(true);
     }
-
+    
     /**
      * Adds a view of the newly added layer to the tool window.
      * @param layer The new layer.
      */
     public void addLayerView(Layer layer) {
 
+        
         ImageIcon icon = layer.getImageIcon();
-        Box hBox = Box.createHorizontalBox();
         JButton b = layer.getRemoveButton();
-
+        int layerNum = layerList.size() + 1;
+        layer.setLayerNum(layerNum);
+        
         b.addActionListener(this);
-
-        layer.setLayerNum(layerList.size() + 1);
-
-        hBox.add(new JLabel(Integer.toString(layer.layerNum()) + ". "));
-        hBox.add(new JLabel(icon));
-        hBox.add(layer.getCheckBox());
-        hBox.add(b);
-        hBox.add(Box.createVerticalStrut(100));
-
-        JPanel newPanel = new JPanel();
-        newPanel.add(hBox);
+        
+        LayerView newLayerView = new LayerView(icon, b, layerNum, layer.getCheckBox());
 
         // Add a mouse listener to the panel view of the layer.
-        newPanel.addMouseListener(new MouseAdapter() {
+        newLayerView.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
                 int count = mouseEvent.getClickCount();
                 if (count == 1 && mouseEvent.getSource() instanceof JPanel) {
-                    JPanel panel = (JPanel) mouseEvent.getSource();
+                    LayerView panel = (LayerView) mouseEvent.getSource();
                     setSelected(panel);
                 }
             }
         });
 
-        layerList.put(newPanel, layer);
-        setSelected(newPanel);
+        layerList.put(newLayerView, layer);
+        setSelected(newLayerView);
     }
 
     /**
      * Remove and repaint the view of layers.
      */
-    private void refresh() {
+    public void refresh() {
         layerDisplay.removeAll();
 
-        Set<JPanel> keys = layerList.keySet();
+        Set<LayerView> keys = layerList.keySet();
 
-        for (JPanel panel : keys) {
+        for (LayerView panel : keys) {
             Layer layer = layerList.get(panel);
 
             if (layer.remove()) {
                 layerDisplay.remove(panel);
             } else {
+                panel.setLayerIcon(layer.getImageIcon());
                 layerDisplay.add(panel, BorderLayout.WEST);
                 if (layer.selected()) {
                     panel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
@@ -128,11 +122,11 @@ public class ToolWindow extends JFrame implements ActionListener {
      * Set the selected layer.
      * @param selectedPanel Currently selected layer panel.
      */
-    private void setSelected(JPanel selectedPanel) {
+    private void setSelected(LayerView selectedPanel) {
 
         layerList.get(selectedPanel).selected(true);
-        Set<JPanel> keys = layerList.keySet();
-        for (JPanel p : keys) {
+        Set<LayerView> keys = layerList.keySet();
+        for (LayerView p : keys) {
             if (p != selectedPanel) {
                 layerList.get(p).selected(false);
             }
@@ -222,7 +216,7 @@ public class ToolWindow extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         JButton source = (JButton) e.getSource();
         
-        Set<JPanel> keys = layerList.keySet();
+        Set<LayerView> keys = layerList.keySet();
         Iterator it = keys.iterator();
         while (it.hasNext()) {
             JPanel panel = (JPanel) it.next();

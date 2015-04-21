@@ -97,9 +97,9 @@ public class Layer implements ItemListener, ActionListener {
     }
     
     public void setGraphics(PGraphics graphics) {
-//        layerGraphics.clear();
-//        layerGraphics.add(graphics);
         mainGraphics = graphics;
+        layerGraphics.clear();
+        layerGraphics.add(graphics);
     }
 
     /**

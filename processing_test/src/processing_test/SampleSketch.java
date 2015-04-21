@@ -54,6 +54,27 @@ public class SampleSketch extends PApplet
         pg = createGraphics(1280, 720);
         frameRate(25);
 //        noLoop();
+        initSetup();
+        
+    }
+    
+    private void initSetup() {
+        
+        PGraphics initImage = createGraphics(1280, 720);
+        initImage.beginDraw();
+        initImage.background(255);
+        initImage.fill(0);
+        initImage.textSize(32);
+        initImage.textAlign(CENTER);
+        initImage.text("Please select an image", width / 2, height / 2);
+        initImage.endDraw();
+        
+        Layer initLayer = new Layer(initImage);
+        initLayer.getRemoveButton().setEnabled(false);
+        layerHandler.addLayer(initLayer);
+        toolWindow.addLayerView(initLayer);
+        initLayer.isDisplayed(true);
+        
     }
 
     @Override
@@ -131,7 +152,7 @@ public class SampleSketch extends PApplet
             } else if (methodState == State.PXLATION) {
                 pxlation(layerHandler.checkFuncStat("BigPix"));
             } else if (methodState == State.CLEAR) {
-                image(layerHandler.getLayers().get(0).getLayerImage(), 0, 0);
+                //image(layerHandler.getLayers().get(0).getLayerImage(), 0, 0);
                 tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
             } else if (methodState == State.MAPTO) {
                 mapTo();
@@ -140,14 +161,7 @@ public class SampleSketch extends PApplet
             } else if (methodState == State.IMPORT) {
                 methodState = nextState;
             }
-        } else {
-
-            fill(0);
-            textSize(32);
-            textAlign(CENTER);
-            text("Please select an image", width / 2, height / 2);
-
-        }
+        } 
         
         methodState = State.NOACTION;
     }
@@ -184,12 +198,16 @@ public class SampleSketch extends PApplet
         if (bgImg.width > 720) {
             bgImg.resize(0, 720);
         }
-//        resize(bgImg.width, bgImg.height);
-//        System.out.println(bgImg.width + " " + bgImg.height);
-        layerHandler.setBackground(new Layer(bgImg));
-        //background(bgImg);
+
+        PGraphics gr = createGraphics(bgImg.width, bgImg.height);
+        gr.beginDraw();
+        gr.image(bgImg, 0, 0);
+        gr.endDraw();
+        
+        layerHandler.setBackground(new Layer(gr));
+        toolWindow.refresh();
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-        redraw();
+//        redraw();
     }
 
     /**
