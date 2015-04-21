@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+
 import processing.core.PGraphics;
 import processing.core.PImage;
 
 /**
- *
  * @author nikla_000
  */
 public class Layer implements ItemListener, ActionListener {
@@ -49,7 +49,7 @@ public class Layer implements ItemListener, ActionListener {
     private void setUp() {
         checkShow = new JCheckBox();
         removeButton = new JButton("x");
-        
+
         checkShow.setSelected(true);
         checkShow.addItemListener(this);
 
@@ -58,29 +58,28 @@ public class Layer implements ItemListener, ActionListener {
 
     /**
      * Constructor for layer with a PImage object.
+     *
      * @param image PImage object representing the layer.
      */
     public Layer(PImage image) {
-
         this();
         layerImage = image;
-
     }
 
     /**
      * Constructor for layer with a PGraphics object.
+     *
      * @param graphic
      */
     public Layer(PGraphics graphic) {
-
         this();
         layerGraphics.add(graphic);
         mainGraphics = graphic;
-
     }
 
     /**
      * Get the layer image
+     *
      * @return PImage object of the layer.
      */
     public PImage getLayerImage() {
@@ -90,22 +89,25 @@ public class Layer implements ItemListener, ActionListener {
     /**
      * Returns a list containing all the PGraphics objects that the layer
      * consists of.
+     *
      * @return ArrayList containing all layer graphics.
      */
     public ArrayList<PGraphics> getAllGraphics() {
         return layerGraphics;
     }
-    
+
     /**
      * Returns the main PGraphics object of the layer.
-     * @return 
+     *
+     * @return
      */
     public PGraphics getGraphics() {
         return mainGraphics;
     }
-    
+
     /**
      * Replaces the main PGrapchics object of the layer with a new one.
+     *
      * @param graphics Replacement new PGraphics.
      */
     public void setGraphics(PGraphics graphics) {
@@ -115,7 +117,6 @@ public class Layer implements ItemListener, ActionListener {
     }
 
     /**
-     *
      * @return
      */
     public boolean show() {
@@ -131,60 +132,56 @@ public class Layer implements ItemListener, ActionListener {
     }
 
     /**
-     *
      * @return
      */
     public JCheckBox getCheckBox() {
         return checkShow;
     }
-    
+
     public JButton getRemoveButton() {
         return removeButton;
     }
-    
+
     public int layerNum() {
         return currentLayerNum;
     }
-    
+
     public void setLayerNum(int num) {
         currentLayerNum = num;
     }
 
     /**
-     *
      * @param show
      */
     public void setShow(boolean show) {
         this.show = show;
     }
-    
+
     public boolean selected() {
         return selected;
     }
-    
+
     public void selected(boolean selected) {
         this.selected = selected;
     }
-    
+
     public boolean remove() {
         return remove;
     }
-    
+
     public void remove(boolean remove) {
         this.remove = remove;
     }
-    
+
     /**
-     * 
-     * @return 
+     * @return
      */
     public boolean isBackground() {
         return isBackground;
     }
-    
+
     /**
-     * 
-     * @param val 
+     * @param val
      */
     public void isBackground(boolean val) {
         isBackground = val;
@@ -202,19 +199,19 @@ public class Layer implements ItemListener, ActionListener {
                 }
             }
             gr.endDraw();
-            
+
             PImage img = gr.get();
             img.resize(0, 75);
-            
+
             return new ImageIcon(img.getImage());
-            
-        }else if (layerImage != null) {
+
+        } else if (layerImage != null) {
             PImage p = layerImage.get();
             p.resize(0, 75);
             Image image = p.getImage();
             return new ImageIcon(image);
         }
-        
+
         return null;
     }
 

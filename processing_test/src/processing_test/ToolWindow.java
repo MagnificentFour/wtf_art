@@ -46,15 +46,16 @@ public class ToolWindow extends JFrame implements ActionListener {
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setAlwaysOnTop(false);
+
         components = new HashMap<>();
         layerList = new LinkedHashMap<>();
         layerPanel = new JPanel();
         scrollPane = new JScrollPane(layerPanel);
         layerDisplay = Box.createVerticalBox();
         layerPanel.add(layerDisplay);
-//        addLayerView(new Layer());
 
         makeComboBox();
+
         components.put("sizeSlider", new JSlider(JSlider.HORIZONTAL, 4, 30, 20));
         components.put("clearButton", new JButton("Clear"));
         components.put("cloneButton", new JButton("Clone"));
@@ -66,7 +67,6 @@ public class ToolWindow extends JFrame implements ActionListener {
         components.put("ellipseButton", new JButton(new ImageIcon(ImageIO.read(new File("graphics/ellipse.png")))));
         components.put("hazeButton", new JButton(new ImageIcon(ImageIO.read(new File("graphics/haze.png")))));
 
-//        setLayout(new FlowLayout());
         Set<String> keys = components.keySet();
         for (String key : keys) {
             add(components.get(key));
@@ -161,8 +161,7 @@ public class ToolWindow extends JFrame implements ActionListener {
     private void arrangeLayout() {
         setLayout(null);
 
-        //button.setFont(new Font("Arial", Font.Plain, 40));
-
+        //Function chooser.
         add(new JLabel("Velg funksjon:")).setBounds(10, 10, 220, 15);
         components.get("functionComboBox").setBounds(10, 30, 240, 100);
 
