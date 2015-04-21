@@ -1,11 +1,16 @@
 package processing_test;
 
+import static ij.measure.CurveFitter.f;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
@@ -24,7 +29,8 @@ import static processing.core.PConstants.RGB;
  *
  * @author nikla_000
  */
-public class SampleSketch extends PApplet implements ActionListener, ChangeListener  {
+public class SampleSketch extends PApplet implements ActionListener, ChangeListener {
+
     ToolWindow tw;
     int sizeWidth = 1280;
     int sizeHeight = 720;
@@ -50,8 +56,9 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     ColorChooserDemo cp;
     JButton fwd;
     JButton back;
+    JButton mapDone;
     CloneTool clTool = new CloneTool();
-    
+
     State methodState = State.CLEAR;
     State nextState = State.CLEAR;
     State previousState;
@@ -63,6 +70,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     JSlider source;
     JSlider cloneSource;
+    JSlider mapSlider;
 
     ChangeTracker tracker = new ChangeTracker();
 
@@ -88,7 +96,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             fwd.setEnabled(false);
         }
 
-        
         if (copying == true) {
 
             //cursor(circle, cloneRadius/2, cloneRadius/2);
@@ -243,7 +250,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             back.setEnabled(false);
         }
         if (bgImg != null) {
-            
+
 //            if(methodState == State.DOTREP && cp.getColor() != currentColor) {
 //                hasChanged = true;
 //                //not working
@@ -261,7 +268,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             } else if (methodState == State.SETPOINTS) {
                 textFont(createFont("Arial", 16, true), 16);
                 fill(0);
-                if(waitingPoint == 0) {
+                if (waitingPoint == 0) {
                     text("Set 1st reference point", mouseX, mouseY);
                 } else {
                     text("Set 2nd reference point", mouseX, mouseY);
@@ -270,7 +277,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
             } else if (methodState == State.IMPORT) {
                 methodState = nextState;
             } else if (methodState == State.CLONE) {
-                image(circle, mouseX - (cloneRadius/2), mouseY - (cloneRadius/2));
+                image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
                 Point ppoint1 = clTool.getPoint1();
                 Point ppoint2 = clTool.getPoint2();
                 int p1x = ppoint1.x;
@@ -281,7 +288,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 image(point2, p2x, p2y);
                 image(point3, mouseX + (p1x - p2x), mouseY + (p1y - p2y));
             } else if (methodState == State.BLUR) {
-                image(circle, mouseX - (cloneRadius/2), mouseY - (cloneRadius/2));
+                image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
             }
 
         } else {
@@ -379,19 +386,63 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
 
     private void mapTo() {
         JFrame f = new JFrame();
-        f.setSize(bgImg.width, bgImg.height);
-
+        f.setSize(1360, 850);
+        mapDone = new JButton("Done");
+        mapSlider = new JSlider(JSlider.HORIZONTAL, 1, 1280, 100);
+        mapSlider.setBounds(50, 10, 15, 15);
+        mapDone.setBounds(1, 10, 20, 20);
+        
         MapTo map = new MapTo();
         JPanel p = new JPanel();
-
+//        JPanel pTool = new JPanel();
+        p.setSize(bgImg.width, bgImg.height);
+//        pTool.setSize(80, 850);
+        p.add(mapDone);
+        p.add(mapSlider);
         f.add(p);
         p.add(map);
-
+        
+        
+        mapSlider.addChangeListener(map);
+        mapDone.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+             f.setVisible(false);
+                p.setVisible(false);
+                image(map.function(), 0, 0);
+                //p.removeAll();
+                f.dispose();
+                redraw();
+                
+        }
+    });
+//        f.addMouseListener(new MouseAdapter() {
+//            
+//            public void mousePressed(MouseEvent s) {
+//             System.out.print("FUCKING ANGRY SHIAT FUCK THIS SHIAT  SKADSKSMDASKSDM");
+//                
+//                f.setVisible(false);
+//                p.setVisible(false);
+//                image(map.function(), 0, 0);
+//                redraw();;
+//                f.dispose();
+//                
+//            } 
+//        });
         map.init();
         map.setupSketch(this.get());
-//        map.function(mouseX);
+        // map.function();
 
         f.setVisible(true);
+//        f.addWindowListener(new WindowAdapter() {
+//
+//            public void windowClosing(WindowEvent e) {
+//                image(map.function(), 0, 0);
+//                 System.out.println("WINDOW IS FUCKING CLOSED");
+//            }
+//        });
+        tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
+                
+
     }
 
     /**
@@ -568,15 +619,14 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 loop();
                 break;
             case "blur":
-                if(methodState != State.BLUR) {
-                previousState = methodState;    
-                System.out.println("It's been a hard day's night, and I'd been working like a dog\n"
-                        + "It's been a hard day's night, I should be sleeping like a log");
-                methodState = State.BLUR;
-                loop();
-                break;
-                }
-                else {
+                if (methodState != State.BLUR) {
+                    previousState = methodState;
+                    System.out.println("It's been a hard day's night, and I'd been working like a dog\n"
+                            + "It's been a hard day's night, I should be sleeping like a log");
+                    methodState = State.BLUR;
+                    loop();
+                    break;
+                } else {
                     methodState = previousState;
                     break;
                 }
@@ -588,8 +638,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                     System.out.println("Many that live deserve death.\nAnd some that die deserve life.\nCan you give it to them?\nThen do not be too eager to deal out death in judgement.\nFor even the very wise cannot see all ends.\n");
                     methodState = State.INVERT;
                     redraw();
-                }
-                else {
+                } else {
                     methodState = previousState;
                 }
         }
@@ -609,7 +658,11 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
     public void stateChanged(ChangeEvent e) {
         source = (JSlider) e.getSource();
         cloneSource = (JSlider) e.getSource();
-
+        
+        if(source == mapSlider) {
+            
+        }
+        
         if (!source.getValueIsAdjusting()) {
             pxSize = source.getValue();
             redraw();
@@ -628,11 +681,11 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         }
 
     }
-    
+
     public void setToolWindow(ToolWindow t) {
         tw = t;
     }
-    
+
     public void setColorPicker(ColorChooserDemo c) {
         cp = c;
     }
