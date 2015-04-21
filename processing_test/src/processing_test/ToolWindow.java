@@ -174,6 +174,7 @@ public class ToolWindow extends JFrame implements ActionListener {
         components.get("blurButton").setBounds(10, 200, 120, 50);
         components.get("invertButton").setBounds(130, 200, 120, 50);
 
+
         //Third row
         components.get("wrappingButton").setBounds(10, 260, 120, 50);
         components.get("clearButton").setBounds(130, 260, 120, 50);
