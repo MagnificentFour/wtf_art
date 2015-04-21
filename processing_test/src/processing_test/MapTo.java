@@ -5,6 +5,8 @@
  */
 package processing_test;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
@@ -17,7 +19,7 @@ import processing.opengl.*;
  *
  * @author Oystein
  */
-public class MapTo extends PApplet implements ChangeListener {
+public class MapTo extends PApplet implements ChangeListener, ActionListener{
 
     PImage bgImg;
     int cellsize = 1; // Dimensions of each cell in the grid
@@ -48,10 +50,7 @@ public class MapTo extends PApplet implements ChangeListener {
         rows = bgImg.height / cellsize;            // Calculate # of rows
     }
 
-//    public void incrementSize() {
-//        cellsize = cellsize + 5;
-//    }
-
+ 
     public void draw() {
 
         if (bgImg != null) {
@@ -66,7 +65,6 @@ public class MapTo extends PApplet implements ChangeListener {
                     int c = color(bgImg.pixels[loc]);       // Grab the color
                     // Calculate a z position as a function of mouseX and pixel brightness
                     float z = (float) ((changeValue / (float) width) * brightness(bgImg.pixels[loc]) - 100.0);
-//                    function(z);
                     // Translate to the location, set fill and stroke, and draw the rect
                     pushMatrix();
                     translate(x, y, z);
@@ -91,6 +89,13 @@ public class MapTo extends PApplet implements ChangeListener {
     public void stateChanged(ChangeEvent e) {
         JSlider source = (JSlider) e.getSource();
         changeValue = source.getValue();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+       this.cellsize = cellsize + 5;
+       setup();
+       
     }
 
 }

@@ -437,6 +437,7 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
         f.add(p);
         p.add(map);
         
+        cellSize.addActionListener(map);
         mapSlider.addChangeListener(map);
         mapDone.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
@@ -448,11 +449,6 @@ public class SampleSketch extends PApplet implements ActionListener, ChangeListe
                 f.dispose();
         }
     });  
-//        cellSize.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent s) {
-//             map.incrementSize();
-//            }
-//        });
         map.init();
         map.setupSketch(this.get());
         
