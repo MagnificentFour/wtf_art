@@ -119,8 +119,8 @@ public class ToolWindow extends JFrame {
     /**
      * Creates an ImageIcon
      *
-     * @param path
-     * @return icon
+     * @param path Path to the imagefile
+     * @return icon object
      */
     protected static ImageIcon createImageIcon(String path) {
         ImageIcon icon = null;
@@ -128,7 +128,6 @@ public class ToolWindow extends JFrame {
         try {
             icon = new ImageIcon(ImageIO.read(new File(path)));
         } catch (IOException ex) {
-
         }
 
         return icon;
