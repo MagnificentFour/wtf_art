@@ -31,7 +31,7 @@ public class Layer implements ItemListener, ActionListener {
     private JButton removeButton;
 
     /**
-     *
+     * Constructor with no parameters. Generally only called by the other constructors.
      */
     public Layer() {
         layerGraphics = new ArrayList<>();
@@ -43,6 +43,9 @@ public class Layer implements ItemListener, ActionListener {
         setUp();
     }
 
+    /**
+     * Initial set up for the layer. Initializes some JComponents and some parameters.
+     */
     private void setUp() {
         checkShow = new JCheckBox();
         removeButton = new JButton("x");
@@ -54,8 +57,8 @@ public class Layer implements ItemListener, ActionListener {
     }
 
     /**
-     *
-     * @param image
+     * Constructor for layer with a PImage object.
+     * @param image PImage object representing the layer.
      */
     public Layer(PImage image) {
 
@@ -65,7 +68,7 @@ public class Layer implements ItemListener, ActionListener {
     }
 
     /**
-     *
+     * Constructor for layer with a PGraphics object.
      * @param graphic
      */
     public Layer(PGraphics graphic) {
@@ -77,25 +80,34 @@ public class Layer implements ItemListener, ActionListener {
     }
 
     /**
-     *
-     * @return
+     * Get the layer image
+     * @return PImage object of the layer.
      */
     public PImage getLayerImage() {
         return layerImage;
     }
 
     /**
-     *
-     * @return
+     * Returns a list containing all the PGraphics objects that the layer
+     * consists of.
+     * @return ArrayList containing all layer graphics.
      */
     public ArrayList<PGraphics> getAllGraphics() {
         return layerGraphics;
     }
     
+    /**
+     * Returns the main PGraphics object of the layer.
+     * @return 
+     */
     public PGraphics getGraphics() {
         return mainGraphics;
     }
     
+    /**
+     * Replaces the main PGrapchics object of the layer with a new one.
+     * @param graphics Replacement new PGraphics.
+     */
     public void setGraphics(PGraphics graphics) {
         mainGraphics = graphics;
         layerGraphics.clear();
