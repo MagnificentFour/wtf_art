@@ -549,7 +549,7 @@ public class SampleSketch extends PApplet
         if (!source.getValueIsAdjusting()) {
             pxSize = source.getValue();
             mainState = State.EDITING;
-            methodState = selectedLayer.getLayerFunc();
+            //methodState = selectedLayer.getLayerFunc();
         }
     }
 
@@ -577,7 +577,6 @@ public class SampleSketch extends PApplet
 
     private void drawFunc(PGraphics pg) {
         pg.beginDraw();
-
         switch (methodState) {
             case BLUR:
                 if (mousePressed == true) {
@@ -605,16 +604,18 @@ public class SampleSketch extends PApplet
         float finalR = 0;
         float finalB = 0;
         float finalG = 0;
-        for (int i = -cloneRadius / 2; i < cloneRadius / 2; i++) {
-            for (int t = -cloneRadius / 2; t < cloneRadius / 2; t++) {
-                totalPix++;
-                colour = color(get(mouseX + i, mouseY + t));
-                float r = red(colour);
-                float b = blue(colour);
-                float g = green(colour);
-                finalB = finalB + b;
-                finalR = finalR + r;
-                finalG = finalG + g;
+        for (int i = (-cloneRadius / 2); i < (cloneRadius / 2); i++) {
+            for (int t = (-cloneRadius / 2); t < (cloneRadius / 2); t++) {
+                if (dist(mouseX, mouseY, (mouseX + i), (mouseY + t)) <= (cloneRadius / 2)) {
+                    totalPix++;
+                    colour = color(pg.get(mouseX + i, mouseY + t));
+                    float r = red(colour);
+                    float b = blue(colour);
+                    float g = green(colour);
+                    finalB = finalB + b;
+                    finalR = finalR + r;
+                    finalG = finalG + g;
+                }
             }
         }
         finalB = finalB / totalPix;
@@ -642,7 +643,7 @@ public class SampleSketch extends PApplet
         for (int i = -cloneRadius / 2; i < cloneRadius / 2; i++) {
             for (int t = -cloneRadius / 2; t < cloneRadius / 2; t++) {
                 if (dist(mouseX, mouseY, (mouseX + i), (mouseY + t)) <= (cloneRadius / 2)) {
-                    int colour = color(get((mouseX - distanceX) + i, (mouseY - distanceY) + t));
+                    int colour = color(pg.get((mouseX - distanceX) + i, (mouseY - distanceY) + t));
                     pg.set(mouseX + i, mouseY + t, colour);
                 }
             }
