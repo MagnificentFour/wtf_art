@@ -379,7 +379,7 @@ public class SampleSketch extends PApplet
     /**
      * Assigns pointers to the undo and redo buttons.
      *
-     * @param fwd The redo button.
+     * @param fwd  The redo button.
      * @param back The undo button.
      */
     public void setButtons(JButton fwd, JButton back) {
@@ -428,9 +428,7 @@ public class SampleSketch extends PApplet
      * @param function Name of the function.
      */
     public void selectFunction(String function) {
-
         switch (function) {
-
             case "Dots":
                 noSave = true;
                 methodState = State.DOTREP;
@@ -459,6 +457,7 @@ public class SampleSketch extends PApplet
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+
         switch (e.getActionCommand()) {
             case "dot":
                 noSave = true;
@@ -552,6 +551,18 @@ public class SampleSketch extends PApplet
                 break;
             case "haze":
                 figureState = 2;
+                break;
+            case "randomFucks":
+                System.out.println("(!) Randomfucks are given");
+                int max = 1;
+                int min = 0;
+                int randInt = rand.nextInt((max - min) + 1) + min;
+                ArrayList<String> randFunc = new ArrayList<>(); //TODO Her trengs mindre skitten kode..........
+                randFunc.add("Dots");
+                randFunc.add("Squares");
+
+                System.out.println(randFunc.get(randInt));
+                selectFunction(randFunc.get(randInt));
                 break;
         }
 
