@@ -40,7 +40,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton hazeButton;
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
-    ToolWindow tw;
+    
     private String[] functionNames = {"Original", "Dots", "Squares", "3D", "Clone"};
     ColorChooserDemo ccd;
     private final JSlider slider;
@@ -51,6 +51,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private ArrayList<Component> componentList;
     private HashMap<String, Component> toolWindowComponents;
 
+    private ToolWindow tw;
     private SampleSketch currentSketch;
 
     /**
@@ -61,10 +62,15 @@ public class DisplayFrame extends JFrame implements ActionListener {
         this.setSize(1340, 890);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        /**
+         * Sets location of main window in relation to toolwindow.
+         * Recommended that first parameter is 290 larger than x-pos for toolwindow
+         */
+        setLocation(350,100);
         
         //cp = new colorPicker();
         ccd = new ColorChooserDemo();
-        setLocationByPlatform(true);
+        //setLocationByPlatform(true);
 
         componentList = new ArrayList<>();
         sketchTabs = new JTabbedPane();
@@ -75,15 +81,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
         newTab = new JButton(new ImageIcon(ImageIO.read(new File("graphics/blank.jpg"))));
         backButton = new JButton("<");
         forwardButton = new JButton(">");
-        randomShit = new JButton("Surprise motherfucker!");
+        tw = new ToolWindow();
+        randomShit = new JButton("Surprise!");
 
         cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
 
 
         arrangeLayout();
         setHoverText();
-        
-        tw = new ToolWindow();
 
         sketchTabs.addTab("Sketch 1", createNewSketch());
         add(fileChooseButton);
@@ -95,8 +100,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
         add(closeTab);
         add(randomShit);
         add(ccd);
-
-        
 
         toolWindowComponents = tw.getToolComponents();
 
@@ -135,12 +138,15 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
                 if (tabIndex != sketchTabs.getSelectedIndex()) {
 
+                    currentSketch.noLoop();
                     removeOldActionListeners(currentSketch);
                     SampleSketch newSketch = (SampleSketch) sketchTabs.getSelectedComponent();
                     setActionListeners(newSketch);
                     currentSketch = newSketch;
                     tabIndex = sketchTabs.getSelectedIndex();
-
+                    currentSketch.loop();
+                    currentSketch.getLayers();
+                    
                 }
 
             }
@@ -158,7 +164,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
         sketchTabs.addTab("Sketch " + tabs, createNewSketch());
         sketchTabs.setSelectedIndex(sketchTabs.getTabCount() - 1);
         tabs++;
-        System.out.println(tabs);
     }
 
     /**
@@ -194,6 +199,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         });
 
+        newSketch.setToolWindow(tw);
         newSketch.init();
 
         return newSketch;
@@ -216,7 +222,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         forwardButton.setBounds(280, 10, 50, 50);
         sketchTabs.setBounds(20, 110, 1282, 722);
         cloneRadiusSlider.setBounds(720, 30, 215, 20);
-        randomShit.setBounds(340,10,200,50);
+        randomShit.setBounds(927,10,90,30);
         ccd.setBounds(407, -173, 500, 500);
         ccd.setBounds(407, -163, 500, 500);
     }
@@ -289,7 +295,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
      */
     private void setActionListeners(SampleSketch s) {
         randomShit.addActionListener(s);
-        randomShit.setActionCommand("");
+        randomShit.setActionCommand(""); //TODO IMPLEMENT THIS FUCKER
 
         clearButton.addActionListener(s);
         clearButton.setActionCommand("clear");
@@ -407,7 +413,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "newTab":
-                System.out.println("Yoloswaggins");
                 newTab();
                 break;
             case "closeTab":

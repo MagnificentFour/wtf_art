@@ -80,15 +80,9 @@ public class Dotting extends PApplet {
         
     }
     
-    public ArrayList<Ellipse> getEllipseList() {
+    public PGraphics getResult() {
         
-        return ellipseList;
-        
-    }
-    
-    public PImage getResult() {
-        
-        return gr.get();
+        return gr;
         
     }
     
