@@ -12,6 +12,7 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 import processing.core.PImage;
 import processing.opengl.*;
 
@@ -22,6 +23,7 @@ import processing.opengl.*;
 public class MapTo extends PApplet implements ChangeListener, ActionListener{
 
     PImage bgImg;
+    PGraphics gr;
     int cellsize = 1; // Dimensions of each cell in the grid
     int cols, rows;   // Number of columns and rows in our system
     int sizeWidth;
@@ -35,7 +37,6 @@ public class MapTo extends PApplet implements ChangeListener, ActionListener{
         cols = sizeWidth / cellsize;             // Calculate # of columns
         rows = sizeHeight / cellsize;            // Calculate # of rows
         background(0);
-
     }
 
     public void setupSketch(PImage image) {
@@ -50,6 +51,7 @@ public class MapTo extends PApplet implements ChangeListener, ActionListener{
     public void draw() {
 
         if (bgImg != null) {
+            
             loadPixels();
             // Begin loop for columns
             for (int i = 0; i < cols; i++) {
@@ -62,22 +64,33 @@ public class MapTo extends PApplet implements ChangeListener, ActionListener{
                     // Calculate a z position as a function of mouseX and pixel brightness
                     float z = (float) ((changeValue / (float) width) * brightness(bgImg.pixels[loc]) - 100.0);
                     // Translate to the location, set fill and stroke, and draw the rect
-                    pushMatrix();
-                    translate(x, y, z);
-                    noStroke();
-                    rectMode(CENTER);
-                    fill(c);
-                    rect(0, 0, cellsize, cellsize);
-                    popMatrix();
+                   pushMatrix();
+                   translate(x, y, z);
+                   noStroke();
+                   rectMode(CENTER);
+                   fill(c);
+                   rect(0, 0, cellsize, cellsize);
+                   popMatrix();
+            
 
                 }
             }
         }
+       
+       
     }
 
     public PImage function() {
 
         return this.get();
+    }
+    
+    public PGraphics getResult() {
+        gr = createGraphics(bgImg.width, bgImg.height);
+        gr.beginDraw();
+        gr.image(this.get(), 0 ,0);
+        gr.endDraw();
+        return gr;
     }
 
     @Override

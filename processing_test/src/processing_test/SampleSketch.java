@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -53,8 +54,6 @@ public class SampleSketch extends PApplet
     JButton mapDone;
     JButton cellSize;
     JButton cellSize2;
-
-
 
     CloneTool clTool = new CloneTool();
 
@@ -170,7 +169,7 @@ public class SampleSketch extends PApplet
                     //image(layerHandler.getLayers().get(0).getLayerImage(), 0, 0);
                     tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
                 } else if (methodState == State.MAPTO) {
-                    mapTo();
+                    mapTo(layerHandler.checkFuncStat("3D"));
                 } else if (methodState == State.SETPOINTS) {
                     textFont(createFont("Arial", 16, true), 16);
                     fill(0);
@@ -307,8 +306,9 @@ public class SampleSketch extends PApplet
     /**
      * TODO Document this
      */
-    private void mapTo() {
+    private void mapTo(int index) {
         JFrame f = new JFrame();
+//        f.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         f.setSize(1360, 850);
         mapDone = new JButton("Done");
         cellSize = new JButton("Less details");
@@ -336,16 +336,25 @@ public class SampleSketch extends PApplet
                 f.setVisible(false);
                 p.setVisible(false);
                 image(map.function(), 0, 0);
+                System.out.println("YOLOSWAG 1 Etter image map.func");
                 methodState = State.NOACTION;
-                redraw();
-                f.dispose();
+                Layer pxlLayer = new Layer(map.getResult());
+                pxlLayer.setLayerFunc(methodState);
+                System.out.println("LAYERSHIATAAZ>>>>>");
+
+                if (index < 0) {
+                    layerHandler.addLayer(pxlLayer, "3D");
+                } else {
+                    layerHandler.getLayers().get(index).setGraphics(map.getResult());
+                }
+               // f.dispose();
             }
         });
-        map.init();
         map.setupSketch(this.get());
+        map.init();
         f.setVisible(true);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-
+        mainState = State.VIEWING;
     }
 
     /**
@@ -438,6 +447,7 @@ public class SampleSketch extends PApplet
                 break;
             case "3D":
                 methodState = State.MAPTO;
+                mainState = State.EDITING;
         }
         redraw();
     }
@@ -469,6 +479,7 @@ public class SampleSketch extends PApplet
             case "3D":
                 noSave = false;
                 methodState = State.MAPTO;
+                mainState = State.EDITING;
                 redraw();
             case "forward":
                 if (tracker.hasChanged()) {
@@ -568,7 +579,7 @@ public class SampleSketch extends PApplet
 //            if (methodState == State.INVERT && firstState == false) {
 //                methodState = State.INVERT;
 //            }
-            
+
             circle = loadImage("graphics/circle2.png");
             circle.resize(cloneR, cloneR);
             //firstState = false;
@@ -611,7 +622,7 @@ public class SampleSketch extends PApplet
                     break;
                 case INVERT:
                     invertEdit(pg);
-                    //break;
+                //break;
             }
         }
         pg.endDraw();
@@ -770,7 +781,7 @@ public class SampleSketch extends PApplet
                 }
             }
         }
-        if(fuckTest == true) {
+        if (fuckTest == true) {
             System.out.println("we did it");
         }
         //tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
