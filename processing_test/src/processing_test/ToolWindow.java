@@ -39,7 +39,7 @@ public class ToolWindow extends JFrame {
         /**
          * Sets location of main window in relation to toolwindow.
          */
-        setLocation(60, 100);
+        setLocation(68, 100);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setAlwaysOnTop(false);
@@ -68,24 +68,24 @@ public class ToolWindow extends JFrame {
         arrangeLayout();
         setVisible(true);
     }
-    
+
     /**
      * Removes a layer view and replaces it. Used when switching between sketches using
      * tabs.
+     *
      * @param layerView Sketch-specific layer view.
      */
     public void refreshLayerView(LayerView layerView) {
-        
+
         remove(scrollPane);
         revalidate();
-        
+
         scrollPane = new JScrollPane(layerView);
         add(scrollPane).setBounds(10, 465, 250, 380);
         revalidate();
-        
+
     }
 
-    
 
     /**
      * Arranges the layout of the components in the tool window.

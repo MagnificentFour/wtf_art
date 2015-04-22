@@ -40,7 +40,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton hazeButton;
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
-    
+
     private String[] functionNames = {"Original", "Dots", "Squares", "3D", "Clone"};
     ColorChooserDemo ccd;
     private final JSlider slider;
@@ -66,8 +66,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
          * Sets location of main window in relation to toolwindow.
          * Recommended that first parameter is 290 larger than x-pos for toolwindow
          */
-        setLocation(350,100);
-        
+        setLocation(350, 100);
+
         //cp = new colorPicker();
         ccd = new ColorChooserDemo();
         //setLocationByPlatform(true);
@@ -146,7 +146,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
                     tabIndex = sketchTabs.getSelectedIndex();
                     currentSketch.loop();
                     currentSketch.getLayers();
-                    
+
                 }
 
             }
@@ -222,14 +222,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
         forwardButton.setBounds(280, 10, 50, 50);
         sketchTabs.setBounds(20, 110, 1282, 722);
         cloneRadiusSlider.setBounds(720, 30, 215, 20);
-        randomShit.setBounds(927,10,90,30);
+        randomShit.setBounds(927, 10, 90, 30);
         ccd.setBounds(407, -173, 500, 500);
         ccd.setBounds(407, -163, 500, 500);
     }
 
     /**
      * Sets the hovertext for main window buttons
-     * Gives a description of buttonfunctions   
+     * Gives a description of buttonfunctions
      */
     private void setHoverText() {
         closeTab.setToolTipText("Close current tab");
@@ -295,7 +295,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
      */
     private void setActionListeners(SampleSketch s) {
         randomShit.addActionListener(s);
-        randomShit.setActionCommand(""); //TODO IMPLEMENT THIS FUCKER
+        randomShit.setActionCommand("randomFucks");
 
         clearButton.addActionListener(s);
         clearButton.setActionCommand("clear");
@@ -317,16 +317,16 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         invertButton.addActionListener(s);
         invertButton.setActionCommand("invert");
-        
+
         wrappingButton.addActionListener(s);
         wrappingButton.setActionCommand("wrapping");
-        
+
         squareButton.addActionListener(s);
         squareButton.setActionCommand("square");
-        
+
         ellipseButton.addActionListener(s);
         ellipseButton.setActionCommand("ellipse");
-        
+
         hazeButton.addActionListener(s);
         hazeButton.setActionCommand("haze");
 
