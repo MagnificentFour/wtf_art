@@ -91,7 +91,6 @@ public class MapTo extends PApplet implements ChangeListener, ActionListener{
     public void actionPerformed(ActionEvent e) {
        this.cellsize = cellsize + 2;
        setup();
-       
-    }
-
+        }
+    
 }
