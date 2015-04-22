@@ -52,7 +52,7 @@ public class SampleSketch extends PApplet
     JButton back;
     JButton mapDone;
     JButton cellSize;
-    
+
     CloneTool clTool = new CloneTool();
 
     Layer selectedLayer;
@@ -109,12 +109,12 @@ public class SampleSketch extends PApplet
 //        toolWindow.addLayerView(initLayer);
         initLayer.isDisplayed(true);
         initLayer.selected(true);
-        
+
         cursorLayer = new Layer(cursorP);
         cursorLayer.isDisplayed(true);
         layerHandler.addCursorLayer(cursorLayer);
         cursorLayer.setShow(false);
-        
+
         toolWindow.refreshLayerView(layerHandler.getLayerView());
     }
 
@@ -131,7 +131,7 @@ public class SampleSketch extends PApplet
         } else {
             back.setEnabled(false);
         }
-        
+
         ArrayList<Layer> rList = new ArrayList<>();
 
         for (Layer layer : layerHandler.getLayers()) {
@@ -243,6 +243,7 @@ public class SampleSketch extends PApplet
         layerHandler.setBackground(new Layer(gr));
         layerHandler.refreshLayerView();
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
+        flop();
     }
 
     /**
@@ -314,7 +315,7 @@ public class SampleSketch extends PApplet
         mapSlider.setBounds(20, 10, 15, 15);
         cellSize.setBounds(10, 10, 15, 15);
         mapDone.setBounds(1, 10, 20, 20);
-        
+
         MapTo map = new MapTo();
         JPanel p = new JPanel();
         p.setSize(bgImg.width, bgImg.height);
@@ -323,25 +324,50 @@ public class SampleSketch extends PApplet
         p.add(mapSlider);
         f.add(p);
         p.add(map);
-        
+
         cellSize.addActionListener(map);
         mapSlider.addChangeListener(map);
         mapDone.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-             f.setVisible(false);
+            public void actionPerformed(ActionEvent e) {
+                f.setVisible(false);
                 p.setVisible(false);
                 image(map.function(), 0, 0);
                 methodState = State.NOACTION;
-                redraw();       
+                redraw();
                 f.dispose();
-        }
-    });  
+            }
+        });
         map.init();
         map.setupSketch(this.get());
         f.setVisible(true);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-                
 
+    }
+
+    ArrayList<PImage> imageList = new ArrayList<>();
+
+    public void flop() {
+        PGraphics dis = createGraphics(1280, 720);
+        dis.beginDraw();
+        dis.image(bgImg, 0, 0);
+
+        for (int i = 0; i < 100; i++) {
+            int randomX = (int) random(0, 1280);
+            int randomY = (int) random(0, 720);
+
+            int randomHeight = (int) random(50, 200);
+            int randomWidth = (int) random(50, 200);
+
+            imageList.add(dis.get(randomX, randomY, randomWidth, randomHeight));
+        }
+
+        for (PImage img : imageList) {
+            float randomX = random(0, 1280);
+            float randomY = random(0, 720);
+            dis.image(img, randomX, randomY);
+        }
+        dis.endDraw();
+        layerHandler.addLayer(new Layer(dis));
     }
 
     /**
@@ -366,7 +392,7 @@ public class SampleSketch extends PApplet
     /**
      * Assigns pointers to the undo and redo buttons.
      *
-     * @param fwd  The redo button.
+     * @param fwd The redo button.
      * @param back The undo button.
      */
     public void setButtons(JButton fwd, JButton back) {
@@ -550,8 +576,7 @@ public class SampleSketch extends PApplet
     public void stateChanged(ChangeEvent e) {
         source = (JSlider) e.getSource();
         cloneSource = (JSlider) e.getSource();
-        
-        
+
         if (!source.getValueIsAdjusting()) {
             pxSize = source.getValue();
             mainState = State.EDITING;
@@ -780,7 +805,7 @@ public class SampleSketch extends PApplet
             }
         }
     }
-    
+
     public void getLayers() {
         toolWindow.refreshLayerView(layerHandler.getLayerView());
     }
