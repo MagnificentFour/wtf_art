@@ -52,6 +52,9 @@ public class SampleSketch extends PApplet
     JButton back;
     JButton mapDone;
     JButton cellSize;
+    JButton cellSize2;
+
+
 
     CloneTool clTool = new CloneTool();
 
@@ -308,10 +311,12 @@ public class SampleSketch extends PApplet
         JFrame f = new JFrame();
         f.setSize(1360, 850);
         mapDone = new JButton("Done");
-        cellSize = new JButton("Performance");
+        cellSize = new JButton("Less details");
+        cellSize2 = new JButton("More details");
         mapSlider = new JSlider(JSlider.HORIZONTAL, 1, 1280, 100);
         mapSlider.setBounds(20, 10, 15, 15);
         cellSize.setBounds(10, 10, 15, 15);
+        cellSize2.setBounds(5, 10, 15, 15);
         mapDone.setBounds(1, 10, 20, 20);
 
         MapTo map = new MapTo();
@@ -319,6 +324,7 @@ public class SampleSketch extends PApplet
         p.setSize(bgImg.width, bgImg.height);
         p.add(mapDone);
         p.add(cellSize);
+        p.add(cellSize2);
         p.add(mapSlider);
         f.add(p);
         p.add(map);
