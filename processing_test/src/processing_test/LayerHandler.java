@@ -1,6 +1,7 @@
 package processing_test;
 
 import java.util.ArrayList;
+import processing.core.PGraphics;
 
 /**
  * Layerhandler
@@ -78,6 +79,18 @@ public class LayerHandler {
             case "Dotting":
                 dottingIndex = layers.indexOf(layer);
         }
+    }
+    
+    /**
+     * Edits a layer and refreshing the layer view.
+     * @param index Index of the edited layer.
+     * @param graphic Updated graphics.
+     */
+    public void editLayer(int index, PGraphics graphic) {
+        
+        layers.get(index).setGraphics(graphic);
+        refreshLayerView();
+        
     }
 
     /**

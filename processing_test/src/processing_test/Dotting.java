@@ -8,7 +8,7 @@ import processing.core.*;
  *
  * @author nikla_000
  */
-public class Dotting extends PApplet {
+public class Dotting extends PApplet{
     
     PImage bgImg;
     PGraphics gr;
@@ -18,11 +18,10 @@ public class Dotting extends PApplet {
     ArrayList<Ellipse> ellipseList = new ArrayList<>();
     
     
-    public void setupSketch(PImage image, int pixelSize, boolean noSave) {
+    public void setupSketch(PImage image, int pixelSize) {
         
         bgImg = image;
         pxSize = pixelSize;
-        this.noSave = noSave;
         
     }
     

@@ -274,20 +274,28 @@ public class SampleSketch extends PApplet
      */
     private void dotRep(int index) {
         Dotting dotRep = new Dotting();
-        PImage base = selectedLayer.getGraphics();
-        dotRep.setupSketch(base, pxSize, noSave);
+        PImage base;
+
+        if (index < 0) {
+            base = selectedLayer.getGraphics();
+        } else {
+            base = selectedLayer.getLayerImage();
+        }
+
+        dotRep.setupSketch(base, pxSize);
         dotRep.init();
         dotRep.runFunction(cp.getColor());
+        
         PGraphics gr = dotRep.getResult();
-
+        
         Layer dotLayer = new Layer(gr);
         dotLayer.setLayerFunc(methodState);
-        dotLayer.setImage(base);
 
         if (index < 0) {
             layerHandler.addLayer(dotLayer, "Dotting");
+            dotLayer.setImage(base);
         } else {
-            layerHandler.getLayers().get(index).setGraphics(gr);
+            layerHandler.editLayer(index, gr);
         }
 
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
@@ -295,6 +303,7 @@ public class SampleSketch extends PApplet
         hasChanged = false;
         currentColor = cp.getColor();
         mainState = State.VIEWING;
+
     }
 
     /**
@@ -302,17 +311,28 @@ public class SampleSketch extends PApplet
      */
     private void pxlation(int index) {
         BigPix pxlation = new BigPix();
-        pxlation.setupSketch(bgImg, pxSize);
+        PImage base;
+        
+        if (index < 0) {
+            base = selectedLayer.getGraphics();
+        } else {
+            base = selectedLayer.getLayerImage();
+        }
+        
+        pxlation.setupSketch(base, pxSize);
         pxlation.init();
         pxlation.runFunction();
 
-        Layer pxlLayer = new Layer(pxlation.getResult());
-        pxlLayer.setLayerFunc(methodState);
+        PGraphics gr = pxlation.getResult();
+        
+        Layer pxlLayer = new Layer(gr);
 
         if (index < 0) {
             layerHandler.addLayer(pxlLayer, "BigPix");
+            pxlLayer.setLayerFunc(methodState);
+            pxlLayer.setImage(base);
         } else {
-            layerHandler.getLayers().get(index).setGraphics(pxlation.getResult());
+            layerHandler.editLayer(index, gr);
         }
 
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
@@ -358,7 +378,7 @@ public class SampleSketch extends PApplet
         map.setupSketch(this.get());
         f.setVisible(true);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-        
+
         mainState = State.VIEWING;
 
     }
@@ -366,12 +386,12 @@ public class SampleSketch extends PApplet
     ArrayList<PImage> imageList = new ArrayList<>();
 
     /**
-     * 
+     *
      */
     public void flop() {
         PGraphics dis = createGraphics(1280, 720);
         dis.beginDraw();
-        dis.image(bgImg, 0, 0);
+        dis.image(selectedLayer.getGraphics(), 0, 0);
 
         for (int i = 0; i < 100; i++) {
             int randomX = (int) random(0, 1280);
@@ -464,7 +484,7 @@ public class SampleSketch extends PApplet
      * @param function Name of the function.
      */
     public void selectFunction(String function) {
-        
+
         switch (function) {
 
             case "Dots":
