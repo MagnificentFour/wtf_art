@@ -12,12 +12,14 @@ public class LayerHandler {
     private final ArrayList<Layer> layers;
     private int dottingIndex;
     private int bigPixIndex;
+    private int mapIndex;
     private LayerView layerView;
 
     public LayerHandler() {
         layers = new ArrayList<>();
         dottingIndex = -1;
         bigPixIndex = -1;
+        mapIndex = -1;
         layerView = new LayerView();
     }
 
@@ -78,6 +80,10 @@ public class LayerHandler {
                 break;
             case "Dotting":
                 dottingIndex = layers.indexOf(layer);
+                break;
+            case "3D":
+                mapIndex = layers.indexOf(layer);
+                break;
         }
     }
     
@@ -104,6 +110,8 @@ public class LayerHandler {
             removeFunc("Dotting");
         } else if (layers.indexOf(layer) == bigPixIndex) {
             removeFunc("BigPix");
+        } else if (layers.indexOf(layer) == mapIndex) {
+            removeFunc("3D");
         } else {
             layer.remove(true);
             layers.remove(layer);
@@ -134,6 +142,11 @@ public class LayerHandler {
             case "Dotting":
                 layers.remove(dottingIndex);
                 dottingIndex = -1;
+                break;
+            case "3D":
+                layers.remove(mapIndex);
+                mapIndex = -1;
+                break;
         }
     }
 
@@ -217,6 +230,8 @@ public class LayerHandler {
                 break;
             case "BigPix":
             //    hasBigPix = true;
+                break;
+            case  "3D":
         }
 
     }
@@ -235,6 +250,8 @@ public class LayerHandler {
                 return dottingIndex;
             case "BigPix":
                 return bigPixIndex;
+            case "3D":
+                return mapIndex;
         }
         return -1;
     }
