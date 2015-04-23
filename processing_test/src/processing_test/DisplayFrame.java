@@ -41,7 +41,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
     
-    private String[] functionNames = {"Original", "Dots", "Squares", "3D", "Clone"};
+    private String[] functionNames = {"Original", "Dots", "Squares", "3D", "Flop", "Clone"};
     ColorChooserDemo ccd;
     private final JSlider slider;
     private final JSlider cloneRadiusSlider;

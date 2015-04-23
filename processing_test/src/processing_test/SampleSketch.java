@@ -159,46 +159,61 @@ public class SampleSketch extends PApplet
 
         if (!layerHandler.getLayers().isEmpty()) {//bgImg != null) {
             if (mainState == State.EDITING) {
-                if (methodState == State.DOTREP) {
-                    dotRep(layerHandler.checkFuncStat("Dotting"));
-                } else if (methodState == State.PXLATION) {
-                    pxlation(layerHandler.checkFuncStat("BigPix"));
-                } else if (methodState == State.CLEAR) {
-                    //image(layerHandler.getLayers().get(0).getLayerImage(), 0, 0);
-                    tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-                } else if (methodState == State.MAPTO) {
-                    mapTo();
-                } else if (methodState == State.SETPOINTS) {
-                    textFont(createFont("Arial", 16, true), 16);
-                    fill(0);
-                    if (waitingPoint == 0) {
-                        text("Set 1st reference point", mouseX, mouseY);
-                    } else {
-                        text("Set 2nd reference point", mouseX, mouseY);
-                    }
-                } else if (methodState == State.IMPORT) {
-                    methodState = nextState;
-                } else if (methodState == State.CLONE) {
-                    cursorLayer.setShow(true);
-                    cursorP.beginDraw();
-                    cursorP.background(0, 0);
-                    cursorP.image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
-                    Point ppoint1 = clTool.getPoint1();
-                    Point ppoint2 = clTool.getPoint2();
-                    int p1x = ppoint1.x;
-                    int p1y = ppoint1.y;
-                    int p2x = ppoint2.x;
-                    int p2y = ppoint2.y;
-                    cursorP.image(point1, p1x, p1y);
-                    cursorP.image(point2, p2x, p2y);
-                    cursorP.image(point3, mouseX + (p1x - p2x), mouseY + (p1y - p2y));
-                    cursorP.endDraw();
-                } else if (methodState == State.BLUR) {
-                    cursorLayer.setShow(true);
-                    cursorP.beginDraw();
-                    cursorP.background(0, 0);
-                    cursorP.image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
-                    cursorP.endDraw();
+
+                switch (methodState) {
+
+                    case DOTREP:
+                        dotRep(layerHandler.checkFuncStat("Dotting"));
+                        break;
+                    case PXLATION:
+                        pxlation(layerHandler.checkFuncStat("BigPix"));
+                        break;
+                    case MAPTO:
+                        mapTo();
+                        break;
+                    case FLOP:
+                        flop();
+                        break;
+                    case CLEAR:
+                        //image(layerHandler.getLayers().get(0).getLayerImage(), 0, 0);
+                        tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
+                        break;
+                    case SETPOINTS:
+                        textFont(createFont("Arial", 16, true), 16);
+                        fill(0);
+                        if (waitingPoint == 0) {
+                            text("Set 1st reference point", mouseX, mouseY);
+                        } else {
+                            text("Set 2nd reference point", mouseX, mouseY);
+                        }
+                        break;
+                    case IMPORT:
+                        methodState = nextState;
+                        break;
+                    case CLONE:
+                        cursorLayer.setShow(true);
+                        cursorP.beginDraw();
+                        cursorP.background(0, 0);
+                        cursorP.image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
+                        Point ppoint1 = clTool.getPoint1();
+                        Point ppoint2 = clTool.getPoint2();
+                        int p1x = ppoint1.x;
+                        int p1y = ppoint1.y;
+                        int p2x = ppoint2.x;
+                        int p2y = ppoint2.y;
+                        cursorP.image(point1, p1x, p1y);
+                        cursorP.image(point2, p2x, p2y);
+                        cursorP.image(point3, mouseX + (p1x - p2x), mouseY + (p1y - p2y));
+                        cursorP.endDraw();
+                        break;
+                    case BLUR:
+                        cursorLayer.setShow(true);
+                        cursorP.beginDraw();
+                        cursorP.background(0, 0);
+                        cursorP.image(circle, mouseX - (cloneRadius / 2), mouseY - (cloneRadius / 2));
+                        cursorP.endDraw();
+                        break;
+
                 }
 
             }
@@ -243,7 +258,6 @@ public class SampleSketch extends PApplet
         layerHandler.setBackground(new Layer(gr));
         layerHandler.refreshLayerView();
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
-        flop();
     }
 
     /**
@@ -260,13 +274,15 @@ public class SampleSketch extends PApplet
      */
     private void dotRep(int index) {
         Dotting dotRep = new Dotting();
-        dotRep.setupSketch(bgImg, pxSize, noSave);
+        PImage base = selectedLayer.getGraphics();
+        dotRep.setupSketch(base, pxSize, noSave);
         dotRep.init();
         dotRep.runFunction(cp.getColor());
         PGraphics gr = dotRep.getResult();
 
         Layer dotLayer = new Layer(gr);
         dotLayer.setLayerFunc(methodState);
+        dotLayer.setImage(base);
 
         if (index < 0) {
             layerHandler.addLayer(dotLayer, "Dotting");
@@ -331,7 +347,8 @@ public class SampleSketch extends PApplet
             public void actionPerformed(ActionEvent e) {
                 f.setVisible(false);
                 p.setVisible(false);
-                image(map.function(), 0, 0);
+                layerHandler.addLayer(new Layer(map.function()));
+//                image(map.function(), 0, 0);
                 methodState = State.NOACTION;
                 redraw();
                 f.dispose();
@@ -341,11 +358,16 @@ public class SampleSketch extends PApplet
         map.setupSketch(this.get());
         f.setVisible(true);
         tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
+        
+        mainState = State.VIEWING;
 
     }
 
     ArrayList<PImage> imageList = new ArrayList<>();
 
+    /**
+     * 
+     */
     public void flop() {
         PGraphics dis = createGraphics(1280, 720);
         dis.beginDraw();
@@ -368,6 +390,7 @@ public class SampleSketch extends PApplet
         }
         dis.endDraw();
         layerHandler.addLayer(new Layer(dis));
+        mainState = State.VIEWING;
     }
 
     /**
@@ -441,7 +464,7 @@ public class SampleSketch extends PApplet
      * @param function Name of the function.
      */
     public void selectFunction(String function) {
-
+        
         switch (function) {
 
             case "Dots":
@@ -460,8 +483,12 @@ public class SampleSketch extends PApplet
                 break;
             case "3D":
                 methodState = State.MAPTO;
+                mainState = State.EDITING;
+                break;
+            case "Flop":
+                methodState = State.FLOP;
+                mainState = State.EDITING;
         }
-        redraw();
     }
 
     /**
