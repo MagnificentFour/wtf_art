@@ -27,7 +27,7 @@ public class ToolWindow extends JFrame {
     private HashMap<String, Component> components;
     private ImageIcon[] functionIcons;
     private ColorChooserDemo cs;
-    private String[] functionNames = {"Original", "Dots", "Squares", "3D"};
+    private String[] functionNames = {"Original", "Dots", "Squares", "3D", "Flop"};
     private JScrollPane scrollPane;
 
     /**

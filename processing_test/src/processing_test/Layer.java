@@ -86,6 +86,12 @@ public class Layer implements ItemListener, ActionListener {
     public PImage getLayerImage() {
         return layerImage;
     }
+    
+    public void setImage(PImage image) {
+        
+        layerImage = image;
+        
+    }
 
     /**
      * Returns a list containing all the PGraphics objects that the layer
@@ -116,7 +122,7 @@ public class Layer implements ItemListener, ActionListener {
         layerGraphics.clear();
         layerGraphics.add(graphics);
     }
-
+   
     /**
      * @return
      */
