@@ -139,15 +139,14 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
                 if (tabIndex != sketchTabs.getSelectedIndex()) {
 
-                    currentSketch.noLoop();
+                    //currentSketch.noLoop();
                     removeOldActionListeners(currentSketch);
                     SampleSketch newSketch = (SampleSketch) sketchTabs.getSelectedComponent();
                     setActionListeners(newSketch);
                     currentSketch = newSketch;
                     tabIndex = sketchTabs.getSelectedIndex();
-                    currentSketch.loop();
+                    //currentSketch.loop();
                     currentSketch.getLayers();
-
                 }
 
             }
