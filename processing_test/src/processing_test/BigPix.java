@@ -9,6 +9,7 @@
 
 package processing_test;
 
+import java.awt.Color;
 import processing.core.*;
 
 /**
@@ -24,7 +25,7 @@ public class BigPix extends PApplet{
      * Code to translate the given picture to a pixelated version.
      *
      */
-    public void runFunction() {
+    public void runFunction(Color c) {
                
         int loc = 0;
         int barSize = 2;
@@ -67,7 +68,7 @@ public class BigPix extends PApplet{
                     gr.fill(color(12, 17, 60)); //darker color
                     gr.rect((i * pxSize) + (pxSize / 2), (j * pxSize) + (pxSize / 2), pxSize + 1, pxSize - barSize);
                 } else if (ave[loc] < contrast2) {
-                    gr.fill(color(248, 159, 159)); //lighter color
+                    gr.fill(color(c.getRed(), c.getGreen(), c.getBlue())); //lighter color
                     gr.rect((i * pxSize) + (pxSize / 2), (j * pxSize) + (pxSize / 2), pxSize + 1, pxSize - barSize);
                 }
             }

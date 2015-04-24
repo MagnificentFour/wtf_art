@@ -351,7 +351,7 @@ public class SampleSketch extends PApplet
 
         pxlation.setupSketch(base, pxSize);
         pxlation.init();
-        pxlation.runFunction();
+        pxlation.runFunction(cp.getColor());
 
         PGraphics gr = pxlation.getResult();
 
