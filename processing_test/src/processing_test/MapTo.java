@@ -117,7 +117,8 @@ public class MapTo extends PApplet implements ChangeListener, ActionListener {
     }
 
     /**
-     * A method do decrease the size of cellsize
+     * A method to decrease the size of cellsize
+     * Changes the value of cellsize
      */
     public void decreaseCell() {
         this.cellsize = cellsize - 2;
@@ -137,7 +138,8 @@ public class MapTo extends PApplet implements ChangeListener, ActionListener {
     }
 
     /**
-     * A ActionListener to change the cellsize when the button is pressed
+     * A ActionListener to change the value of 
+     * cellsize when the button is pressed
      *
      * @param e
      */
