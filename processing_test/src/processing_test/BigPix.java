@@ -1,3 +1,12 @@
+/*
+ *  Credit to Jonathan Martin for his processing project "Pixelate" upon
+ *  which this code is based.
+ *  
+ *  Jonathan Martin - reddit user "creepyeyes"
+ *  http://www.reddit.com/r/processing/comments/21sgz0/more_progress_on_my_photofilter_its_come_out/
+ *
+ */
+
 package processing_test;
 
 import processing.core.*;
@@ -10,7 +19,11 @@ public class BigPix extends PApplet{
     int pxSize = 20;
     PImage bgImg;
     PGraphics gr;
-    
+
+    /**
+     * Code to translate the given picture to a pixelated version.
+     *
+     */
     public void runFunction() {
                
         int loc = 0;
@@ -61,14 +74,24 @@ public class BigPix extends PApplet{
         }
         gr.endDraw();
     }
-    
+
+    /**
+     * Sets up the sketch
+     *
+     * @param image Image object
+     * @param pxSize
+     */
     public void setupSketch(PImage image, int pxSize) {
         
         bgImg = image;
         this.pxSize = pxSize;
                 
     }
-    
+
+    /**
+     * Returns result of the algorithm
+     * @return gr
+     */
     public PGraphics getResult() {
         
         return gr;

@@ -87,6 +87,10 @@ public class Layer implements ItemListener, ActionListener {
         return layerImage;
     }
     
+    /**
+     * Set the layer image.
+     * @param image 
+     */
     public void setImage(PImage image) {
         
         layerImage = image;
@@ -130,10 +134,18 @@ public class Layer implements ItemListener, ActionListener {
         return show;
     }
 
+    /**
+     * Returns true if the layer is viewed in the layer view.
+     * @return Boolean value for whether or not it is displayed.
+     */
     public boolean isDisplayed() {
         return isDisplayed;
     }
 
+    /**
+     * Set the value for whether or not this layer is displayed.
+     * @param val Boolean for whether or not this layer is displayed
+     */
     public void isDisplayed(boolean val) {
         isDisplayed = val;
     }
@@ -145,45 +157,83 @@ public class Layer implements ItemListener, ActionListener {
         return checkShow;
     }
 
+    /**
+     * Gets the JButton object that removes the layer.
+     * @return JButton object which is the remove button
+     */
     public JButton getRemoveButton() {
         return removeButton;
     }
 
+    /**
+     * Gets the layer number.
+     * @return Int value for layer number. 
+     */
     public int layerNum() {
         return currentLayerNum;
     }
 
+    /**
+     * Sets the layer number.
+     * @param num Int value for layer number.
+     */
     public void setLayerNum(int num) {
         currentLayerNum = num;
     }
 
     /**
-     * @param show
+     * Specify whether or not this item should be painted in the canvas
+     * @param show Boolean value, true for showing in the canvas.
      */
     public void setShow(boolean show) {
         this.show = show;
     }
 
+    /**
+     * Returns true if this item is selected in the layer view
+     * @return Boolean value, true if item is selected.
+     */
     public boolean selected() {
         return selected;
     }
 
+    /**
+     * Used by the layer view to set true if item is selected.
+     * @param selected Boolean value, true if selected.
+     */
     public void selected(boolean selected) {
         this.selected = selected;
     }
 
+    /**
+     * Returns true to the main sketch if the item is to be removed.
+     * @return Boolean value, trur if the layer is to be removed.
+     */
     public boolean remove() {
         return remove;
     }
 
+    /**
+     * Used by the remove button. True if the layer is to be removed.
+     * @param remove Boolean value, true if the item is to be removed.
+     */
     public void remove(boolean remove) {
         this.remove = remove;
     }
 
+    /**
+     * Assigns a function to the layer.
+     * @param layerFunc The function currently on this layer.
+     */
     public void setLayerFunc(State layerFunc) {
         layerFunction = layerFunc;
     }
     
+    /**
+     * Returns the function currently used on this layer in order to do the 
+     * proper editing.
+     * @return The function currently present on this layer.
+     */
     public State getLayerFunc() {
         return layerFunction;
     }
@@ -202,6 +252,10 @@ public class Layer implements ItemListener, ActionListener {
         isBackground = val;
     }
 
+    /**
+     * Creates an icon based on what is currently showing on the canvas.
+     * @return ImageIcon object showing a small image of the canvas.
+     */
     public ImageIcon getImageIcon() {
 
         if (layerGraphics.size() > 0) {
