@@ -1,3 +1,12 @@
+/*
+ *  Credit to Jonathan Martin for his processing project "Pixelate" upon
+ *  which this code is based.
+ *  
+ *  Jonathan Martin - reddit user "creepyeyes"
+ *  http://www.reddit.com/r/processing/comments/21sgz0/more_progress_on_my_photofilter_its_come_out/
+ *
+ */
+
 package processing_test;
 
 import processing.core.*;
