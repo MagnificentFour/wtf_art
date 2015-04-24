@@ -63,7 +63,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     public DisplayFrame() throws IOException {
         this.setSize(1340, 890);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
+        setTitle("Wattafa");
         /**
          * Sets location of main window in relation to toolwindow. Recommended
          * that first parameter is 290 larger than x-pos for toolwindow
