@@ -265,8 +265,8 @@ public class SampleSketch extends PApplet
      *
      * @param dir The directory where the image will be saved.
      */
-    public void saveImage(File dir) {
-        save(dir.getAbsolutePath());
+    public void saveImage(String dir) {        
+        save(dir);
     }
 
     /**
