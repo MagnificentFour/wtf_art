@@ -360,15 +360,14 @@ public class SampleSketch extends PApplet
         mapDone = new JButton("Done");
         cellSize = new JButton("Less detailed");
         cellSize2 = new JButton("More detailed");
-        mapSlider = new JSlider(JSlider.HORIZONTAL, 1, 1280, 100);
+        mapSlider = new JSlider(JSlider.HORIZONTAL, 1, 1280, 50);
         mapSlider.setBounds(20, 10, 15, 15);
         cellSize.setBounds(10, 10, 15, 15);
         cellSize2.setBounds(5, 10, 15, 15);
         mapDone.setBounds(1, 10, 20, 20);
-
         MapTo map = new MapTo();
         JPanel p = new JPanel();
-        p.setSize(bgImg.width, bgImg.height);
+        p.setSize(bgImg.width, bgImg.height);       
         p.add(mapDone);
         p.add(cellSize);
         p.add(cellSize2);
@@ -397,7 +396,6 @@ public class SampleSketch extends PApplet
                 } else {
                     layerHandler.getLayers().get(index).setGraphics(map.getResult());
                 }
-                // f.dispose();
             }
         });
         map.setupSketch(this.get());
