@@ -65,8 +65,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         /**
-         * Sets location of main window in relation to toolwindow.
-         * Recommended that first parameter is 290 larger than x-pos for toolwindow
+         * Sets location of main window in relation to toolwindow. Recommended
+         * that first parameter is 290 larger than x-pos for toolwindow
          */
         setLocation(350, 100);
 
@@ -140,15 +140,19 @@ public class DisplayFrame extends JFrame implements ActionListener {
             public void stateChanged(ChangeEvent e) {
 
                 if (tabIndex != sketchTabs.getSelectedIndex()) {
-                    currentSketch.noLoop();
                     removeOldActionListeners(currentSketch);
                     SampleSketch newSketch = (SampleSketch) sketchTabs.getSelectedComponent();
                     setActionListeners(newSketch);
+                    
+                    if(currentSketch != null)
+                        currentSketch.noLoop();
+                    
                     currentSketch = newSketch;
                     tabIndex = sketchTabs.getSelectedIndex();
-                    currentSketch.loop();
-                    currentSketch.getLayers();
-
+                    if (currentSketch != null) {
+                        currentSketch.loop();
+                        currentSketch.getLayers();
+                    }
                 }
             }
         });
@@ -162,6 +166,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private void newTab() {
         sketchTabs.addTab("Sketch " + tabs, createNewSketch());
         sketchTabs.setSelectedIndex(sketchTabs.getTabCount() - 1);
+
         tabs++;
     }
 
@@ -226,8 +231,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
     }
 
     /**
-     * Sets the hovertext for main window buttons
-     * Gives a description of buttonfunctions
+     * Sets the hovertext for main window buttons Gives a description of
+     * buttonfunctions
      */
     private void setHoverText() {
         closeTab.setToolTipText("Close current tab");
@@ -243,7 +248,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
      * Removes action listeners for components.
      *
      * @param removeFrom A pointer to the instance of the sketch where the
-     *                   listeners will be removed from
+     * listeners will be removed from
      */
     private void removeOldActionListeners(SampleSketch removeFrom) {
 
@@ -329,15 +334,10 @@ public class DisplayFrame extends JFrame implements ActionListener {
         hazeButton.setActionCommand("haze");
 
         slider.addChangeListener(s);
-
         
         tcc.getSelectionModel().addChangeListener(s);
-        
         fileChooseButton.addActionListener((
-                        ActionEvent arg0
-                ) ->
-
-                {
+                ActionEvent arg0) -> {
                     JFileChooser chooser = new JFileChooser();
 
                     FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -349,44 +349,52 @@ public class DisplayFrame extends JFrame implements ActionListener {
                         s.loadBgImage(chooser.getSelectedFile());
                     }
                 }
-
         );
 
         saveButton.addActionListener((
-                        ActionEvent arg0
-                ) ->
-
-                {
+                ActionEvent arg0) -> {
                     JFileChooser chooser = new JFileChooser();
                     chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-                    chooser.addChoosableFileFilter(new FileNameExtensionFilter("PNG: png", "png"));
-                    chooser.addChoosableFileFilter(new FileNameExtensionFilter("JPEG: jpg & jpeg", "jpg", "jpeg"));
-                    chooser.addChoosableFileFilter(new FileNameExtensionFilter("TIF: tif", "tif"));
+                    FileNameExtensionFilter png = new FileNameExtensionFilter("PNG: png", "png");
+                    FileNameExtensionFilter jpg = new FileNameExtensionFilter("JPEG: jpg & jpeg", "jpg", "jpeg");
+                    FileNameExtensionFilter tif = new FileNameExtensionFilter("TIF: tif", "tif");
+
+                    chooser.addChoosableFileFilter(png);
+                    chooser.addChoosableFileFilter(jpg);
+                    chooser.addChoosableFileFilter(tif);
 
                     int returnVal = chooser.showSaveDialog(sketchTabs);
                     if (returnVal == JFileChooser.APPROVE_OPTION) {
-                        s.saveImage(chooser.getSelectedFile());
+                        File selectedFile = chooser.getSelectedFile();
+                        String selectedFilePath = selectedFile.getAbsolutePath();
+
+                        if (chooser.getFileFilter() == png && !selectedFilePath.endsWith(".png")) {
+                            selectedFilePath += ".png";
+                        } else if (chooser.getFileFilter() == jpg && !selectedFilePath.endsWith(".jpg")) {
+                            selectedFilePath += ".jpg";
+                        } else if (chooser.getFileFilter() == tif && !selectedFilePath.endsWith(".tif")) {
+                            selectedFilePath += ".tif";
+                        }
+                        s.saveImage(selectedFilePath);
                     }
                 }
-
         );
 
         functionChooser.addItemListener(new ItemListener() {
 
-                                            @Override
-                                            public void itemStateChanged(ItemEvent e) {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
 
-                                                if (e.getStateChange() == ItemEvent.SELECTED) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
 
-                                                    s.selectFunction(functionNames[(int) e.getItem()]);
+                    s.selectFunction(functionNames[(int) e.getItem()]);
 
-                                                }
+                }
 
-                                            }
+            }
 
-                                        }
-
+        }
         );
 
     }
@@ -403,7 +411,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
                 + "are you sure you want to do this?", "Warning", dialogButton);
         return dialogResult == JOptionPane.YES_OPTION;
     }
-
 
     /**
      * Actionlistener for creating new tabs and closing tabs.
