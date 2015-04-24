@@ -89,7 +89,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         cloneRadiusSlider = new JSlider(JSlider.HORIZONTAL, 1, 50, 25);
 
-
         arrangeLayout();
         setHoverText();
 
@@ -141,7 +140,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
             public void stateChanged(ChangeEvent e) {
 
                 if (tabIndex != sketchTabs.getSelectedIndex()) {
-
                     currentSketch.noLoop();
                     removeOldActionListeners(currentSketch);
                     SampleSketch newSketch = (SampleSketch) sketchTabs.getSelectedComponent();
@@ -152,14 +150,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
                     currentSketch.getLayers();
 
                 }
-
             }
-
         });
-        
-        
-    
-
         setVisible(true);
         tw.setVisible(true);
     }

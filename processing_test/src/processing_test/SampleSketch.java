@@ -44,16 +44,13 @@ public class SampleSketch extends PApplet
     PGraphics cursorP;
 
     boolean noSave = false;
-    boolean copying = false;
-    boolean isDrawn = false;
-    boolean wrapperInit = false;
-    boolean wrappingCreated = false;
-
-    boolean firstState = false;
+    boolean copying = false; //is true when the cloning tool i ready to use
+    boolean wrapperInit = false; //is true when the wrapperfunction is selected, and tells the draw function to create the wrapperlayer
+    boolean wrappingCreated = false; //is true when the wrapperlayer has been initialised
     boolean hasChanged = false;
 
-    Color currentColor;
-    ColorChooserDemo cp;
+    Color currentColor; //the current color selected in the colorpicker
+    ColorChooserDemo cp; //the colorpicker
 
     JButton fwd;
     JButton back;
@@ -63,8 +60,8 @@ public class SampleSketch extends PApplet
 
     CloneTool clTool = new CloneTool();
 
-    Layer selectedLayer;
-    Layer cursorLayer;
+    Layer selectedLayer; //the current selected layer that is being drawn on
+    Layer cursorLayer; //the layer to draw custom mouse cursors on
 
     State methodState = State.CLEAR;
     State nextState = State.CLEAR;
@@ -133,6 +130,9 @@ public class SampleSketch extends PApplet
         toolWindow.refreshLayerView(layerHandler.getLayerView());
     }
 
+    /**
+     * The draw function, loops continously
+     */
     @Override
     public void draw() {
         if (tracker.hasNext()) {
@@ -627,7 +627,6 @@ public class SampleSketch extends PApplet
                 if (methodState != State.INVERT) {
                     //previousState = methodState;
                     selectedLayer = layerHandler.getLayers().get(0);
-                    firstState = true;
                     methodState = State.INVERT;
                     mainState = State.EDITING;
                     selectedLayer.setLayerFunc(methodState);
@@ -674,12 +673,8 @@ public class SampleSketch extends PApplet
 
     }
 
-    public void cloneRadChanged(int newR) {
-        cloneR = newR;
-    }
-
     /**
-     * Changes the variable pxSize with a value based on the slider.
+     * Changes the variable pxSize and radius on tools used, and the radius for the wrapper with a value based on the slider.
      *
      * @param e
      */
@@ -695,13 +690,8 @@ public class SampleSketch extends PApplet
                 pxSize = source.getValue();
 
                 methodState = selectedLayer.getLayerFunc();
-//            if (methodState == State.INVERT && firstState == false) {
-//                methodState = State.INVERT;
-//            }
-                isDrawn = false;
                 circle = loadImage("graphics/circle2.png");
                 circle.resize(cloneR, cloneR);
-                //firstState = false;
                 System.out.println(cloneR);
                 System.out.println(methodState);
             }
@@ -709,6 +699,11 @@ public class SampleSketch extends PApplet
         mainState = State.EDITING;
     }
 
+    /**
+     * Doesn't really do anything
+     * 
+     * @param e 
+     */
     @Override
     public void itemStateChanged(ItemEvent e) {
         cloneSource = (JSlider) e.getSource();
@@ -718,10 +713,21 @@ public class SampleSketch extends PApplet
 
     }
 
+    
+    /**
+     * Instantiates the colorPicker from class DisplayFrame
+     * 
+     * @param c 
+     */
     public void setColorPicker(ColorChooserDemo c) {
         cp = c;
     }
 
+    /**
+     * Function to select which drawfunction to use
+     * 
+     * @param pg 
+     */
     private void drawFunc(PGraphics pg) {
         pg.beginDraw();
         if (methodState != null) {
@@ -815,7 +821,7 @@ public class SampleSketch extends PApplet
     }
 
     /**
-     * Processing code for the invertColors functino
+     * Processing code for the invertColors function
      *
      * @param pg picturegraphics
      */

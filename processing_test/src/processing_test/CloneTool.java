@@ -14,38 +14,44 @@ import java.awt.Point;
  * @author vidar
  */
 public class CloneTool {
-    private Point p1;
-    private Point p2;
-    private int radius;
+    private Point p1; //first reference point
+    private Point p2; //2nd reference point
+    
     public CloneTool() {
-        radius = 5;
+
     }
     
+    /**
+     * Sets 1st reference point
+     * 
+     * @param newPoint 
+     */
     public void setPoint1(Point newPoint){
         p1 = newPoint;
-        System.out.println(p1);
-
     }
     
+    /**
+     * Sets 2nd reference point
+     * 
+     * @param newPoint 
+     */
     public void setPoint2(Point newPoint){
         p2 = newPoint;
-        System.out.println(p2);
-
     }
     
-    public void setRadius(int newRadius) {
-        radius = newRadius;
-    }
-    
+    /**
+     * returns the first reference point
+     * @return 
+     */
     public Point getPoint1() {
         return p1;
     }
     
+    /**
+     * returns the second reference point
+     * @return 
+     */
     public Point getPoint2() {
         return p2;
-    }
-    
-    public int getRadius(){
-        return radius;
     }
 }
