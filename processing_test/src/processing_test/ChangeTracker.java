@@ -16,6 +16,11 @@ public class ChangeTracker {
         currentIndex = -1;
     }
 
+    /**
+     *
+     *
+     * @param prevState Previous state
+     */
     public void addChange(StateCapture prevState) {
         changeList.add(prevState);
 
