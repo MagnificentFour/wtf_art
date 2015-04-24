@@ -49,6 +49,8 @@ import java.awt.image.Kernel;
  
  /**
  * This class is a simple implementation of a Canny Edge Detector.
+  *
+  * Brukes ikke!
  *
  * @author Mathias Lux, mathias@juggle.at, 05.04.13
  */

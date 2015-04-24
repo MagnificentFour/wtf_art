@@ -19,7 +19,11 @@ public class BigPix extends PApplet{
     int pxSize = 20;
     PImage bgImg;
     PGraphics gr;
-    
+
+    /**
+     * Code to translate the given picture to a pixelated version.
+     *
+     */
     public void runFunction() {
                
         int loc = 0;
@@ -70,14 +74,24 @@ public class BigPix extends PApplet{
         }
         gr.endDraw();
     }
-    
+
+    /**
+     * Sets up the sketch
+     *
+     * @param image Image object
+     * @param pxSize
+     */
     public void setupSketch(PImage image, int pxSize) {
         
         bgImg = image;
         this.pxSize = pxSize;
                 
     }
-    
+
+    /**
+     * Returns result of the algorithm
+     * @return gr
+     */
     public PGraphics getResult() {
         
         return gr;

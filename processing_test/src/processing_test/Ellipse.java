@@ -7,6 +7,8 @@ package processing_test;
 
 /**
  *
+ * Brukes ikke atm!!
+ *
  * @author nikla_000
  */
 public class Ellipse {

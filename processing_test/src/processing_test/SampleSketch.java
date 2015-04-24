@@ -347,8 +347,8 @@ public class SampleSketch extends PApplet
 //        f.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         f.setSize(1360, 850);
         mapDone = new JButton("Done");
-        cellSize = new JButton("Less details");
-        cellSize2 = new JButton("More details");
+        cellSize = new JButton("Less detailed");
+        cellSize2 = new JButton("More detailed");
         mapSlider = new JSlider(JSlider.HORIZONTAL, 1, 1280, 100);
         mapSlider.setBounds(20, 10, 15, 15);
         cellSize.setBounds(10, 10, 15, 15);
@@ -367,16 +367,19 @@ public class SampleSketch extends PApplet
 
         cellSize.addActionListener(map);
         mapSlider.addChangeListener(map);
+        cellSize2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                map.decreaseCell();
+            }
+        } );
         mapDone.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 f.setVisible(false);
                 p.setVisible(false);
                 image(map.function(), 0, 0);
-                System.out.println("YOLOSWAG 1 Etter image map.func");
                 methodState = State.NOACTION;
                 Layer pxlLayer = new Layer(map.getResult());
                 pxlLayer.setLayerFunc(methodState);
-                System.out.println("LAYERSHIATAAZ>>>>>");
 
                 if (index < 0) {
                     layerHandler.addLayer(pxlLayer, "3D");
