@@ -48,7 +48,7 @@ public class MapTo extends PApplet implements ChangeListener, ActionListener {
     /**
      * Sets up the sketch and assigns variables
      *
-     * @bgImg, sizeWidth, sizeHeight, cols, rows
+     * bgImg, sizeWidth, sizeHeight, cols, rows
      * @param image
      */
     public void setupSketch(PImage image) {
