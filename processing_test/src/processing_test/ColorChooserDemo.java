@@ -7,8 +7,7 @@ import javax.swing.event.*;
 import javax.swing.colorchooser.*;
  
 /* ColorChooserDemo.java requires no other files. */
-public class ColorChooserDemo extends JPanel
-                              implements ChangeListener {
+public class ColorChooserDemo extends JPanel implements ChangeListener {
  
     protected JColorChooser tcc;
     protected JLabel banner;
@@ -47,6 +46,10 @@ public class ColorChooserDemo extends JPanel
     
     public Color getColor() {
         return color;
+    }
+    
+    public JColorChooser getTCC() {
+        return tcc;
     }
  
     /**

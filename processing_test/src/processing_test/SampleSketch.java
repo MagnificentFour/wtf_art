@@ -42,6 +42,9 @@ public class SampleSketch extends PApplet
 
     boolean noSave = false;
     boolean copying = false;
+    boolean isDrawn = false;
+    boolean wrapperInit = false;
+    boolean wrappingCreated = false;
 
     boolean firstState = false;
     boolean hasChanged = false;
@@ -83,6 +86,7 @@ public class SampleSketch extends PApplet
         size(1280, 720);
         background(255);
         pg = createGraphics(1280, 720);
+
         cursorP = createGraphics(1280, 720);
         circle = loadImage("graphics/circle2.png");
         circle.resize(cloneR, cloneR);
@@ -135,9 +139,24 @@ public class SampleSketch extends PApplet
         }
 
         ArrayList<Layer> rList = new ArrayList<>();
-
+        
+        if(wrapperInit == true && wrappingCreated == false) {
+            PGraphics base = selectedLayer.getGraphics();
+            PGraphics gb = createGraphics(bgImg.width, bgImg.height);
+            Layer wrappingLayer = new Layer(gb);
+                    if (layerHandler.checkFuncStat("Wrapping") < 0) {
+                        layerHandler.addLayer(wrappingLayer, "Wrapping");
+                        wrappingLayer.setImage(base);
+                    } else {
+                        //layerHandler.editLayer(index, gr);
+                    }
+                    selectedLayer = wrappingLayer;
+                    selectedLayer.setLayerFunc(methodState);
+                    wrapperInit = false;
+                    wrappingCreated = true;
+        }
+        
         for (Layer layer : layerHandler.getLayers()) {
-
             if (layer.remove()) {
                 rList.add(layer);
             } else {
@@ -158,7 +177,6 @@ public class SampleSketch extends PApplet
         for (Layer layer : rList) {
             layerHandler.removeLayer(layer);
         }
-
         if (!layerHandler.getLayers().isEmpty()) {//bgImg != null) {
             if (mainState == State.EDITING) {
 
@@ -285,9 +303,9 @@ public class SampleSketch extends PApplet
         dotRep.setupSketch(base, pxSize);
         dotRep.init();
         dotRep.runFunction(cp.getColor());
-        
+
         PGraphics gr = dotRep.getResult();
-        
+
         Layer dotLayer = new Layer(gr);
         dotLayer.setLayerFunc(methodState);
 
@@ -312,19 +330,19 @@ public class SampleSketch extends PApplet
     private void pxlation(int index) {
         BigPix pxlation = new BigPix();
         PImage base;
-        
+
         if (index < 0) {
             base = selectedLayer.getGraphics();
         } else {
             base = selectedLayer.getLayerImage();
         }
-        
+
         pxlation.setupSketch(base, pxSize);
         pxlation.init();
         pxlation.runFunction();
 
         PGraphics gr = pxlation.getResult();
-        
+
         Layer pxlLayer = new Layer(gr);
 
         if (index < 0) {
@@ -381,7 +399,7 @@ public class SampleSketch extends PApplet
                 } else {
                     layerHandler.getLayers().get(index).setGraphics(map.getResult());
                 }
-               // f.dispose();
+                // f.dispose();
             }
         });
         map.setupSketch(this.get());
@@ -594,30 +612,37 @@ public class SampleSketch extends PApplet
             case "invert":
                 if (methodState != State.INVERT) {
                     //previousState = methodState;
-                    noLoop();
+                    selectedLayer = layerHandler.getLayers().get(0);
                     firstState = true;
                     methodState = State.INVERT;
                     mainState = State.EDITING;
                     selectedLayer.setLayerFunc(methodState);
-                    redraw();
                 } else {
                     //methodState = previousState;
                 }
                 break;
             case "wrapping":
-                methodState = State.WRAPPING;
-                mainState = State.EDITING;
-                selectedLayer.setLayerFunc(methodState);
-                loop();
+                if (methodState != State.WRAPPING) {
+                    
+                   
+                    wrapperInit = true;
+                    methodState = State.WRAPPING;
+                    mainState = State.EDITING;
+                    
+                    loop();
+                }
                 break;
             case "square":
                 figureState = 0;
+                mainState = State.EDITING;
                 break;
             case "ellipse":
                 figureState = 1;
+                mainState = State.EDITING;
                 break;
             case "haze":
                 figureState = 2;
+                mainState = State.EDITING;
                 break;
             case "randomFucks":
                 System.out.println("(!) Randomfucks are given");
@@ -646,26 +671,28 @@ public class SampleSketch extends PApplet
      */
     @Override
     public void stateChanged(ChangeEvent e) {
-        source = (JSlider) e.getSource();
-        cloneSource = (JSlider) e.getSource();
+        
+        
+        if (e.getSource() instanceof JSlider) {
+            source = (JSlider) e.getSource();
+            cloneSource = (JSlider) e.getSource();
+            if (!source.getValueIsAdjusting()) {
+                cloneR = source.getValue() * 3;
+                pxSize = source.getValue();
 
-        if (!source.getValueIsAdjusting()) {
-            cloneR = source.getValue() * 3;
-            pxSize = source.getValue();
-            mainState = State.EDITING;
-            methodState = selectedLayer.getLayerFunc();
+                methodState = selectedLayer.getLayerFunc();
 //            if (methodState == State.INVERT && firstState == false) {
 //                methodState = State.INVERT;
 //            }
-
-            circle = loadImage("graphics/circle2.png");
-            circle.resize(cloneR, cloneR);
-            //firstState = false;
-            System.out.println(cloneR);
-            System.out.println(methodState);
-            redraw();
+                isDrawn = false;
+                circle = loadImage("graphics/circle2.png");
+                circle.resize(cloneR, cloneR);
+                //firstState = false;
+                System.out.println(cloneR);
+                System.out.println(methodState);
+            }
         }
-
+        mainState = State.EDITING;
     }
 
     @Override
@@ -700,7 +727,9 @@ public class SampleSketch extends PApplet
                     break;
                 case INVERT:
                     invertEdit(pg);
-                //break;
+                    break;
+                case WRAPPING:
+                    wrappingEdit(pg);
             }
         }
         pg.endDraw();
@@ -862,10 +891,13 @@ public class SampleSketch extends PApplet
         if (fuckTest == true) {
             System.out.println("we did it");
         }
+        mainState = State.VIEWING;
         //tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
     }
 
     private void wrappingEdit(PGraphics pg) {
+        if(mainState == State.EDITING){
+        pg.clear();
         int xMid = bgImg.width / 2;
         int yMid = bgImg.height / 2;
         currentColor = cp.getColor();
@@ -886,16 +918,22 @@ public class SampleSketch extends PApplet
                 } else if (figureState == 2) {
                     if (dist(i, t, xMid, yMid) > cloneR * 3) {
                         if (dist(i, t, xMid, yMid) < cloneR * 6) {
-                            int u = (int) dist(i, t, xMid, yMid);
+                            int u = (int) dist(i, t, xMid, yMid) - cloneR;
                             int r = rand.nextInt(u);
-                            if (r > cloneR) {
+                            if (r > ((cloneR *6) - (cloneR * 3))) {
                                 pg.set(i, t, c);
                             }
                         }
                     }
+                    if (dist(i, t, xMid, yMid) > cloneR * 6) {
+                        pg.set(i, t, c);
+                    }
                 }
             }
         }
+        layerHandler.refreshLayerView();
+        }
+        mainState = State.VIEWING;
     }
 
     public void getLayers() {
