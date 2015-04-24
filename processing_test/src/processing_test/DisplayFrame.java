@@ -44,9 +44,10 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private String[] functionNames = {"Original", "Dots", "Squares", "3D", "Flop", "Clone"};
 
     ColorChooserDemo ccd;
+    private JColorChooser tcc;
     private final JSlider slider;
     private final JSlider cloneRadiusSlider;
-    colorPicker cp;
+    //colorPicker cp;
     private int tabIndex;
     private int tabs = 2;
     private ArrayList<Component> componentList;
@@ -71,6 +72,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         //cp = new colorPicker();
         ccd = new ColorChooserDemo();
+        tcc = ccd.getTCC();
         //setLocationByPlatform(true);
 
         componentList = new ArrayList<>();
@@ -108,6 +110,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         componentList.add(fileChooseButton);
         componentList.add(saveButton);
         componentList.add(randomShit);
+        componentList.add(tcc);
 
         Set<String> keys = toolWindowComponents.keySet();
         for (String key : keys) {
@@ -157,6 +160,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
             }
 
         });
+        
+        
+    
 
         setVisible(true);
         tw.setVisible(true);
@@ -336,7 +342,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
         hazeButton.setActionCommand("haze");
 
         slider.addChangeListener(s);
-
+        
+        tcc.getSelectionModel().addChangeListener(s);
         fileChooseButton.addActionListener((
                 ActionEvent arg0) -> {
                     JFileChooser chooser = new JFileChooser();
@@ -401,9 +408,10 @@ public class DisplayFrame extends JFrame implements ActionListener {
     }
 
     /**
-     * Creates a dialog asking the user whether or not they want to reset.
-     *
      * @return dialogResult
+     * @deprecated Not in use after changed implementations of newtab button. Tabs are no longer closed when a new document is created.
+     * <p>
+     * Creates a dialog asking the user whether or not they want to reset.
      */
     private boolean wantToReset() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -413,7 +421,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
     }
 
     /**
-     * Actionlistener for creating new tabs and closing.
+     * Actionlistener for creating new tabs and closing tabs.
      *
      * @param e Actionevent
      */
