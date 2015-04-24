@@ -372,11 +372,9 @@ public class SampleSketch extends PApplet
                 f.setVisible(false);
                 p.setVisible(false);
                 image(map.function(), 0, 0);
-                System.out.println("YOLOSWAG 1 Etter image map.func");
                 methodState = State.NOACTION;
                 Layer pxlLayer = new Layer(map.getResult());
                 pxlLayer.setLayerFunc(methodState);
-                System.out.println("LAYERSHIATAAZ>>>>>");
 
                 if (index < 0) {
                     layerHandler.addLayer(pxlLayer, "3D");
