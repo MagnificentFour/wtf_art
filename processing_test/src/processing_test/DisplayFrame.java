@@ -40,9 +40,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private final JButton hazeButton;
     private final JComboBox functionChooser;
     private final JTabbedPane sketchTabs;
-    
+
     private String[] functionNames = {"Original", "Dots", "Squares", "3D", "Flop", "Clone"};
-    
+
     ColorChooserDemo ccd;
     private final JSlider slider;
     private final JSlider cloneRadiusSlider;
@@ -212,7 +212,6 @@ public class DisplayFrame extends JFrame implements ActionListener {
      */
     private void arrangeLayout() {
         setLayout(null);
-
 
         //Position and size for buttons.
         closeTab.setBounds(1267, 10, 30, 30);
@@ -393,9 +392,10 @@ public class DisplayFrame extends JFrame implements ActionListener {
     }
 
     /**
-     * Creates a dialog asking the user whether or not they want to reset.
-     *
      * @return dialogResult
+     * @deprecated Not in use after changed implementations of newtab button. Tabs are no longer closed when a new document is created.
+     * <p>
+     * Creates a dialog asking the user whether or not they want to reset.
      */
     private boolean wantToReset() {
         int dialogButton = JOptionPane.YES_NO_OPTION;
@@ -406,7 +406,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
 
     /**
-     * Actionlistener for creating new tabs and closing.
+     * Actionlistener for creating new tabs and closing tabs.
      *
      * @param e Actionevent
      */

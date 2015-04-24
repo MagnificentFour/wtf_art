@@ -16,6 +16,9 @@ import javax.swing.event.ChangeListener;
 import processing.core.*;
 
 /**
+ * This class contains the code that makes the buttons execute functions. Much of the processingcode is here as well.
+ * Setup for the processing canvas, and the class that controls the flow of processing code in the application.
+ *
  * @author nikla_000
  */
 public class SampleSketch extends PApplet
@@ -78,6 +81,9 @@ public class SampleSketch extends PApplet
     ChangeTracker tracker = new ChangeTracker();
     ToolWindow toolWindow;
 
+    /**
+     * Setup of the processing canvas and further execution of processing code
+     */
     @Override
     public void setup() {
         size(1280, 720);
@@ -94,6 +100,9 @@ public class SampleSketch extends PApplet
 
     }
 
+    /**
+     * Initialization of canvas and layer code
+     */
     private void initSetup() {
 
         PGraphics initImage = createGraphics(1280, 720);
@@ -222,6 +231,9 @@ public class SampleSketch extends PApplet
         drawFunc(selectedLayer.getGraphics());
     }
 
+    /**
+     * Checks if mouse is clicked. Used with the clonetool
+     */
     public void mouseClicked() {
         if (methodState == State.SETPOINTS) {
             if (waitingPoint == 0) {
@@ -285,9 +297,9 @@ public class SampleSketch extends PApplet
         dotRep.setupSketch(base, pxSize);
         dotRep.init();
         dotRep.runFunction(cp.getColor());
-        
+
         PGraphics gr = dotRep.getResult();
-        
+
         Layer dotLayer = new Layer(gr);
         dotLayer.setLayerFunc(methodState);
 
@@ -312,19 +324,19 @@ public class SampleSketch extends PApplet
     private void pxlation(int index) {
         BigPix pxlation = new BigPix();
         PImage base;
-        
+
         if (index < 0) {
             base = selectedLayer.getGraphics();
         } else {
             base = selectedLayer.getLayerImage();
         }
-        
+
         pxlation.setupSketch(base, pxSize);
         pxlation.init();
         pxlation.runFunction();
 
         PGraphics gr = pxlation.getResult();
-        
+
         Layer pxlLayer = new Layer(gr);
 
         if (index < 0) {
@@ -340,11 +352,10 @@ public class SampleSketch extends PApplet
     }
 
     /**
-     * TODO Document this
+     * 3D skewing procesing code
      */
     private void mapTo(int index) {
         JFrame f = new JFrame();
-//        f.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         f.setSize(1360, 850);
         mapDone = new JButton("Done");
         cellSize = new JButton("Less detailed");
@@ -386,7 +397,7 @@ public class SampleSketch extends PApplet
                 } else {
                     layerHandler.getLayers().get(index).setGraphics(map.getResult());
                 }
-               // f.dispose();
+                // f.dispose();
             }
         });
         map.setupSketch(this.get());
@@ -399,7 +410,7 @@ public class SampleSketch extends PApplet
     ArrayList<PImage> imageList = new ArrayList<>();
 
     /**
-     *
+     * Processing code for the random flop function
      */
     public void flop() {
         PGraphics dis = createGraphics(1280, 720);
@@ -448,7 +459,7 @@ public class SampleSketch extends PApplet
     /**
      * Assigns pointers to the undo and redo buttons.
      *
-     * @param fwd The redo button.
+     * @param fwd  The redo button.
      * @param back The undo button.
      */
     public void setButtons(JButton fwd, JButton back) {
@@ -705,12 +716,17 @@ public class SampleSketch extends PApplet
                     break;
                 case INVERT:
                     invertEdit(pg);
-                //break;
+                    //break;
             }
         }
         pg.endDraw();
     }
 
+    /**
+     * Processing code for the blurfunction
+     *
+     * @param pg picturegraphics
+     */
     private void blurEdit(PGraphics pg) {
         int colour;
         int totalPix = 0;
@@ -744,6 +760,11 @@ public class SampleSketch extends PApplet
         }
     }
 
+    /**
+     * processing code for the clone function
+     *
+     * @param pg picturegraphics
+     */
     private void cloneEdit(PGraphics pg) {
         Point p1 = clTool.getPoint1();
         Point p2 = clTool.getPoint2();
@@ -764,6 +785,11 @@ public class SampleSketch extends PApplet
 
     }
 
+    /**
+     * Processing code for the invertColors functino
+     *
+     * @param pg picturegraphics
+     */
     private void invertEdit(PGraphics pg) {
         boolean fuckTest = false;
         PGraphics gb = createGraphics(bgImg.width, bgImg.height);
@@ -864,12 +890,13 @@ public class SampleSketch extends PApplet
                 }
             }
         }
-        if (fuckTest == true) {
-            System.out.println("we did it");
-        }
-        //tracker.addChange(new StateCapture(this.get(), methodState, pxSize));
     }
 
+    /**
+     * Processing code for wrapping function
+     *
+     * @param pg picturegraphics
+     */
     private void wrappingEdit(PGraphics pg) {
         int xMid = bgImg.width / 2;
         int yMid = bgImg.height / 2;

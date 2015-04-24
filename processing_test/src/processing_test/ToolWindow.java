@@ -18,7 +18,7 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 
 /**
- * The visual in the toolwindow
+ * The visual implementation of the toolwindow
  *
  * @author nikla_000
  */
@@ -167,8 +167,8 @@ public class ToolWindow extends JFrame {
     /**
      * Creates an ImageIcon
      *
-     * @param path
-     * @return icon
+     * @param path path for the icon
+     * @return icon icon object
      */
     protected static ImageIcon createImageIcon(String path) {
         ImageIcon icon = null;
@@ -193,7 +193,7 @@ public class ToolWindow extends JFrame {
             setVerticalAlignment(CENTER);
         }
 
-        /*
+        /**
          * This method finds the image and text corresponding
          * to the selected value and returns the label, set up
          * to display the text and image.

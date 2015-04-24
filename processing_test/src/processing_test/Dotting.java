@@ -1,3 +1,12 @@
+/*
+ *  Credit to Jonathan Martin for his processing project upon which this code
+ *  is based.
+ *
+ *  Jonathan Martin - reddit user "creepyeyes"
+ *  http://www.reddit.com/r/processing/comments/21jcil/working_on_a_simple_photofilter_its_not_perfect/
+ *
+ */
+
 package processing_test;
 
 import java.awt.Color;
