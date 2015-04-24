@@ -44,9 +44,10 @@ public class DisplayFrame extends JFrame implements ActionListener {
     private String[] functionNames = {"Original", "Dots", "Squares", "3D", "Flop", "Clone"};
 
     ColorChooserDemo ccd;
+    private JColorChooser tcc;
     private final JSlider slider;
     private final JSlider cloneRadiusSlider;
-    colorPicker cp;
+    //colorPicker cp;
     private int tabIndex;
     private int tabs = 2;
     private ArrayList<Component> componentList;
@@ -71,6 +72,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         //cp = new colorPicker();
         ccd = new ColorChooserDemo();
+        tcc = ccd.getTCC();
         //setLocationByPlatform(true);
 
         componentList = new ArrayList<>();
@@ -109,6 +111,7 @@ public class DisplayFrame extends JFrame implements ActionListener {
         componentList.add(fileChooseButton);
         componentList.add(saveButton);
         componentList.add(randomShit);
+        componentList.add(tcc);
 
         Set<String> keys = toolWindowComponents.keySet();
         for (String key : keys) {
@@ -152,6 +155,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
             }
 
         });
+        
+        
+    
 
         setVisible(true);
         tw.setVisible(true);
@@ -331,7 +337,9 @@ public class DisplayFrame extends JFrame implements ActionListener {
 
         slider.addChangeListener(s);
 
-
+        
+        tcc.getSelectionModel().addChangeListener(s);
+        
         fileChooseButton.addActionListener((
                         ActionEvent arg0
                 ) ->
