@@ -154,14 +154,8 @@ public class DisplayFrame extends JFrame implements ActionListener {
                         currentSketch.getLayers();
                     }
                 }
-
             }
-
         });
-        
-        
-    
-
         setVisible(true);
         tw.setVisible(true);
     }
